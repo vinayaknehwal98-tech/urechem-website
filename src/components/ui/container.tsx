@@ -1,0 +1,12 @@
+import { cn } from "@/lib/utils";
+
+type ContainerProps = React.ComponentPropsWithoutRef<"div">;
+
+export function Container({ className, ...props }: ContainerProps) {
+  return (
+    <div
+      className={cn("mx-auto w-full max-w-[var(--container-wide)] px-5 sm:px-6 lg:px-8", className)}
+      {...props}
+    />
+  );
+}
