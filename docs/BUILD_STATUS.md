@@ -17,7 +17,8 @@ This branch is an unverified catalog and application scaffold for Milestone 2 an
 
 ## Verification
 
-- `npm ci`, `npm run lint` and `npm run build` must be rerun with the repository lockfile and a supported Node.js version before readiness claims are made.
+- The repository now includes GitHub Actions CI for pull requests and pushes to `main`, using Node.js 20 with `npm ci`, `npm run lint` and `npm run build`.
+- Local verification remains blocked in this environment by the npm proxy/install hang noted in the latest task output; CI should be used as the clean Linux verification source once this branch is pushed.
 - Runtime inspection, accessibility checks and desktop/mobile screenshots are still required after a successful build.
 - No backend API, API keys, secrets, `.env` files, credentials or private keys were added.
 
