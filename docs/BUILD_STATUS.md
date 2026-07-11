@@ -4,39 +4,32 @@ Last verified: July 11, 2026
 
 ## Current milestone
 
-The Urechem homepage has been completed and refined for the current visible milestone, including the global layout, responsive navigation, footer, hero, homepage sections, AI challenge intake UI, product universe, workflow, technical center preview, and review screenshots.
+Client-ready MVP product, application, industry, technical-center, company and deterministic AI front-end foundations have been implemented from Milestone 2 through Milestone 11 scope.
+
+## Completed work
+
+- Product data architecture with typed families, products, stable slugs, document availability metadata, validation states, lookup helpers, related-family helpers and comparison eligibility helpers.
+- `/products` listing with client-side search, family filtering, empty-state handling and reusable family cards.
+- Dynamic product family and individual product pages using only confirmed catalog names and safe validation language.
+- Product comparison page comparing confirmed public attributes only.
+- Applications and industries listing/detail pages connected to product families and enquiry pathways.
+- Technical Center landing and document/testing/AI-search/validation pages with no fake downloads.
+- Innovation & R&D, About and Contact pages, including structured enquiry types without invented contact details.
+- Deterministic local/demo AI Solution Finder, Ask Urechem AI and Technical Brief Builder pages with expert-validation language.
+- Sitemap and robots routes added for production SEO foundation.
 
 ## Verification
 
-- `npm run lint` passes.
-- `npm run build` passes.
-- Desktop inspection at `1440 x 900` completed.
-- Mobile inspection at `390 x 844` completed.
-- No horizontal overflow was observed during visual review.
-- No backend API, API keys, secrets, or environment variables were added.
+- `npm run lint` attempted but could not complete because local dependencies are unavailable (`eslint` package missing after registry/install failure).
+- `npm run build` attempted but could not complete because local dependencies are unavailable (`next` binary missing after registry/install failure).
+- Desktop and mobile inspection are limited to code-level responsive review in this non-browser execution pass; `review-screenshots/latest/README.md` records the screenshot blocker.
+- No backend API, API keys, secrets, `.env` files, credentials or private keys were added.
 
-## Review screenshots
+## Known issues
 
-Latest review screenshots are saved under `review-screenshots/`, including:
+- Public contact details, certifications, product specifications, downloads, safety guidance and processing parameters still require client-supplied verified source material before publication.
+- AI experiences are deterministic front-end placeholders only and do not represent a live AI backend.
 
-- `review-screenshots/homepage-desktop.png`
-- `review-screenshots/homepage-mobile.png`
-- `review-screenshots/sections/desktop-01-hero.png`
-- `review-screenshots/sections/desktop-02-pathways.png`
-- `review-screenshots/sections/desktop-03-product-universe.png`
-- `review-screenshots/sections/desktop-04-application-discovery.png`
-- `review-screenshots/sections/desktop-05-proof-and-expertise.png`
-- `review-screenshots/sections/desktop-06-workflow.png`
-- `review-screenshots/sections/desktop-07-technical-center-preview.png`
-- `review-screenshots/sections/desktop-08-final-cta.png`
-- `review-screenshots/sections/desktop-09-footer.png`
-- `review-screenshots/sections/mobile-01-hero.png`
-- `review-screenshots/sections/mobile-02-product-universe.png`
-- `review-screenshots/sections/mobile-03-workflow.png`
-- `review-screenshots/sections/mobile-04-footer.png`
+## Next milestone
 
-## Notes
-
-- AI challenge intake remains a front-end interaction only.
-- AI guidance is preliminary; final product selection requires technical validation.
-- Provisional company figures remain internally marked with validation metadata in the structured data source.
+Client review, content validation and replacement of request-only document states with approved controlled document workflows when available.
