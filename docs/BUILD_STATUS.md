@@ -4,7 +4,7 @@ Last verified: July 11, 2026
 
 ## Current milestone
 
-This branch is an unverified catalog and application scaffold for Milestone 2 and Milestone 3 follow-up work. It should not be described as client-ready until dependency installation, lint, production build, runtime checks, accessibility checks and review screenshots have all passed.
+This branch is a verified-build catalog and application scaffold for Milestone 2 and Milestone 3 follow-up work. GitHub Actions `CI` has passed for dependency installation, lint and production build on the current branch; runtime inspection, accessibility checks and review screenshots remain separate pre-merge review items.
 
 ## Implemented scaffold
 
@@ -17,9 +17,10 @@ This branch is an unverified catalog and application scaffold for Milestone 2 an
 
 ## Verification
 
-- The repository now includes GitHub Actions CI for pull requests and pushes to `main`, using Node.js 20 with `npm ci`, `npm run lint` and `npm run build`.
-- Local verification remains blocked in this environment by the npm proxy/install hang noted in the latest task output; CI should be used as the clean Linux verification source once this branch is pushed.
-- Runtime inspection, accessibility checks and desktop/mobile screenshots are still required after a successful build.
+- GitHub Actions `CI` passed on the current branch for `npm ci`, `npm run lint` and `npm run build` on July 11, 2026, as reported in the PR follow-up trigger.
+- Local verification in the Codex task container remains blocked by an npm proxy/install hang before a runnable local server is available; this is an environment limitation, not the source of truth for CI.
+- Runtime inspection, keyboard/accessibility checks and desktop/mobile screenshots are still required before merge.
+- `.github/workflows/review-screenshots.yml` adds an automated screenshot capture job for the requested Milestone 2/3 routes and uploads the images as a GitHub Actions artifact.
 - No backend API, API keys, secrets, `.env` files, credentials or private keys were added.
 
 ## Known limitations
@@ -30,4 +31,4 @@ This branch is an unverified catalog and application scaffold for Milestone 2 an
 
 ## Next milestone
 
-Stabilize Milestone 2 catalog quality and Milestone 3 application/industry quality, then complete dependency installation, lint, build, runtime, accessibility and screenshot verification before describing the work as production-ready.
+Complete the focused Milestone 2/3 runtime review, inspect the screenshot artifact, resolve any visual/accessibility issues found there, and keep non-catalog routes as honest scaffolds until verified client content is available.

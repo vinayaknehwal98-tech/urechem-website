@@ -1,0 +1,79 @@
+name: Review Screenshots
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/app/products/**'
+      - 'src/app/applications/**'
+      - 'src/app/industries/**'
+      - 'src/components/**'
+      - 'src/data/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/review-screenshots.yml'
+
+jobs:
+  capture:
+    name: Capture Milestone 2/3 route screenshots
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production app
+        run: npm run build
+
+      - name: Install Chromium for Playwright CLI
+        run: npx --yes playwright@1.55.0 install --with-deps chromium
+
+      - name: Start production server
+        run: |
+          npm run start -- --hostname 127.0.0.1 --port 3000 > /tmp/urechem-next.log 2>&1 &
+          echo "$!" > /tmp/urechem-next.pid
+
+      - name: Wait for server
+        run: |
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000/products >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/urechem-next.log
+          exit 1
+
+      - name: Capture desktop and mobile screenshots
+        run: |
+          mkdir -p review-screenshots/latest
+          routes=(
+            "products:/products"
+            "product-family:/products/uretherm-spray-foam-systems"
+            "product-page:/products/uretherm-spray-foam-systems/uretherm-spray-foam-systems-gt-40"
+            "products-compare:/products/compare"
+            "applications:/applications"
+            "application-page:/applications/automotive-seating"
+            "industries:/industries"
+          )
+          for route in "${routes[@]}"; do
+            name="${route%%:*}"
+            path="${route#*:}"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1000 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1000 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
+          done
+
+      - name: Upload review screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: milestone-2-3-review-screenshots
+          path: review-screenshots/latest/*.png
+          if-no-files-found: error

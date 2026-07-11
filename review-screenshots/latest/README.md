@@ -1,10 +1,19 @@
 # Latest review screenshots
 
-Screenshot capture was not completed in this execution pass because dependency setup is still blocked before a Next.js dev server can run.
+The requested Milestone 2/3 runtime screenshot pass could not be produced inside the Codex task container because dependency installation still hangs behind the environment npm proxy before a runnable local Next.js server is available.
 
-Latest setup attempts on July 11, 2026:
+GitHub Actions `CI` has passed on the current branch for `npm ci`, `npm run lint`, and `npm run build` per the PR trigger on July 11, 2026.
 
-- `PATH=/root/.nvm/versions/node/v20.20.2/bin:$PATH npm ci` failed because `package.json` and `package-lock.json` are out of sync; npm reported missing lockfile entries for `@emnapi/runtime` and `@emnapi/core`.
-- `npm install --package-lock-only` also failed because the registry returned `403 Forbidden` for `@tailwindcss/oxide-wasm32-wasi-4.3.2.tgz`.
+To make screenshot verification reproducible without overstating local results, this branch adds `.github/workflows/review-screenshots.yml`. The workflow builds the production app, starts `next start`, captures desktop 1440×900 and mobile 390×844 screenshots for the requested Milestone 2/3 routes, and uploads them as the `milestone-2-3-review-screenshots` artifact.
 
-After dependency setup is fixed, capture desktop and mobile screenshots for `/products`, one product-family page, one product page, `/applications`, `/contact`, and one AI flow.
+Routes covered by the automated screenshot job:
+
+- `/products`
+- `/products/uretherm-spray-foam-systems`
+- `/products/uretherm-spray-foam-systems/uretherm-spray-foam-systems-gt-40`
+- `/products/compare`
+- `/applications`
+- `/applications/automotive-seating`
+- `/industries`
+
+No screenshot image in this directory should be treated as passed unless it is produced by the workflow or by a successful local browser run.
