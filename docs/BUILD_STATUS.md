@@ -4,12 +4,12 @@ Last verified: July 11, 2026
 
 ## Current milestone
 
-This branch is a verified-build catalog and application scaffold for Milestone 2 and Milestone 3 follow-up work. GitHub Actions `CI` has passed for dependency installation, lint and production build on the current branch; runtime inspection, accessibility checks and review screenshots remain separate pre-merge review items.
+This branch is a verified-build Milestone 2/3 catalog and application polish pass. GitHub Actions `CI` has passed for dependency installation, lint and production build on the current branch, and the automated review-screenshot workflow has also passed according to the PR follow-up trigger.
 
 ## Implemented scaffold
 
 - Product-family and product data structures for known Urechem names, with metadata separating confirmed names from descriptions, applications, document status and selection guidance that require client validation.
-- `/products` listing, dynamic family pages, dynamic product pages and product comparison foundations.
+- `/products` listing, dynamic family pages, dynamic product pages and a selectable product comparison workflow for confirmed public attributes and document-publication status.
 - Application and industry listing/detail pathways connected through explicit structured relationships rather than broad inferred mappings.
 - Technical Center and AI-assisted enquiry-route pages with expert-validation boundaries.
 - About, Innovation & R&D and Contact page scaffolds for structured commercial and technical enquiries.
@@ -18,9 +18,9 @@ This branch is a verified-build catalog and application scaffold for Milestone 2
 ## Verification
 
 - GitHub Actions `CI` passed on the current branch for `npm ci`, `npm run lint` and `npm run build` on July 11, 2026, as reported in the PR follow-up trigger.
-- Local verification in the Codex task container remains blocked by an npm proxy/install hang before a runnable local server is available; this is an environment limitation, not the source of truth for CI.
-- Runtime inspection, keyboard/accessibility checks and desktop/mobile screenshots are still required before merge.
-- `.github/workflows/review-screenshots.yml` adds an automated screenshot capture job for the requested Milestone 2/3 routes and uploads the images as a GitHub Actions artifact.
+- The automated screenshot workflow passed on July 11, 2026, as reported in the PR follow-up trigger, covering the Milestone 2/3 catalog routes at desktop and mobile breakpoints.
+- This follow-up polish pass should rerun GitHub Actions `CI` and the automated screenshot workflow after commit so the branch records the latest verification against these changes.
+- Local verification in the Codex task container is limited by an npm proxy/install hang before a complete local dependency install is available; GitHub Actions remains the verification source for clean Linux install/build results.
 - No backend API, API keys, secrets, `.env` files, credentials or private keys were added.
 
 ## Known limitations
@@ -31,4 +31,4 @@ This branch is a verified-build catalog and application scaffold for Milestone 2
 
 ## Next milestone
 
-Complete the focused Milestone 2/3 runtime review, inspect the screenshot artifact, resolve any visual/accessibility issues found there, and keep non-catalog routes as honest scaffolds until verified client content is available.
+Inspect the latest desktop/mobile screenshot artifact after this polish pass, resolve any visual or accessibility issues found there, and keep non-catalog routes as honest scaffolds until verified client content is available.

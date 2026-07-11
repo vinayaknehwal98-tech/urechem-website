@@ -1,3 +1,4 @@
+import { getApplicationFamilySlugs } from "@/data/application-family-mappings";
 export type ValidationState = "confirmed-name" | "requires-client-validation" | "unavailable";
 export type DocumentType = "TDS" | "SDS" | "COA" | "Compliance" | "Processing guide";
 export type DocumentStatus = "not-published-online" | "contact-for-availability";
@@ -79,9 +80,8 @@ const product = (familySlug: string, name: string, description: string, applicat
   validation: "confirmed-name",
   documents: docs(),
   compareAttributes: {
-    Family: familySlug,
     "Published documents": "Contact Urechem for current document availability",
-    "Selection status": "Requires Urechem technical validation",
+    "Selection status": "Performance data and application suitability are reviewed for each enquiry",
   },
 });
 
@@ -91,14 +91,14 @@ export const productFamilies: ProductFamily[] = [
     name: "Uretherm spray-foam systems",
     shortName: "Uretherm",
     positioning: "Spray-applied polyurethane system pathway for insulation and construction enquiries.",
-    description: "Known product names include GT 40 and GT 50. Performance details require Urechem confirmation before publication.",
+    description: "Part of the Uretherm spray-foam systems range, with GT 40 and GT 50 catalog identifiers routed through technical review.",
     applications: ["thermal-insulation", "spray-foam", "construction-systems"],
     industries: ["construction", "industrial-facilities"],
     validation: "confirmed-name",
     documents: docs(),
     products: [
-      product("uretherm-spray-foam-systems", "GT 40", "GT 40 is a confirmed Urechem product name in the Uretherm family.", ["thermal-insulation", "spray-foam"]),
-      product("uretherm-spray-foam-systems", "GT 50", "GT 50 is a confirmed Urechem product name in the Uretherm family.", ["thermal-insulation", "spray-foam"]),
+      product("uretherm-spray-foam-systems", "GT 40", "Part of the Uretherm spray-foam systems range for structured insulation and spray-foam enquiries.", ["thermal-insulation", "spray-foam"]),
+      product("uretherm-spray-foam-systems", "GT 50", "Part of the Uretherm spray-foam systems range for structured insulation and spray-foam enquiries.", ["thermal-insulation", "spray-foam"]),
     ],
   },
   {
@@ -106,13 +106,13 @@ export const productFamilies: ProductFamily[] = [
     name: "ChemNate MDI range",
     shortName: "ChemNate",
     positioning: "MDI product-name range for controlled polyurethane formulation discussions.",
-    description: "Known ChemNate names are listed without unverified NCO, viscosity, packaging or processing claims.",
+    description: "ChemNate MDI catalog identifiers are presented for enquiry routing, with performance data reviewed case by case.",
     applications: ["thermal-insulation", "adhesives-coatings", "construction-systems"],
     industries: ["construction", "industrial-facilities"],
     validation: "confirmed-name",
     documents: docs(),
     products: ["PMDI 2401", "FMDI 2402", "MDI 2450", "MDI 2437", "C MDI 2096"].map((name) =>
-      product("chemnate-mdi-range", name, `${name} is a confirmed ChemNate product name requiring expert validation for application selection.`, []),
+      product("chemnate-mdi-range", name, `${name} is part of the ChemNate MDI range for Urechem technical enquiries.`, []),
     ),
   },
   {
@@ -120,13 +120,13 @@ export const productFamilies: ProductFamily[] = [
     name: "KlayOl polyol range",
     shortName: "KlayOl Polyols",
     positioning: "Polyol product-name range for flexible, moulded and custom polyurethane development discussions.",
-    description: "Known KlayOl polyol names are presented as catalog identifiers until detailed properties are confirmed.",
-    applications: ["flexible-moulded-foam"],
+    description: "KlayOl polyol catalog identifiers support flexible, moulded and development enquiries that require technical review.",
+    applications: ["flexible-moulded-foam", "automotive-seating", "furniture-bedding"],
     industries: ["furniture-bedding", "automotive"],
     validation: "confirmed-name",
     documents: docs(),
     products: ["PE 2428", "PE 2435", "PE 2456", "POP"].map((name) =>
-      product("klayol-polyol-range", name, `${name} is a confirmed KlayOl polyol product name.`, []),
+      product("klayol-polyol-range", name, `${name} is part of the KlayOl polyol range for Urechem technical enquiries.`, []),
     ),
   },
   {
@@ -134,13 +134,13 @@ export const productFamilies: ProductFamily[] = [
     name: "KlayOl PPG range",
     shortName: "KlayOl PPG",
     positioning: "PPG product-name range for formulation review pathways.",
-    description: "Known PPG 14xx names are shown as identifiers; detailed use claims require client confirmation.",
+    description: "KlayOl PPG catalog identifiers support formulation discussions where detailed use guidance is reviewed per enquiry.",
     applications: ["adhesives-coatings", "custom-formulation"],
     industries: ["industrial-facilities"],
     validation: "confirmed-name",
     documents: docs(),
     products: ["PPG 1420", "PPG 1440", "PPG 1410", "PPG 1404", "PPG 1412"].map((name) =>
-      product("klayol-ppg-range", name, `${name} is a confirmed KlayOl PPG product name.`, []),
+      product("klayol-ppg-range", name, `${name} is part of the KlayOl PPG range for Urechem technical enquiries.`, []),
     ),
   },
   {
@@ -148,13 +148,13 @@ export const productFamilies: ProductFamily[] = [
     name: "Flexible systems",
     shortName: "Flexible Systems",
     positioning: "Flexible foam system names for comfort, seating and moulded foam review pathways.",
-    description: "Known flexible-system names include VE4105 A/B and Flex 8305 A/B; processing data requires technical review.",
-    applications: ["flexible-moulded-foam"],
+    description: "Flexible system catalog identifiers connect comfort, seating and moulded-foam enquiries to technical review.",
+    applications: ["flexible-moulded-foam", "automotive-seating", "furniture-bedding"],
     industries: ["automotive", "furniture-bedding"],
     validation: "confirmed-name",
     documents: docs(),
     products: ["VE4105 A/B", "Flex 8305 A/B"].map((name) =>
-      product("flexible-systems", name, `${name} is a confirmed flexible-system product name requiring application-specific validation.`, []),
+      product("flexible-systems", name, `${name} is part of the Flexible Systems range for application-specific technical review.`, []),
     ),
   },
   {
@@ -162,13 +162,13 @@ export const productFamilies: ProductFamily[] = [
     name: "Additives and processing aids",
     shortName: "Additives",
     positioning: "Known additive and processing-aid categories for formulation-support discussions.",
-    description: "Category names are listed for enquiry routing; specific grades and performance claims require client confirmation.",
-    applications: ["custom-formulation"],
+    description: "Additive and processing-aid categories are listed for enquiry routing; grade selection is reviewed with Urechem specialists.",
+    applications: ["spray-foam", "custom-formulation"],
     industries: ["industrial-facilities"],
     validation: "requires-client-validation",
     documents: docs(),
     products: ["Additives", "Pigments", "Catalysts", "Silicone oils", "Colour pastes", "Cell openers", "Anti-scorching agents", "Anti-UV agents", "Anti-yellowing agents", "Antibacterial agents", "Whitening agents"].map((name) =>
-      product("additives-processing-aids", name, `${name} are known catalog category names for Urechem technical discussion.`, []),
+      product("additives-processing-aids", name, `${name} can be routed through Urechem technical discussion for formulation support.`, []),
     ),
   },
 ];
@@ -186,6 +186,8 @@ const applicationSeeds = [
   ["custom-formulation", "Custom formulation", "Convert non-standard performance needs into a controlled development brief."],
 ] as const satisfies readonly ApplicationSeed[];
 
+
+
 export const industries: Industry[] = [
   { slug: "construction", name: "Construction", summary: "Insulation, spray foam and building-system evaluation pathways.", needs: ["Substrate compatibility", "Installation method", "Compliance documentation"], applicationSlugs: ["thermal-insulation", "spray-foam", "construction-systems"], familySlugs: ["uretherm-spray-foam-systems", "chemnate-mdi-range"] },
   { slug: "automotive", name: "Automotive", summary: "Seating and moulded-foam enquiry pathways for manufacturing teams.", needs: ["Foam response", "Production repeatability", "Document control"], applicationSlugs: ["automotive-seating", "flexible-moulded-foam"], familySlugs: ["flexible-systems", "klayol-polyol-range"] },
@@ -198,7 +200,7 @@ export const applications: Application[] = applicationSeeds.map(([slug, name, su
   name,
   summary,
   needs: ["Application context", "Performance target", "Processing constraints", "Required documents"],
-  familySlugs: productFamilies.filter((family) => family.applications.includes(slug)).map((family) => family.slug),
+  familySlugs: [...getApplicationFamilySlugs(slug)],
   industrySlugs: industries.filter((industry) => industry.applicationSlugs.includes(slug)).map((industry) => industry.slug),
 }));
 

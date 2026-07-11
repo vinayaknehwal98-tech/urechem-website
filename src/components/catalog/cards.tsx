@@ -14,7 +14,7 @@ export function ValidationNote() {
 
 export function FamilyCard({ family }: { family: ProductFamily }) {
   return (
-    <article className="rounded-lg border border-white/10 bg-white/[0.04] p-5 shadow-[var(--shadow-soft)]">
+    <article className="rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.04] p-5 shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 hover:border-cyan-300/60 focus-within:border-cyan-300/60">
       <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-300">{family.shortName}</p>
       <h3 className="mt-3 text-xl font-semibold text-white">{family.name}</h3>
       <p className="mt-3 text-sm leading-6 text-slate-300">{family.positioning}</p>
@@ -50,68 +50,63 @@ function Tag({ children, tone = "neutral" }: { children: ReactNode; tone?: "cyan
 }
 
 export function FamilyLinks({ slugs }: { slugs: string[] }) {
+  const resolved = slugs.map((slug) => productFamilies.find((item) => item.slug === slug)).filter((family): family is ProductFamily => Boolean(family));
+  if (resolved.length === 0) return null;
   return (
     <div className="flex flex-wrap gap-2">
-      {slugs.map((slug) => {
-        const family = productFamilies.find((item) => item.slug === slug);
-        return family ? (
-          <Link key={slug} href={`/products/${slug}`} className="rounded-full bg-cyan-300/10 px-3 py-1 text-sm text-cyan-100">
-            {family.shortName}
-          </Link>
-        ) : null;
-      })}
+      {resolved.map((family) => (
+        <Link key={family.slug} href={`/products/${family.slug}`} className="rounded-full bg-cyan-300/10 px-3 py-1 text-sm text-cyan-100 transition hover:bg-cyan-300/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200">
+          {family.shortName}
+        </Link>
+      ))}
     </div>
   );
 }
 
 export function FamilyTags({ slugs }: { slugs: string[] }) {
+  const resolved = slugs.map((slug) => productFamilies.find((item) => item.slug === slug)).filter((family): family is ProductFamily => Boolean(family));
+  if (resolved.length === 0) return null;
   return (
     <div className="flex flex-wrap gap-2">
-      {slugs.map((slug) => {
-        const family = productFamilies.find((item) => item.slug === slug);
-        return family ? <Tag key={family.slug} tone="cyan">{family.shortName}</Tag> : null;
-      })}
+      {resolved.map((family) => <Tag key={family.slug} tone="cyan">{family.shortName}</Tag>)}
     </div>
   );
 }
 
 export function AppLinks({ slugs }: { slugs: string[] }) {
+  const resolved = slugs.map((slug) => applications.find((item) => item.slug === slug)).filter((application): application is (typeof applications)[number] => Boolean(application));
+  if (resolved.length === 0) return null;
   return (
     <div className="flex flex-wrap gap-2">
-      {slugs.map((slug) => {
-        const application = applications.find((item) => item.slug === slug);
-        return application ? (
-          <Link key={slug} href={`/applications/${slug}`} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-100">
-            {application.name}
-          </Link>
-        ) : null;
-      })}
+      {resolved.map((application) => (
+        <Link key={application.slug} href={`/applications/${application.slug}`} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-100 transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200">
+          {application.name}
+        </Link>
+      ))}
     </div>
   );
 }
 
 export function AppTags({ slugs }: { slugs: string[] }) {
+  const resolved = slugs.map((slug) => applications.find((item) => item.slug === slug)).filter((application): application is (typeof applications)[number] => Boolean(application));
+  if (resolved.length === 0) return null;
   return (
     <div className="flex flex-wrap gap-2">
-      {slugs.map((slug) => {
-        const application = applications.find((item) => item.slug === slug);
-        return application ? <Tag key={application.slug}>{application.name}</Tag> : null;
-      })}
+      {resolved.map((application) => <Tag key={application.slug}>{application.name}</Tag>)}
     </div>
   );
 }
 
 export function IndustryLinks({ slugs }: { slugs: string[] }) {
+  const resolved = slugs.map((slug) => industries.find((item) => item.slug === slug)).filter((industry): industry is (typeof industries)[number] => Boolean(industry));
+  if (resolved.length === 0) return null;
   return (
     <div className="flex flex-wrap gap-2">
-      {slugs.map((slug) => {
-        const industry = industries.find((item) => item.slug === slug);
-        return industry ? (
-          <Link key={slug} href={`/industries/${slug}`} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-100">
-            {industry.name}
-          </Link>
-        ) : null;
-      })}
+      {resolved.map((industry) => (
+        <Link key={industry.slug} href={`/industries/${industry.slug}`} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-100 transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200">
+          {industry.name}
+        </Link>
+      ))}
     </div>
   );
 }
