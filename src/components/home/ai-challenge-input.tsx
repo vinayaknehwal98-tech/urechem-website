@@ -23,7 +23,7 @@ export function AiChallengeInput() {
     }
 
     if (state === "ready") {
-      return "AI Solution Finder preview captured. Expert-validated recommendations are coming in the AI milestone. Final product selection requires technical validation.";
+      return "Challenge captured. AI-assisted guidance is preliminary, and final product selection requires technical validation.";
     }
 
     return "";
@@ -69,10 +69,10 @@ export function AiChallengeInput() {
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {suggestions.map((suggestion) => (
               <button
-                className="rounded-[var(--radius-sm)] border border-white/12 bg-white/[0.055] px-3 py-2 text-left text-xs font-semibold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:border-cyan-200/48 hover:bg-cyan-300/11 hover:text-cyan-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200"
+                className="rounded-[var(--radius-sm)] border border-white/12 bg-white/[0.055] px-3 py-1.5 text-left text-xs font-semibold text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:border-cyan-200/48 hover:bg-cyan-300/11 hover:text-cyan-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200 sm:py-2"
                 key={suggestion}
                 type="button"
                 onClick={() => {

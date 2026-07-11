@@ -28,13 +28,18 @@ export function SiteFooter() {
               Urechem is a technical polyurethane and specialty-chemical solutions partner for application
               problem-solving, formulation development, implementation support, quality validation and supply.
             </p>
-            <p className="mt-4 max-w-md rounded-[var(--radius-md)] border border-amber-300/24 bg-amber-300/8 px-4 py-3 text-sm leading-6 text-amber-100">
-              Contact details are awaiting client confirmation and should not be published until validated.
-            </p>
-            <ButtonLink className="mt-6" href="/ask-urechem-ai" variant="secondary">
-              <Sparkles aria-hidden="true" className="h-4 w-4" />
-              Ask Urechem AI
-            </ButtonLink>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <ButtonLink href="/contact" variant="secondary">
+                Submit an enquiry
+              </ButtonLink>
+              <ButtonLink href="/contact" variant="ghost">
+                Speak to a technical expert
+              </ButtonLink>
+              <ButtonLink href="/ask-urechem-ai" variant="secondary">
+                <Sparkles aria-hidden="true" className="h-4 w-4" />
+                Ask Urechem AI
+              </ButtonLink>
+            </div>
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">

@@ -106,7 +106,7 @@ export function MobileNavigation() {
                 Ask Urechem AI
               </ButtonLink>
               <p className="mt-3 text-sm leading-6 text-slate-300">
-                Preliminary AI guidance only. Final product selection requires Urechem technical validation.
+                AI guidance is preliminary. Final product selection requires Urechem technical validation.
               </p>
             </div>
           </nav>
