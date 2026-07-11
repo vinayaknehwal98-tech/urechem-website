@@ -1,1 +1,12 @@
-import { Container } from "@/components/ui/container";export const metadata={title:'Innovation & R&D | Urechem'};export default function Page(){return <Container className="py-16"><h1 className="text-4xl font-semibold">Innovation & R&D</h1><p className="mt-4 max-w-3xl text-slate-300">Urechem frames formulation work through problem identification, research, raw-material alignment, custom development, testing, compliance review, sample approval and delivery.</p></Container>}
+import { Container } from "@/components/ui/container";
+
+export const metadata = { title: "Innovation and R&D | Urechem Chemicals" };
+
+export default function Page() {
+  return (
+    <Container className="py-16">
+      <h1 className="text-4xl font-semibold">Innovation & R&D</h1>
+      <p className="mt-4 max-w-3xl text-slate-300">Urechem frames formulation work through problem identification, research, raw-material alignment, custom development, testing, compliance review, sample approval and delivery.</p>
+    </Container>
+  );
+}

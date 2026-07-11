@@ -4,32 +4,29 @@ Last verified: July 11, 2026
 
 ## Current milestone
 
-Client-ready MVP product, application, industry, technical-center, company and deterministic AI front-end foundations have been implemented from Milestone 2 through Milestone 11 scope.
+This branch is an unverified catalog and application scaffold for Milestone 2 and Milestone 3 follow-up work. It should not be described as client-ready until dependency installation, lint, production build, runtime checks, accessibility checks and review screenshots have all passed.
 
-## Completed work
+## Implemented scaffold
 
-- Product data architecture with typed families, products, stable slugs, document availability metadata, validation states, lookup helpers, related-family helpers and comparison eligibility helpers.
-- `/products` listing with client-side search, family filtering, empty-state handling and reusable family cards.
-- Dynamic product family and individual product pages using only confirmed catalog names and safe validation language.
-- Product comparison page comparing confirmed public attributes only.
-- Applications and industries listing/detail pages connected to product families and enquiry pathways.
-- Technical Center landing and document/testing/AI-search/validation pages with no fake downloads.
-- Innovation & R&D, About and Contact pages, including structured enquiry types without invented contact details.
-- Deterministic local/demo AI Solution Finder, Ask Urechem AI and Technical Brief Builder pages with expert-validation language.
-- Sitemap and robots routes added for production SEO foundation.
+- Product-family and product data structures for known Urechem names, with metadata separating confirmed names from descriptions, applications, document status and selection guidance that require client validation.
+- `/products` listing, dynamic family pages, dynamic product pages and product comparison foundations.
+- Application and industry listing/detail pathways connected through explicit structured relationships rather than broad inferred mappings.
+- Technical Center and AI-assisted enquiry-route pages with expert-validation boundaries.
+- About, Innovation & R&D and Contact page scaffolds for structured commercial and technical enquiries.
+- Sitemap and robots routes for an SEO foundation.
 
 ## Verification
 
-- `npm run lint` attempted but could not complete because local dependencies are unavailable (`eslint` package missing after registry/install failure).
-- `npm run build` attempted but could not complete because local dependencies are unavailable (`next` binary missing after registry/install failure).
-- Desktop and mobile inspection are limited to code-level responsive review in this non-browser execution pass; `review-screenshots/latest/README.md` records the screenshot blocker.
+- `npm ci`, `npm run lint` and `npm run build` must be rerun with the repository lockfile and a supported Node.js version before readiness claims are made.
+- Runtime inspection, accessibility checks and desktop/mobile screenshots are still required after a successful build.
 - No backend API, API keys, secrets, `.env` files, credentials or private keys were added.
 
-## Known issues
+## Known limitations
 
-- Public contact details, certifications, product specifications, downloads, safety guidance and processing parameters still require client-supplied verified source material before publication.
-- AI experiences are deterministic front-end placeholders only and do not represent a live AI backend.
+- Public contact details, certifications, product specifications, downloads, safety guidance, document availability and processing parameters still require client-supplied verified source material before publication.
+- AI experiences are deterministic front-end scaffolds only and do not represent a live AI backend.
+- Product, safety, compliance and processing guidance must be reviewed by qualified Urechem stakeholders before publication.
 
 ## Next milestone
 
-Client review, content validation and replacement of request-only document states with approved controlled document workflows when available.
+Stabilize Milestone 2 catalog quality and Milestone 3 application/industry quality, then complete dependency installation, lint, build, runtime, accessibility and screenshot verification before describing the work as production-ready.
