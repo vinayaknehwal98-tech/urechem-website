@@ -1,6 +1,6 @@
 # Build Status
 
-Last verified: July 11, 2026
+Last verified: July 17, 2026
 
 ## Current milestone
 
@@ -19,8 +19,8 @@ This branch is a verified-build Milestone 2/3 catalog and application polish pas
 
 - GitHub Actions `CI` passed on the current branch for `npm ci`, `npm run lint` and `npm run build` on July 11, 2026, as reported in the PR follow-up trigger.
 - The automated screenshot workflow passed on July 11, 2026, as reported in the PR follow-up trigger, covering the Milestone 2/3 catalog routes at desktop and mobile breakpoints.
-- This follow-up polish pass should rerun GitHub Actions `CI` and the automated screenshot workflow after commit so the branch records the latest verification against these changes.
-- Local verification in the Codex task container is limited by an npm proxy/install hang before a complete local dependency install is available; GitHub Actions remains the verification source for clean Linux install/build results.
+- Vercel is now connected to the repository; this documentation-only commit is intended to trigger the first preview deployment for the current pull-request branch.
+- GitHub Actions remains the verification source for clean Linux install/build results when the Codex task container cannot complete a local dependency install.
 - No backend API, API keys, secrets, `.env` files, credentials or private keys were added.
 
 ## Known limitations
@@ -31,4 +31,4 @@ This branch is a verified-build Milestone 2/3 catalog and application polish pas
 
 ## Next milestone
 
-Inspect the latest desktop/mobile screenshot artifact after this polish pass, resolve any visual or accessibility issues found there, and keep non-catalog routes as honest scaffolds until verified client content is available.
+Inspect the Vercel pull-request preview alongside the latest desktop/mobile screenshot artifact, resolve any visual or accessibility issues found there, and keep non-catalog routes as honest scaffolds until verified client content is available.
