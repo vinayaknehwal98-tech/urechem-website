@@ -1,42 +1,34 @@
 # Build Status
 
-Last verified: July 11, 2026
+Last verified: July 17, 2026
 
 ## Current milestone
 
-The Urechem homepage has been completed and refined for the current visible milestone, including the global layout, responsive navigation, footer, hero, homepage sections, AI challenge intake UI, product universe, workflow, technical center preview, and review screenshots.
+This branch is a verified-build Milestone 2/3 catalog and application polish pass. GitHub Actions `CI` has passed for dependency installation, lint and production build on the current branch, and the automated review-screenshot workflow has also passed according to the PR follow-up trigger.
+
+## Implemented scaffold
+
+- Product-family and product data structures for known Urechem names, with metadata separating confirmed names from descriptions, applications, document status and selection guidance that require client validation.
+- `/products` listing, dynamic family pages, dynamic product pages and a selectable product comparison workflow for confirmed public attributes and document-publication status.
+- Application and industry listing/detail pathways connected through explicit structured relationships rather than broad inferred mappings.
+- Technical Center and AI-assisted enquiry-route pages with expert-validation boundaries.
+- About, Innovation & R&D and Contact page scaffolds for structured commercial and technical enquiries.
+- Sitemap and robots routes for an SEO foundation.
 
 ## Verification
 
-- `npm run lint` passes.
-- `npm run build` passes.
-- Desktop inspection at `1440 x 900` completed.
-- Mobile inspection at `390 x 844` completed.
-- No horizontal overflow was observed during visual review.
-- No backend API, API keys, secrets, or environment variables were added.
+- GitHub Actions `CI` passed on the current branch for `npm ci`, `npm run lint` and `npm run build` on July 11, 2026, as reported in the PR follow-up trigger.
+- The automated screenshot workflow passed on July 11, 2026, as reported in the PR follow-up trigger, covering the Milestone 2/3 catalog routes at desktop and mobile breakpoints.
+- Vercel is now connected to the repository; this documentation-only commit is intended to trigger the first preview deployment for the current pull-request branch.
+- GitHub Actions remains the verification source for clean Linux install/build results when the Codex task container cannot complete a local dependency install.
+- No backend API, API keys, secrets, `.env` files, credentials or private keys were added.
 
-## Review screenshots
+## Known limitations
 
-Latest review screenshots are saved under `review-screenshots/`, including:
+- Public contact details, certifications, product specifications, downloads, safety guidance, document availability and processing parameters still require client-supplied verified source material before publication.
+- AI experiences are deterministic front-end scaffolds only and do not represent a live AI backend.
+- Product, safety, compliance and processing guidance must be reviewed by qualified Urechem stakeholders before publication.
 
-- `review-screenshots/homepage-desktop.png`
-- `review-screenshots/homepage-mobile.png`
-- `review-screenshots/sections/desktop-01-hero.png`
-- `review-screenshots/sections/desktop-02-pathways.png`
-- `review-screenshots/sections/desktop-03-product-universe.png`
-- `review-screenshots/sections/desktop-04-application-discovery.png`
-- `review-screenshots/sections/desktop-05-proof-and-expertise.png`
-- `review-screenshots/sections/desktop-06-workflow.png`
-- `review-screenshots/sections/desktop-07-technical-center-preview.png`
-- `review-screenshots/sections/desktop-08-final-cta.png`
-- `review-screenshots/sections/desktop-09-footer.png`
-- `review-screenshots/sections/mobile-01-hero.png`
-- `review-screenshots/sections/mobile-02-product-universe.png`
-- `review-screenshots/sections/mobile-03-workflow.png`
-- `review-screenshots/sections/mobile-04-footer.png`
+## Next milestone
 
-## Notes
-
-- AI challenge intake remains a front-end interaction only.
-- AI guidance is preliminary; final product selection requires technical validation.
-- Provisional company figures remain internally marked with validation metadata in the structured data source.
+Inspect the Vercel pull-request preview alongside the latest desktop/mobile screenshot artifact, resolve any visual or accessibility issues found there, and keep non-catalog routes as honest scaffolds until verified client content is available.
