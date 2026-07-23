@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
+import { BrandLogo } from "@/components/layout/brand-logo";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { footerGroups, legalLinks } from "@/data/navigation";
@@ -13,16 +14,10 @@ export function SiteFooter() {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_2fr]">
           <div>
             <Link
-              className="inline-flex items-center gap-3 rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+              className="group inline-flex items-center rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
               href="/"
             >
-              <span className="grid h-11 w-11 place-items-center rounded-[var(--radius-sm)] border border-cyan-200/25 bg-cyan-300/10 text-sm font-black text-cyan-100 shadow-[var(--shadow-cyan)]">
-                U
-              </span>
-              <span>
-                <span className="block text-lg font-black leading-none text-white">URECHEM</span>
-                <span className="mt-1 block text-xs font-medium text-cyan-100/80">We deliver what we promise</span>
-              </span>
+              <BrandLogo tone="dark" />
             </Link>
             <p className="mt-6 max-w-md text-sm leading-7">
               Urechem is a technical polyurethane and specialty-chemical solutions partner for application

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Menu, MessageSquareText, Sparkles, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
+import { BrandLogo } from "@/components/layout/brand-logo";
 import { ButtonLink } from "@/components/ui/button";
 import { primaryNavigation } from "@/data/navigation";
 
@@ -64,17 +65,11 @@ export function MobileNavigation() {
           >
             <div className="mb-5 flex items-start justify-between gap-4">
               <Link
-                className="group flex items-center gap-3 rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+                className="group inline-flex min-w-0 items-center rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
                 href="/"
                 onClick={() => setIsOpen(false)}
               >
-                <span className="grid h-10 w-10 place-items-center rounded-[var(--radius-sm)] border border-blue-700 bg-blue-700 text-sm font-black text-white shadow-[0_10px_28px_rgba(29,78,216,0.25)]">
-                  U
-                </span>
-                <span>
-                  <span className="block text-base font-black text-blue-950">URECHEM CHEMICAL</span>
-                  <span className="block text-xs font-bold text-blue-700">We deliver what we promise</span>
-                </span>
+                <BrandLogo compact />
               </Link>
               <button
                 ref={closeButtonRef}
