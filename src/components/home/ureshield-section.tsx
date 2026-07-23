@@ -7,9 +7,9 @@ export function UreShieldSection() {
   return (
     <HomeSection
       className="bg-[linear-gradient(180deg,#071a2d,#0b2840)]"
-      eyebrow="Waterproofing and grouting"
+      eyebrow="Waterproofing, grouting and polyurea"
       id="ureshield"
-      intro="UreShield combines polyurethane membrane and injection-grouting pathways for waterproofing, structural consolidation and water-control challenges."
+      intro="UreShield combines polyurethane membranes, injection-grouting systems and polyurea coatings for waterproofing, consolidation, water control and surface protection."
       title="UreShield systems built around demanding construction conditions."
     >
       <div className="grid gap-5 lg:grid-cols-[0.88fr_1.12fr]">
@@ -20,7 +20,7 @@ export function UreShieldSection() {
           <p className="relative mt-7 text-sm font-bold uppercase tracking-[0.2em] text-cyan-100">URESHIELD</p>
           <h3 className="relative mt-3 text-3xl font-black leading-tight sm:text-4xl">Seamless protection. Controlled injection. Technical validation.</h3>
           <p className="relative mt-5 max-w-xl leading-7 text-slate-200">
-            Explore single- and two-component PU membranes alongside specialist grouting products adapted from the supplied reference range through page 55.
+            Explore single- and two-component PU membranes, specialist grouting products and high-performance polyurea coatings adapted from the supplied reference range through page 62.
           </p>
           <Link
             className="relative mt-8 inline-flex items-center gap-2 rounded-[var(--radius-button)] border border-cyan-200/55 bg-cyan-300 px-5 py-3 font-bold text-navy-950 transition hover:bg-white"

@@ -1,7 +1,7 @@
 export type UreShieldProduct = {
   slug: string;
   name: string;
-  category: "PU membrane" | "Grouting chemical";
+  category: "PU membrane" | "Grouting chemical" | "Polyurea";
   summary: string;
   features: string[];
   benefits: string[];
@@ -89,7 +89,71 @@ export const ureshieldProducts: UreShieldProduct[] = [
       "Dams and hydraulic works: repair and sealing of fissures, including aquifer conditions.",
     ],
   },
+  {
+    slug: "ureshield-hpu-101",
+    name: "UreShield HPU-101",
+    category: "Polyurea",
+    summary:
+      "Spray-applied hybrid polyurea waterproofing system engineered for rapid curing and durable surface protection in hot and tropical climates.",
+    features: ["2 component", "Hydrophobic", "Insulative", "Fast reacting"],
+    benefits: [
+      "Becomes tack-free within minutes, supporting near-immediate return to service.",
+      "Moisture and weather changes have minimal impact on coating adhesion and performance.",
+    ],
+    applications: [
+      "Bridge-deck construction and repairs, flooring, parking decks and roof coatings.",
+      "Moulded parts, industrial and manufacturing facilities, and power plants.",
+    ],
+  },
+  {
+    slug: "ureshield-ppu-102",
+    name: "UreShield PPU-102",
+    category: "Polyurea",
+    summary:
+      "Advanced pure-polyurea protective coating for rapid application and durable surface protection using specialised two-component hot-spray equipment.",
+    features: ["2 component", "Hydrophobic", "Insulative", "Fast reacting"],
+    benefits: [
+      "Becomes tack-free within minutes, supporting near-immediate return to service.",
+      "Moisture and weather changes have minimal impact on coating adhesion and performance.",
+    ],
+    applications: [
+      "Bridge-deck construction and repairs, flooring, parking decks and roof coatings.",
+      "Moulded parts, industrial and manufacturing facilities, and power plants.",
+    ],
+  },
+  {
+    slug: "ureshield-hpu-101-cold",
+    name: "UreShield HPU-101 Cold",
+    category: "Polyurea",
+    summary:
+      "Two-component, solvent-free, hand-applied elastomeric hybrid-polyurea membrane for concrete waterproofing.",
+    features: ["2 component", "Hydrophobic", "Hand applied", "Slow reacting"],
+    benefits: [
+      "Forms an integrated bond without gaps, laps or seams for a smooth, durable surface.",
+      "Provides robust puncture resistance for reliable protection in high-impact areas.",
+    ],
+    applications: [
+      "Terraces, podium decks, car-park decks and roofing where a fire-retardant coating is not required.",
+      "Pour onto the prepared surface and distribute evenly with a notched trowel or spreader.",
+    ],
+  },
+  {
+    slug: "ureshield-hpu-101-cold-sl",
+    name: "UreShield HPU-101 Cold SL",
+    category: "Polyurea",
+    summary:
+      "Solvent-free, self-levelling, two-component hand-applied membrane based on elastomeric hybrid polyurea.",
+    features: ["2 component", "Hydrophobic", "Self levelling", "Slow reacting"],
+    benefits: [
+      "Provides strong mechanical characteristics for demanding waterproofing applications.",
+      "Its thermosetting nature helps maintain integrity at elevated temperatures.",
+    ],
+    applications: [
+      "Concrete waterproofing across terraces, podium decks, car-park decks and suitable roofing.",
+      "Apply onto correctly primed surfaces to support bonding and coating performance.",
+    ],
+  },
 ];
 
 export const ureshieldReferenceNote =
-  "This public pathway summarises the supplied reference content through page 55. Final product selection, performance claims and application suitability require validation by Urechem Chemicals specialists.";
+  "This public pathway summarises the supplied PU membrane, grouting and polyurea reference content through page 62. Final product selection, performance claims and application suitability require validation by Urechem Chemicals specialists.";

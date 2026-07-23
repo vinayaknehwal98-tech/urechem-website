@@ -5,9 +5,9 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { ureshieldProducts, ureshieldReferenceNote } from "@/data/ureshield";
 
 export const metadata = {
-  title: "UreShield Waterproofing & Grouting Systems | Urechem Chemicals",
+  title: "UreShield Waterproofing, Grouting & Polyurea Systems | Urechem Chemicals",
   description:
-    "Explore UreShield polyurethane membranes and injection-grouting pathways for waterproofing, consolidation and water-control enquiries.",
+    "Explore UreShield polyurethane membranes, injection grouts and polyurea coatings for waterproofing, consolidation, water control and surface protection.",
 };
 
 export default function Page() {
@@ -20,10 +20,10 @@ export default function Page() {
           <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_0.42fr] lg:items-end">
             <div>
               <h1 className="max-w-5xl text-balance text-5xl font-black leading-[0.98] text-white sm:text-6xl lg:text-7xl">
-                UreShield waterproofing and grouting systems
+                UreShield waterproofing, grouting and polyurea systems
               </h1>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-200">
-                Polyurethane membrane and injection-grouting pathways for waterproofing, structural consolidation, void filling and high-pressure water-control challenges.
+                Polyurethane membranes, injection-grouting systems and polyurea coatings for waterproofing, structural consolidation, void filling, water control and durable surface protection.
               </p>
             </div>
             <div className="rounded-[var(--radius-lg)] border border-cyan-200/20 bg-white/7 p-5 backdrop-blur-sm">

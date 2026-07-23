@@ -17,8 +17,8 @@ export default function Page() {
         <div>
           <ShieldCheck aria-hidden="true" className="h-7 w-7 text-cyan-200" />
           <p className="mt-4 text-sm font-black uppercase tracking-[0.16em] text-cyan-100">New product-family pathway</p>
-          <h2 className="mt-2 text-3xl font-black text-white">UreShield waterproofing and grouting systems</h2>
-          <p className="mt-3 max-w-3xl leading-7 text-slate-300">Explore PU membranes and injection-grouting products for waterproofing, consolidation, void filling and water-control enquiries.</p>
+          <h2 className="mt-2 text-3xl font-black text-white">UreShield waterproofing, grouting and polyurea systems</h2>
+          <p className="mt-3 max-w-3xl leading-7 text-slate-300">Explore PU membranes, injection grouts and polyurea coatings for waterproofing, consolidation, void filling, water control and surface-protection enquiries.</p>
         </div>
         <ButtonLink href="/products/ureshield-waterproofing-grouting-systems" size="lg">
           Explore UreShield
