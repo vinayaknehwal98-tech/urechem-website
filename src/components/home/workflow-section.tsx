@@ -37,11 +37,15 @@ export function WorkflowSection() {
 
         <div className="grid gap-4 pl-12 md:pl-0">
           {workflowStages.map((stage, index) => (
-            <article
+            <motion.article
               className={`relative rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.045] p-5 shadow-[var(--shadow-soft)] md:grid md:w-[calc(50%_-_2rem)] md:grid-cols-[4rem_1fr] md:gap-5 ${
                 index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
               }`}
+              initial={shouldReduceMotion ? false : { opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
               key={stage.title}
+              transition={{ delay: Math.min(index * 0.04, 0.24), duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ amount: 0.3, once: true }}
+              whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
             >
               <span
                 aria-hidden="true"
@@ -58,7 +62,7 @@ export function WorkflowSection() {
                 <h3 className="text-xl font-black text-white">{stage.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-300">{stage.description}</p>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>
