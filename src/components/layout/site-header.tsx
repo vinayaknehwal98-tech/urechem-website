@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { MessageSquareText } from "lucide-react";
+import { DesktopNavigation } from "@/components/layout/desktop-navigation";
 import { MobileNavigation } from "@/components/layout/mobile-navigation";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { primaryNavigation } from "@/data/navigation";
 
 export function SiteHeader() {
   return (
@@ -22,17 +22,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Primary navigation" className="hidden items-center justify-between gap-1 px-2 lg:flex xl:px-5">
-          {primaryNavigation.map((item) => (
-            <Link
-              className="rounded-[var(--radius-sm)] px-2.5 py-2 text-[0.8125rem] font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 xl:px-3 xl:text-sm"
-              href={item.href}
-              key={item.href}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <DesktopNavigation />
 
         <div className="flex items-center gap-3">
           <ButtonLink className="hidden xl:inline-flex" href="/contact?type=Consultation%20request" size="sm">
