@@ -5,6 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
     "/products",
+    "/products/complete-range",
     "/products/compare",
     "/products/ureshield-waterproofing-grouting-systems",
     "/applications",
