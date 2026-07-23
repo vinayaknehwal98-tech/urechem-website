@@ -35,4 +35,6 @@ Milestones 2–11 are implemented. The site is in final production validation, w
 
 ## Final release step
 
-Publish the verified source, inspect the production deployment at desktop and mobile sizes, check browser console/output and record the final production URL and commit.
+Source release commit: `00bea05a78e54f69a38c90fc2d11ce91820bfde0`.
+
+Inspect the production deployment at desktop and mobile sizes, check browser console/output and record the final production result.
