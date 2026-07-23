@@ -1,9 +1,9 @@
-import { AiChallengeInput } from "@/components/home/ai-challenge-input";
 import { ValidationNote } from "@/components/catalog/cards";
+import { GuidedSolutionFinder } from "@/components/tools/guided-solution-finder";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 
-export const metadata = { title: "Describe Your Challenge | Urechem Chemicals" };
+export const metadata = { title: "Describe Your Challenge" };
 
 export default function Page() {
   return (
@@ -19,7 +19,7 @@ export default function Page() {
         </p>
 
         <div className="mt-10 max-w-5xl">
-          <AiChallengeInput />
+          <GuidedSolutionFinder />
         </div>
 
         <div className="mt-6 max-w-5xl">

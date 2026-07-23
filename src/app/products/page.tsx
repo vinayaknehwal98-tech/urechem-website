@@ -5,7 +5,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 
-export const metadata = { title: "Products | Urechem Chemicals" };
+export const metadata = { title: "Products" };
 
 export default function Page() {
   return (

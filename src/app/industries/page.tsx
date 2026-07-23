@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 import { industries } from "@/data/catalog";
 
-export const metadata = { title: "Industries | Urechem Chemicals" };
+export const metadata = { title: "Industries" };
 
 export default function Page() {
   return (

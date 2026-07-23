@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ application: string }> }) {
   const { application } = await params;
   const item = getApplication(application);
-  return { title: item ? `${item.name} | Urechem Applications` : "Application | Urechem Chemicals" };
+  return { title: item ? `${item.name} Application` : "Application" };
 }
 
 export default async function Page({ params }: { params: Promise<{ application: string }> }) {
@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ application: 
       <p className="mt-4 max-w-3xl text-slate-300">{item.summary}</p>
       <div className="mt-6"><ValidationNote /></div>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <ButtonLink href="/contact">Discuss this application</ButtonLink>
+        <ButtonLink href={`/contact?type=Consultation%20request&context=${encodeURIComponent(`Application review: ${item.name}`)}`}>Discuss this application</ButtonLink>
         <ButtonLink href="/innovation-rd" variant="secondary">Innovation & R&D route</ButtonLink>
       </div>
       <div className="mt-10 grid gap-6 md:grid-cols-3">

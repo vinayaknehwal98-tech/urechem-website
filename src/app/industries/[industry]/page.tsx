@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { AppLinks, FamilyLinks, ValidationNote } from "@/components/catalog/cards";
+import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 import { getIndustry, industries } from "@/data/catalog";
@@ -11,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ industry: string }> }) {
   const { industry } = await params;
   const item = getIndustry(industry);
-  return { title: item ? `${item.name} | Urechem Industries` : "Industry | Urechem Chemicals" };
+  return { title: item ? `${item.name} Industry` : "Industry" };
 }
 
 export default async function Page({ params }: { params: Promise<{ industry: string }> }) {
@@ -25,6 +26,11 @@ export default async function Page({ params }: { params: Promise<{ industry: str
       <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl">{item.name}</h1>
       <p className="mt-4 max-w-3xl text-slate-300">{item.summary}</p>
       <div className="mt-6"><ValidationNote /></div>
+      <div className="mt-8">
+        <ButtonLink href={`/contact?type=Consultation%20request&context=${encodeURIComponent(`Industry review: ${item.name}`)}`}>
+          Discuss this industry pathway
+        </ButtonLink>
+      </div>
       <div className="mt-10 grid gap-6 md:grid-cols-3">
         <section className="rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.035] p-5 shadow-[var(--shadow-soft)]">
           <h2 className="font-semibold">Common needs</h2>

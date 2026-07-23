@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { ContactEnquiryForm } from "@/components/contact/contact-enquiry-form";
 import { Container } from "@/components/ui/container";
 
-export const metadata = { title: "Contact | Urechem Chemicals" };
+export const metadata = { title: "Contact" };
 
 export default function Page() {
   return (

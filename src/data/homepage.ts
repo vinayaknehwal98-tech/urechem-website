@@ -274,7 +274,7 @@ export const technicalResources: TechnicalResource[] = [
   },
 ];
 
-export const technicalFilters = ["Product Family", "Application", "Chemistry", "Document Type"];
+export const technicalFilters = ["TDS", "SDS", "COA", "Compliance", "Processing guide"];
 
 export const ctaBriefFields = ["Application", "Material", "Environment", "Performance goal"];
 

@@ -71,7 +71,13 @@ const slugify = (name: string) =>
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 
-const product = (familySlug: string, name: string, description: string, applications: string[] = []): Product => ({
+const product = (
+  familySlug: string,
+  name: string,
+  description: string,
+  applications: string[] = [],
+  compareAttributes: Record<string, string> = {},
+): Product => ({
   slug: `${familySlug}-${slugify(name)}`,
   name,
   familySlug,
@@ -79,10 +85,7 @@ const product = (familySlug: string, name: string, description: string, applicat
   applications,
   validation: "confirmed-name",
   documents: docs(),
-  compareAttributes: {
-    "Published documents": "Contact Urechem for current document availability",
-    "Selection status": "Performance data and application suitability are reviewed for each enquiry",
-  },
+  compareAttributes,
 });
 
 export const productFamilies: ProductFamily[] = [
@@ -97,8 +100,34 @@ export const productFamilies: ProductFamily[] = [
     validation: "confirmed-name",
     documents: docs(),
     products: [
-      product("uretherm-spray-foam-systems", "GT 40", "Part of the Uretherm spray-foam systems range for structured insulation and spray-foam enquiries.", ["thermal-insulation", "spray-foam"]),
-      product("uretherm-spray-foam-systems", "GT 50", "Part of the Uretherm spray-foam systems range for structured insulation and spray-foam enquiries.", ["thermal-insulation", "spray-foam"]),
+      product(
+        "uretherm-spray-foam-systems",
+        "GT 40",
+        "A fully formulated polyol blend used as part of a two-component, closed-cell polyurethane spray system for building-insulation applications.",
+        ["thermal-insulation", "spray-foam", "construction-systems"],
+        {
+          "Product role": "Fully formulated spray-foam polyol blend",
+          "System profile": "Two-component, closed-cell polyurethane spray system",
+          "Reference density": "40-45",
+          "Primary applications": "Floors, attics, crawl spaces and walls in residential and commercial buildings",
+          "Reference benefits": "Thermal insulation, moisture resistance, durable structure and adhesion to common construction materials",
+          "Application requirement": "For trained applicators using dedicated spray-foam dispensing equipment",
+        },
+      ),
+      product(
+        "uretherm-spray-foam-systems",
+        "GT 50",
+        "A fully formulated polyol blend used as part of a two-component, closed-cell polyurethane spray system for higher-density building-insulation applications.",
+        ["thermal-insulation", "spray-foam", "construction-systems"],
+        {
+          "Product role": "Fully formulated spray-foam polyol blend",
+          "System profile": "Two-component, closed-cell polyurethane spray system",
+          "Reference density": "50-55",
+          "Primary applications": "Floors, attics, crawl spaces and walls in residential and commercial buildings",
+          "Reference benefits": "Thermal insulation, moisture resistance, durable structure and adhesion to common construction materials",
+          "Application requirement": "For trained applicators using dedicated spray-foam dispensing equipment",
+        },
+      ),
     ],
   },
   {
@@ -111,9 +140,68 @@ export const productFamilies: ProductFamily[] = [
     industries: ["construction", "industrial-facilities"],
     validation: "confirmed-name",
     documents: docs(),
-    products: ["PMDI 2401", "FMDI 2402", "MDI 2450", "MDI 2437", "C MDI 2096"].map((name) =>
-      product("chemnate-mdi-range", name, `${name} is part of the ChemNate MDI range for Urechem technical enquiries.`, []),
-    ),
+    products: [
+      product(
+        "chemnate-mdi-range",
+        "PMDI 2401",
+        "A standard-functionality polymeric diphenylmethane diisocyanate (MDI) for polyurethane formulation enquiries.",
+        ["thermal-insulation", "adhesives-coatings", "construction-systems"],
+        {
+          "Product role": "Standard-functionality polymeric MDI",
+          Chemistry: "Polymeric diphenylmethane diisocyanate",
+          "Primary applications": "Polyurethane production, adhesives, coatings and insulation materials",
+          "Reference benefits": "Bonding strength, moisture resistance and thermal-insulation performance",
+        },
+      ),
+      product(
+        "chemnate-mdi-range",
+        "FMDI 2402",
+        "A prepolymerized diphenylmethane diisocyanate presented in the supplied reference as a liquid pure MDI.",
+        ["adhesives-coatings", "custom-formulation"],
+        {
+          "Product role": "Prepolymerized liquid MDI",
+          Chemistry: "Diphenylmethane diisocyanate",
+          "Physical profile": "Liquid at room temperature",
+          "Reference benefits": "Easier handling and faster curing for processing efficiency",
+        },
+      ),
+      product(
+        "chemnate-mdi-range",
+        "MDI 2450",
+        "A 2,4-rich blend of 2,4- and 4,4-diphenylmethane diisocyanates for formulation review.",
+        ["adhesives-coatings", "custom-formulation"],
+        {
+          "Product role": "2,4-rich isocyanate blend",
+          Chemistry: "Blend of 2,4- and 4,4-diphenylmethane diisocyanates",
+          "Physical profile": "Clear, colourless to light-yellow liquid at room temperature",
+          "Reference benefits": "Mechanical strength, stiffness, durability, high reactivity and faster curing",
+        },
+      ),
+      product(
+        "chemnate-mdi-range",
+        "MDI 2437",
+        "A viscosity- and reactivity-modified MDI for adhesive, coating and elastomer formulation pathways.",
+        ["adhesives-coatings", "custom-formulation"],
+        {
+          "Product role": "Viscosity- and reactivity-modified MDI",
+          Chemistry: "Modified diphenylmethane diisocyanate",
+          "Primary applications": "Adhesives, coatings, elastomers and flexible-packaging applications",
+          "Reference benefits": "Adhesion, durability and chemical resistance",
+        },
+      ),
+      product(
+        "chemnate-mdi-range",
+        "C MDI 2096",
+        "A low-viscosity modified MDI for specialist polyurethane, floor-coating and primer enquiries.",
+        ["adhesives-coatings", "construction-systems", "custom-formulation"],
+        {
+          "Product role": "Low-viscosity modified MDI",
+          Chemistry: "Modified diphenylmethane diisocyanate",
+          "Primary applications": "Specialty polyurethanes, polyurethane floor coatings and primers",
+          "Reference benefits": "Thermal stability and formulation flexibility for application-specific properties",
+        },
+      ),
+    ],
   },
   {
     slug: "klayol-polyol-range",
@@ -125,9 +213,56 @@ export const productFamilies: ProductFamily[] = [
     industries: ["furniture-bedding", "automotive"],
     validation: "confirmed-name",
     documents: docs(),
-    products: ["PE 2428", "PE 2435", "PE 2456", "POP"].map((name) =>
-      product("klayol-polyol-range", name, `${name} is part of the KlayOl polyol range for Urechem technical enquiries.`, []),
-    ),
+    products: [
+      product(
+        "klayol-polyol-range",
+        "PE 2428",
+        "A trifunctional polyether polyol with a reference molecular weight of 6,000.",
+        ["flexible-moulded-foam", "automotive-seating", "furniture-bedding"],
+        {
+          "Product role": "Trifunctional polyether polyol",
+          "Reference molecular weight": "6,000",
+          "Primary applications": "Polyurethane sealing, moulded foam and flexible foam",
+          "Reference benefits": "Crosslinking strength, flexibility, hardness balance and resilience",
+        },
+      ),
+      product(
+        "klayol-polyol-range",
+        "PE 2435",
+        "A trifunctional reactive polyether polyol with a reference molecular weight of 5,000.",
+        ["flexible-moulded-foam", "automotive-seating", "furniture-bedding"],
+        {
+          "Product role": "Trifunctional reactive polyether polyol",
+          "Reference molecular weight": "5,000",
+          "Primary applications": "Moulded high-resilience foams",
+          "Reference benefits": "Crosslinking, tensile strength and flexibility",
+        },
+      ),
+      product(
+        "klayol-polyol-range",
+        "PE 2456",
+        "A propylene-oxide and ethylene-oxide triol with a reference molecular weight of 3,000.",
+        ["flexible-moulded-foam", "furniture-bedding"],
+        {
+          "Product role": "Polyether triol",
+          "Reference molecular weight": "3,000",
+          Composition: "Propylene oxide and ethylene oxide",
+          "Primary applications": "Flexible polyurethane foam slabs and one-shot flexible foam",
+          "Reference benefits": "Crosslinking, rigidity, flexibility and resilience",
+        },
+      ),
+      product(
+        "klayol-polyol-range",
+        "POP",
+        "A polymer polyol used across polyurethane foam and related formulation applications.",
+        ["flexible-moulded-foam", "automotive-seating", "furniture-bedding"],
+        {
+          "Product role": "Polymer polyol",
+          "Primary applications": "Mattresses, automotive seating, furniture foam and protective-film formulations",
+          "Reference benefits": "Foam durability and comfort; abrasion, scratch, oil, solvent and UV resistance in film applications",
+        },
+      ),
+    ],
   },
   {
     slug: "klayol-ppg-range",
@@ -139,9 +274,63 @@ export const productFamilies: ProductFamily[] = [
     industries: ["industrial-facilities"],
     validation: "confirmed-name",
     documents: docs(),
-    products: ["PPG 1420", "PPG 1440", "PPG 1410", "PPG 1404", "PPG 1412"].map((name) =>
-      product("klayol-ppg-range", name, `${name} is part of the KlayOl PPG range for Urechem technical enquiries.`, []),
-    ),
+    products: [
+      product(
+        "klayol-ppg-range",
+        "PPG 1420",
+        "A KlayOl PPG grade for coatings, adhesives, sealants and elastomer formulation enquiries.",
+        ["adhesives-coatings", "custom-formulation"],
+        {
+          "Product role": "KlayOl PPG grade",
+          "Primary applications": "Coatings, adhesives, sealants and elastomers",
+          "Technical status": "Grade-specific properties require Urechem confirmation",
+        },
+      ),
+      product(
+        "klayol-ppg-range",
+        "PPG 1440",
+        "A KlayOl PPG grade for polyurethane coating, adhesive and sealant formulation enquiries.",
+        ["adhesives-coatings", "custom-formulation"],
+        {
+          "Product role": "KlayOl PPG grade",
+          "Primary applications": "Polyurethane coatings, adhesives and sealants",
+          "Technical status": "Grade-specific properties require Urechem confirmation",
+        },
+      ),
+      product(
+        "klayol-ppg-range",
+        "PPG 1410",
+        "A KlayOl PPG grade for application-specific polyurethane formulation review.",
+        ["adhesives-coatings", "custom-formulation"],
+        {
+          "Product role": "KlayOl PPG grade",
+          "Primary applications": "Polyurethane formulation pathways requiring durability and stable processing",
+          "Technical status": "Grade-specific properties require Urechem confirmation",
+        },
+      ),
+      product(
+        "klayol-ppg-range",
+        "PPG 1404",
+        "A KlayOl PPG grade for coating, sealant, adhesive and elastomer formulation enquiries.",
+        ["adhesives-coatings", "custom-formulation"],
+        {
+          "Product role": "KlayOl PPG grade",
+          "Primary applications": "Coatings, sealants, adhesives and elastomers",
+          "Technical status": "Grade-specific properties require Urechem confirmation",
+        },
+      ),
+      product(
+        "klayol-ppg-range",
+        "PPG 1412",
+        "A KlayOl PPG grade for advanced sealant, adhesive, coating and elastomer formulation enquiries.",
+        ["adhesives-coatings", "custom-formulation"],
+        {
+          "Product role": "KlayOl PPG grade",
+          "Primary applications": "Advanced sealants, adhesives, coatings and elastomers",
+          "Technical status": "Grade-specific properties require Urechem confirmation",
+        },
+      ),
+    ],
   },
   {
     slug: "flexible-systems",
@@ -154,7 +343,17 @@ export const productFamilies: ProductFamily[] = [
     validation: "confirmed-name",
     documents: docs(),
     products: ["VE4105 A/B", "Flex 8305 A/B"].map((name) =>
-      product("flexible-systems", name, `${name} is part of the Flexible Systems range for application-specific technical review.`, []),
+      product(
+        "flexible-systems",
+        name,
+        `${name} is part of the Flexible Systems range for application-specific technical review.`,
+        ["flexible-moulded-foam", "automotive-seating", "furniture-bedding"],
+        {
+          "Product role": "Flexible polyurethane system",
+          "Primary applications": "Flexible and moulded foam development pathways",
+          "Technical status": "Detailed performance data requires Urechem validation",
+        },
+      ),
     ),
   },
   {
@@ -167,8 +366,30 @@ export const productFamilies: ProductFamily[] = [
     industries: ["industrial-facilities"],
     validation: "requires-client-validation",
     documents: docs(),
-    products: ["Additives", "Pigments", "Catalysts", "Silicone oils", "Colour pastes", "Cell openers", "Anti-scorching agents", "Anti-UV agents", "Anti-yellowing agents", "Antibacterial agents", "Whitening agents"].map((name) =>
-      product("additives-processing-aids", name, `${name} can be routed through Urechem technical discussion for formulation support.`, []),
+    products: [
+      ["Additives", "Application-specific polyurethane formulation support"],
+      ["Pigments", "Polyurethane foam colouring"],
+      ["Catalysts", "Promoting the reaction between isocyanate and polyether polyol"],
+      ["Silicone oils", "Foam stability, regular cell structure and processing latitude"],
+      ["Colour pastes", "Polyurethane foam colouring"],
+      ["Cell openers", "Cell opening in slow-recovery and high-resilience foams"],
+      ["Anti-scorching agents", "Foam anti-yellowing and scorching-control pathways"],
+      ["Anti-UV agents", "UV-related anti-yellowing pathways for foam"],
+      ["Anti-yellowing agents", "Anti-yellowing pathways for foam, footwear and polyurethane leather"],
+      ["Antibacterial agents", "Formulation pathways intended to help prevent bacterial growth"],
+      ["Whitening agents", "Polyurethane foam-whitening pathways"],
+    ].map(([name, primaryApplication]) =>
+      product(
+        "additives-processing-aids",
+        name,
+        `${name} can be routed through Urechem technical discussion for formulation support.`,
+        ["custom-formulation"],
+        {
+          "Product role": name,
+          "Primary applications": primaryApplication,
+          "Grade-selection status": "Specific grade, dosage and processing guidance require Urechem validation",
+        },
+      ),
     ),
   },
 ];

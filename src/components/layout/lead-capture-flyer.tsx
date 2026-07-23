@@ -1,32 +1,45 @@
 "use client";
 
 import { ArrowRight, Mail, Phone, UserRound, X } from "lucide-react";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const storageKey = "urechem-consultation-flyer-dismissed";
+const dismissalWindow = 7 * 24 * 60 * 60 * 1000;
 
 export function LeadCaptureFlyer() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLElement>(null);
 
   const dismiss = useCallback(() => {
-    window.sessionStorage.setItem(storageKey, "true");
+    window.localStorage.setItem(storageKey, String(Date.now()));
     setIsOpen(false);
   }, []);
 
   useEffect(() => {
-    if (window.sessionStorage.getItem(storageKey)) {
+    if (pathname === "/contact" || pathname.startsWith("/privacy") || pathname.startsWith("/terms") || pathname.startsWith("/legal")) {
       return;
     }
 
-    const timer = window.setTimeout(() => setIsOpen(true), 2000);
+    const dismissedAt = Number(window.localStorage.getItem(storageKey) ?? "0");
+    if (dismissedAt && Date.now() - dismissedAt < dismissalWindow) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => setIsOpen(true), 8000);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!isOpen) {
       return;
     }
+
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    closeButtonRef.current?.focus();
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -34,12 +47,34 @@ export function LeadCaptureFlyer() {
       }
     };
 
+    const handleTab = (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || !dialogRef.current) return;
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]):not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
+        ),
+      );
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
     document.addEventListener("keydown", handleEscape);
+    document.addEventListener("keydown", handleTab);
     document.body.classList.add("overflow-hidden");
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("keydown", handleTab);
       document.body.classList.remove("overflow-hidden");
+      previouslyFocused?.focus();
     };
   }, [dismiss, isOpen]);
 
@@ -53,7 +88,7 @@ export function LeadCaptureFlyer() {
       mobile: String(formData.get("mobile") ?? ""),
     });
 
-    window.sessionStorage.setItem(storageKey, "true");
+    window.localStorage.setItem(storageKey, String(Date.now()));
     window.location.assign(`/contact?${params.toString()}`);
   };
 
@@ -64,8 +99,9 @@ export function LeadCaptureFlyer() {
   return (
     <div className="fixed inset-0 z-[70] grid place-items-center p-4 sm:p-6" role="presentation">
       <button
-        aria-label="Close consultation flyer"
+        aria-hidden="true"
         className="absolute inset-0 h-full w-full cursor-default bg-blue-950/72 backdrop-blur-sm"
+        tabIndex={-1}
         type="button"
         onClick={dismiss}
       />
@@ -74,12 +110,14 @@ export function LeadCaptureFlyer() {
         aria-labelledby="consultation-flyer-title"
         aria-modal="true"
         className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[var(--radius-lg)] border border-blue-200 bg-white shadow-[0_30px_110px_rgba(3,19,43,0.38)]"
+        ref={dialogRef}
         role="dialog"
       >
         <div className="h-2 bg-[linear-gradient(90deg,#1d4ed8,#22d3ee)]" />
         <button
           aria-label="Close consultation flyer"
           className="absolute right-4 top-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-blue-200 bg-blue-50 text-blue-950 transition hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          ref={closeButtonRef}
           type="button"
           onClick={dismiss}
         >
@@ -102,7 +140,7 @@ export function LeadCaptureFlyer() {
               Name
               <span className="relative">
                 <UserRound aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600" />
-                <input className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" name="name" placeholder="Your name" required />
+                <input autoComplete="name" className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" name="name" placeholder="Your name" required />
               </span>
             </label>
 
@@ -111,7 +149,7 @@ export function LeadCaptureFlyer() {
                 Email address
                 <span className="relative">
                   <Mail aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600" />
-                  <input className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" name="email" placeholder="name@company.com" required type="email" />
+                  <input autoComplete="email" className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" name="email" placeholder="name@company.com" required type="email" />
                 </span>
               </label>
 
@@ -119,7 +157,7 @@ export function LeadCaptureFlyer() {
                 Mobile number
                 <span className="relative">
                   <Phone aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600" />
-                  <input className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" inputMode="tel" name="mobile" placeholder="Mobile number" required type="tel" />
+                  <input autoComplete="tel" className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" inputMode="tel" name="mobile" placeholder="Mobile number" required type="tel" />
                 </span>
               </label>
             </div>

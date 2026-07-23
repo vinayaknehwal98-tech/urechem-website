@@ -11,6 +11,7 @@ export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
   const panelId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -24,6 +25,25 @@ export function MobileNavigation() {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsOpen(false);
+        return;
+      }
+
+      if (event.key === "Tab" && panelRef.current) {
+        const focusable = Array.from(
+          panelRef.current.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]):not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
+          ),
+        );
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
 
@@ -53,8 +73,9 @@ export function MobileNavigation() {
       {isOpen ? (
         <div className="fixed inset-0 z-50">
           <button
-            aria-label="Close navigation overlay"
+            aria-hidden="true"
             className="absolute inset-0 h-full w-full cursor-default bg-navy-950/84 backdrop-blur-sm"
+            tabIndex={-1}
             type="button"
             onClick={() => setIsOpen(false)}
           />
@@ -62,6 +83,7 @@ export function MobileNavigation() {
             aria-label="Mobile navigation"
             className="absolute right-3 top-3 flex max-h-[calc(100dvh-1.5rem)] w-[min(28rem,calc(100vw-1.5rem))] flex-col overflow-y-auto rounded-[var(--radius-lg)] border border-blue-200 bg-white p-4 shadow-[var(--shadow-deep)]"
             id={panelId}
+            ref={panelRef}
           >
             <div className="mb-5 flex items-start justify-between gap-4">
               <Link

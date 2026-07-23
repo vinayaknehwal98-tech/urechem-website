@@ -2,7 +2,7 @@ import { AnimatedImage } from "@/components/media/animated-image";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 
-export const metadata = { title: "Innovation and R&D | Urechem Chemicals" };
+export const metadata = { title: "Innovation and R&D" };
 
 export default function Page() {
   return (

@@ -5,7 +5,7 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { ureshieldProducts, ureshieldReferenceNote } from "@/data/ureshield";
 
 export const metadata = {
-  title: "UreShield Waterproofing, Grouting & Polyurea Systems | Urechem Chemicals",
+  title: "UreShield Waterproofing, Grouting & Polyurea Systems",
   description:
     "Explore UreShield polyurethane membranes, injection grouts and polyurea coatings for waterproofing, consolidation, water control and surface protection.",
 };

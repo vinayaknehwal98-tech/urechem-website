@@ -13,7 +13,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ family: string }> }) {
   const { family } = await params;
   const productFamily = getFamily(family);
-  return { title: productFamily ? `${productFamily.name} | Urechem Products` : "Product Family | Urechem Products" };
+  return { title: productFamily ? productFamily.name : "Product Family" };
 }
 
 export default async function Page({ params }: { params: Promise<{ family: string }> }) {
@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ family: strin
       <p className="mt-4 max-w-3xl text-slate-300">{productFamily.description}</p>
       <div className="mt-6"><ValidationNote /></div>
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <ButtonLink href="/contact">Start a technical enquiry</ButtonLink>
+        <ButtonLink href={`/contact?type=Consultation%20request&product=${encodeURIComponent(productFamily.name)}`}>Start a technical enquiry</ButtonLink>
         <ButtonLink href="/products/compare" variant="secondary">Compare products</ButtonLink>
       </div>
       <section className="mt-10 grid gap-4 md:grid-cols-2">

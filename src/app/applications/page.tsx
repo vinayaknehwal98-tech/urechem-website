@@ -5,7 +5,7 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { FamilyTags } from "@/components/catalog/cards";
 import { applications } from "@/data/catalog";
 
-export const metadata = { title: "Applications | Urechem Chemicals" };
+export const metadata = { title: "Applications" };
 
 export default function Page() {
   return (

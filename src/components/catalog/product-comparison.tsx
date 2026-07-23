@@ -1,13 +1,14 @@
 "use client";
 
-import { Search, X } from "lucide-react";
+import Link from "next/link";
+import { FileText, Search, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { productFamilies, products } from "@/data/catalog";
+import { applications, productFamilies, products } from "@/data/catalog";
 
 const MAX_SELECTIONS = 3;
-const documentStatus = "Contact Urechem for current document availability";
-const selectionStatus = "Performance data and application suitability are reviewed for each enquiry";
+const unavailableValue = "Not stated in supplied reference";
 
 function productKey(product: (typeof products)[number]) {
   return `${product.familySlug}:${product.slug}`;
@@ -17,9 +18,24 @@ function familyName(slug: string) {
   return productFamilies.find((family) => family.slug === slug)?.name ?? slug;
 }
 
+function applicationNames(slugs: string[]) {
+  return slugs
+    .map((slug) => applications.find((application) => application.slug === slug)?.name)
+    .filter((name): name is string => Boolean(name))
+    .join(", ");
+}
+
 export function ProductComparison() {
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>(() => {
+    const requested = searchParams.getAll("product");
+    return requested
+      .map((key) => products.find((item) => productKey(item) === key))
+      .filter((item): item is (typeof products)[number] => Boolean(item))
+      .slice(0, MAX_SELECTIONS)
+      .map(productKey);
+  });
 
   const selectedProducts = selectedKeys
     .map((key) => products.find((product) => productKey(product) === key))
@@ -32,6 +48,21 @@ export function ProductComparison() {
       return normalizedQuery.length === 0 || searchable.includes(normalizedQuery);
     });
   }, [query]);
+
+  const comparisonRows = useMemo(() => {
+    const keys = Array.from(
+      new Set(selectedProducts.flatMap((product) => Object.keys(product.compareAttributes))),
+    );
+
+    if (selectedProducts.length < 2) {
+      return keys;
+    }
+
+    return keys.filter((key) => {
+      const values = selectedProducts.map((product) => product.compareAttributes[key] ?? "");
+      return new Set(values).size > 1;
+    });
+  }, [selectedProducts]);
 
   const addProduct = (key: string) => {
     if (selectedKeys.includes(key) || selectedKeys.length >= MAX_SELECTIONS) return;
@@ -85,7 +116,9 @@ export function ProductComparison() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-white">Selected comparison</h2>
-            <p className="mt-1 text-sm text-slate-300">Only confirmed public identifiers and document-publication status are compared.</p>
+            <p className="mt-1 text-sm text-slate-300">
+              Product-specific differences from the supplied reference are shown first. Missing values are not inferred.
+            </p>
           </div>
           {selectedProducts.length > 0 ? <Button onClick={() => setSelectedKeys([])} variant="secondary">Clear all</Button> : null}
         </div>
@@ -101,13 +134,74 @@ export function ProductComparison() {
                 <thead className="bg-white/10 text-cyan-100">
                   <tr>
                     <th className="p-4">Field</th>
-                    {selectedProducts.map((product) => <th className="p-4" key={productKey(product)}>{product.name}</th>)}
+                    {selectedProducts.map((product) => (
+                      <th className="p-4" key={productKey(product)}>
+                        <span className="flex items-start justify-between gap-3">
+                          <span>{product.name}</span>
+                          <button
+                            aria-label={`Remove ${product.name}`}
+                            className="rounded-full border border-white/10 p-1.5 text-slate-200 transition hover:border-cyan-200 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200"
+                            onClick={() => removeProduct(productKey(product))}
+                            type="button"
+                          >
+                            <X aria-hidden="true" className="size-3.5" />
+                          </button>
+                        </span>
+                      </th>
+                    ))}
                   </tr>
                 </thead>
-                <tbody>
-                  <tr className="border-t border-white/10"><th className="p-4 text-cyan-100">Family</th>{selectedProducts.map((product) => <td className="p-4 text-slate-300" key={productKey(product)}>{familyName(product.familySlug)}</td>)}</tr>
-                  <tr className="border-t border-white/10"><th className="p-4 text-cyan-100">Documents</th>{selectedProducts.map((product) => <td className="p-4 text-slate-300" key={productKey(product)}>{documentStatus}</td>)}</tr>
-                  <tr className="border-t border-white/10"><th className="p-4 text-cyan-100">Selection status</th>{selectedProducts.map((product) => <td className="p-4 text-slate-300" key={productKey(product)}>{selectionStatus}</td>)}</tr>
+                  <tbody>
+                  <tr className="border-t border-white/10">
+                    <th className="p-4 align-top text-cyan-100">Family</th>
+                    {selectedProducts.map((product) => (
+                      <td className="p-4 align-top leading-6 text-slate-300" key={productKey(product)}>
+                        {familyName(product.familySlug)}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr className="border-t border-white/10">
+                    <th className="p-4 align-top text-cyan-100">Reference description</th>
+                    {selectedProducts.map((product) => (
+                      <td className="p-4 align-top leading-6 text-slate-300" key={productKey(product)}>
+                        {product.description}
+                      </td>
+                    ))}
+                  </tr>
+                  {comparisonRows.map((row) => (
+                    <tr className="border-t border-white/10" key={row}>
+                      <th className="p-4 align-top text-cyan-100">{row}</th>
+                      {selectedProducts.map((product) => (
+                        <td className="p-4 align-top leading-6 text-slate-300" key={productKey(product)}>
+                          {product.compareAttributes[row] ?? (
+                            <span className="text-slate-500">{unavailableValue}</span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                  <tr className="border-t border-white/10">
+                    <th className="p-4 align-top text-cyan-100">Application pathways</th>
+                    {selectedProducts.map((product) => (
+                      <td className="p-4 align-top leading-6 text-slate-300" key={productKey(product)}>
+                        {applicationNames(product.applications) || unavailableValue}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr className="border-t border-white/10">
+                    <th className="p-4 align-top text-cyan-100">Technical documents</th>
+                    {selectedProducts.map((product) => (
+                      <td className="p-4 align-top text-slate-300" key={productKey(product)}>
+                        <Link
+                          className="inline-flex items-center gap-2 font-semibold text-cyan-100 underline decoration-cyan-300/40 underline-offset-4 transition hover:text-white"
+                          href={`/contact?type=TDS%20request&product=${encodeURIComponent(product.name)}`}
+                        >
+                          <FileText aria-hidden="true" className="size-4" />
+                          Ask for TDS
+                        </Link>
+                      </td>
+                    ))}
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -121,9 +215,25 @@ export function ProductComparison() {
                   </div>
                   <dl className="mt-4 space-y-3 text-sm">
                     <div><dt className="font-semibold text-cyan-100">Family</dt><dd className="mt-1 text-slate-300">{familyName(product.familySlug)}</dd></div>
-                    <div><dt className="font-semibold text-cyan-100">Documents</dt><dd className="mt-1 text-slate-300">{documentStatus}</dd></div>
-                    <div><dt className="font-semibold text-cyan-100">Selection status</dt><dd className="mt-1 text-slate-300">{selectionStatus}</dd></div>
+                    <div><dt className="font-semibold text-cyan-100">Reference description</dt><dd className="mt-1 text-slate-300">{product.description}</dd></div>
+                    {comparisonRows.map((row) => (
+                      <div key={row}>
+                        <dt className="font-semibold text-cyan-100">{row}</dt>
+                        <dd className="mt-1 text-slate-300">{product.compareAttributes[row] ?? unavailableValue}</dd>
+                      </div>
+                    ))}
+                    <div>
+                      <dt className="font-semibold text-cyan-100">Application pathways</dt>
+                      <dd className="mt-1 text-slate-300">{applicationNames(product.applications) || unavailableValue}</dd>
+                    </div>
                   </dl>
+                  <Link
+                    className="mt-5 inline-flex items-center gap-2 font-semibold text-cyan-100 underline decoration-cyan-300/40 underline-offset-4"
+                    href={`/contact?type=TDS%20request&product=${encodeURIComponent(product.name)}`}
+                  >
+                    <FileText aria-hidden="true" className="size-4" />
+                    Ask for TDS
+                  </Link>
                 </article>
               ))}
             </div>
