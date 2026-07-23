@@ -1,9 +1,6 @@
-import { ArrowRight, Beaker, Boxes, ShieldCheck } from "lucide-react";
-import { AiChallengeInput } from "@/components/home/ai-challenge-input";
+import { ArrowRight, Beaker, Boxes, MessageSquareText, ShieldCheck } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { SectionLabel } from "@/components/ui/section-label";
-import { FoamCellVisual } from "@/components/visuals/foam-cell-visual";
 import { MolecularBackground } from "@/components/visuals/molecular-background";
 
 const proofPoints = [
@@ -28,38 +25,34 @@ export function HeroSection() {
   return (
     <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-navy-950">
       <MolecularBackground />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.16),transparent_29%),radial-gradient(circle_at_78%_12%,rgba(45,212,191,0.11),transparent_30%),radial-gradient(circle_at_54%_86%,rgba(103,232,249,0.08),transparent_32%),linear-gradient(135deg,rgba(4,17,31,0.97),rgba(7,26,45,0.94)_50%,rgba(4,17,31,0.99))]" />
-      <div className="absolute inset-0 -z-10 opacity-[0.22] [background-image:radial-gradient(circle_at_1px_1px,rgba(203,213,225,0.28)_1px,transparent_0)] [background-size:22px_22px]" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-navy-950 to-transparent" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_14%_18%,rgba(37,99,235,0.32),transparent_31%),radial-gradient(circle_at_82%_18%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(135deg,rgba(4,17,31,0.98),rgba(8,42,76,0.95)_52%,rgba(4,17,31,0.99))]" />
+      <div className="absolute inset-0 -z-10 opacity-[0.2] [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:24px_24px]" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-52 bg-gradient-to-t from-navy-950 to-transparent" />
 
-      <Container className="grid min-h-[calc(100dvh-4.5rem)] items-center gap-8 py-8 lg:grid-cols-[1.08fr_0.82fr] lg:py-9 xl:gap-10">
-        <div className="relative z-10 max-w-[58rem]">
-          <SectionLabel>AI-assisted polyurethane solutions</SectionLabel>
-          <h1 className="mt-5 max-w-[46rem] text-balance text-[clamp(2.65rem,3.45vw,3.75rem)] font-black leading-[0.99] text-white">
-            Intelligent chemistry for better polyurethane performance.
+      <Container className="flex min-h-[calc(100dvh-4.5rem)] flex-col justify-center py-12 sm:py-16 lg:py-20">
+        <div className="relative z-10 w-full">
+          <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-200">URECHEM CHEMICALS</p>
+          <h1 className="mt-6 w-full text-balance text-[clamp(3.4rem,7.4vw,7.8rem)] font-black leading-[0.86] tracking-[-0.055em] text-white">
+            Intelligent chemistry for better polyurethane solutions.
           </h1>
-          <p className="mt-4 max-w-2xl text-pretty text-lg leading-8 text-slate-200 sm:text-xl">
-            Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world
-            applications.
+          <p className="mt-7 text-2xl font-black text-cyan-100 sm:text-3xl">We deliver what we promise.</p>
+          <p className="mt-5 max-w-3xl text-pretty text-lg leading-8 text-slate-200 sm:text-xl">
+            Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
           </p>
 
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <ButtonLink href="/ai-solution-finder" size="lg">
               Describe Your Challenge
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </ButtonLink>
-            <ButtonLink href="/products" size="lg" variant="secondary">
+            <ButtonLink href="/contact?type=Consultation%20request" size="lg" variant="secondary">
+              <MessageSquareText aria-hidden="true" className="h-4 w-4" />
+              Talk to a Consultant
+            </ButtonLink>
+            <ButtonLink href="/products" size="lg" variant="ghost">
               Explore Products
             </ButtonLink>
           </div>
-
-          <div className="mt-5 max-w-3xl">
-            <AiChallengeInput />
-          </div>
-        </div>
-
-        <div className="relative z-10 hidden lg:block">
-          <FoamCellVisual />
         </div>
       </Container>
 
@@ -67,7 +60,7 @@ export function HeroSection() {
         <div className="grid gap-3 border-t border-white/10 pt-6 md:grid-cols-3">
           {proofPoints.map((item) => (
             <article
-              className="rounded-[var(--radius-md)] border border-white/10 bg-white/[0.04] p-4 shadow-[var(--shadow-soft)]"
+              className="rounded-[var(--radius-md)] border border-white/10 bg-white/[0.05] p-4 shadow-[var(--shadow-soft)] backdrop-blur-sm"
               key={item.label}
             >
               <item.icon aria-hidden="true" className="h-5 w-5 text-cyan-200" />
