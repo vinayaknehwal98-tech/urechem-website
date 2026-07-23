@@ -105,7 +105,7 @@ export function MobileNavigation() {
                 <MessageSquareText aria-hidden="true" className="h-4 w-4" />
                 Talk to a consultant
               </ButtonLink>
-              <ButtonLink className="w-full" href="/ask-urechem-ai" variant="secondary" onClick={() => setIsOpen(false)}>
+              <ButtonLink className="w-full" href="/ask-urechem-ai" variant="metal" onClick={() => setIsOpen(false)}>
                 <Sparkles aria-hidden="true" className="h-4 w-4" />
                 Ask Urechem AI
               </ButtonLink>
