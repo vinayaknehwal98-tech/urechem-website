@@ -19,6 +19,7 @@ export const primaryNavigation: NavigationItem[] = [
 ];
 
 export const productFamilyLinks: NavigationItem[] = [
+  { label: "UreShield waterproofing and grouting systems", href: "/products/ureshield-waterproofing-grouting-systems" },
   { label: "Uretherm spray-foam systems", href: "/products/uretherm-spray-foam-systems" },
   { label: "ChemNate MDI range", href: "/products/chemnate-mdi-range" },
   { label: "KlayOl polyol range", href: "/products/klayol-polyol-range" },
@@ -30,6 +31,7 @@ export const productFamilyLinks: NavigationItem[] = [
 export const applicationLinks: NavigationItem[] = [
   { label: "Product discovery", href: "/applications" },
   { label: "Technical challenge intake", href: "/ai-solution-finder" },
+  { label: "Consultation request", href: "/contact?type=Consultation%20request" },
   { label: "Industry pathways", href: "/industries" },
   { label: "Product comparison", href: "/products/compare" },
 ];
@@ -42,8 +44,9 @@ export const technicalCenterLinks: NavigationItem[] = [
 ];
 
 export const companyLinks: NavigationItem[] = [
-  { label: "About Urechem", href: "/about" },
+  { label: "About Urechem Chemicals", href: "/about" },
   { label: "Innovation & R&D", href: "/innovation-rd" },
+  { label: "Talk to a consultant", href: "/contact?type=Consultation%20request" },
   { label: "Contact", href: "/contact" },
   { label: "Ask Urechem AI", href: "/ask-urechem-ai" },
 ];
