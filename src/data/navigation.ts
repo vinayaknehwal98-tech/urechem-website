@@ -9,6 +9,7 @@ export type FooterGroup = {
 };
 
 export const primaryNavigation: NavigationItem[] = [
+  // Technical Center remains available on the site but is intentionally omitted from the header.
   { label: "Products", href: "/products" },
   { label: "Applications", href: "/applications" },
   { label: "Industries", href: "/industries" },
