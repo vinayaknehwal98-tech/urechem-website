@@ -15,7 +15,7 @@ export function SiteHeader() {
           className="group inline-flex min-w-0 items-center rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
           href="/"
         >
-          <BrandLogo priority />
+          <BrandLogo animateDrop priority />
         </Link>
 
         <DesktopNavigation />
