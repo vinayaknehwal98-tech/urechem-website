@@ -45,6 +45,7 @@ export function HeroSection() {
           className="object-cover object-[66%_center]"
           fill
           priority
+          quality={88}
           sizes="100vw"
           src="/images/spray-foam-application.webp"
         />
