@@ -1,4 +1,7 @@
+"use client";
+
 import { ArrowRight, Beaker, Boxes, MessageSquareText, ShieldCheck } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { MolecularBackground } from "@/components/visuals/molecular-background";
@@ -22,6 +25,13 @@ const proofPoints = [
 ];
 
 export function HeroSection() {
+  const shouldReduceMotion = useReducedMotion();
+  const enter = (delay: number, distance = 28) => ({
+    animate: { opacity: 1, y: 0 },
+    initial: shouldReduceMotion ? false : { opacity: 0, y: distance },
+    transition: { delay, duration: 0.72, ease: [0.22, 1, 0.36, 1] as const },
+  });
+
   return (
     <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-navy-950">
       <MolecularBackground />
@@ -31,16 +41,23 @@ export function HeroSection() {
 
       <Container className="flex min-h-[calc(100dvh-4.5rem)] flex-col justify-center py-12 sm:py-16 lg:py-20">
         <div className="relative z-10 w-full">
-          <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-200">URECHEM CHEMICAL</p>
-          <h1 className="mt-6 w-full text-balance text-[clamp(3.4rem,7.4vw,7.8rem)] font-black leading-[0.86] tracking-[-0.055em] text-white">
+          <motion.p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-200" {...enter(0.08, 18)}>
+            URECHEM CHEMICAL
+          </motion.p>
+          <motion.h1
+            className="mt-6 w-full text-balance text-[clamp(3.4rem,7.4vw,7.8rem)] font-black leading-[0.86] tracking-[-0.055em] text-white"
+            {...enter(0.16, 42)}
+          >
             Intelligent chemistry for better polyurethane solutions.
-          </h1>
-          <p className="mt-7 text-2xl font-black text-cyan-100 sm:text-3xl">We deliver what we promise.</p>
-          <p className="mt-5 max-w-3xl text-pretty text-lg leading-8 text-slate-200 sm:text-xl">
+          </motion.h1>
+          <motion.p className="mt-7 text-2xl font-black text-cyan-100 sm:text-3xl" {...enter(0.3)}>
+            We deliver what we promise.
+          </motion.p>
+          <motion.p className="mt-5 max-w-3xl text-pretty text-lg leading-8 text-slate-200 sm:text-xl" {...enter(0.38)}>
             Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
-          </p>
+          </motion.p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <motion.div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap" {...enter(0.46)}>
             <ButtonLink href="/ai-solution-finder" size="lg">
               Describe Your Challenge
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -52,21 +69,26 @@ export function HeroSection() {
             <ButtonLink href="/products" size="lg" variant="ghost">
               Explore Products
             </ButtonLink>
-          </div>
+          </motion.div>
         </div>
       </Container>
 
       <Container className="relative z-10 pb-10">
         <div className="grid gap-3 border-t border-white/10 pt-6 md:grid-cols-3">
-          {proofPoints.map((item) => (
-            <article
+          {proofPoints.map((item, index) => (
+            <motion.article
               className="rounded-[var(--radius-md)] border border-white/10 bg-white/[0.05] p-4 shadow-[var(--shadow-soft)] backdrop-blur-sm"
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
               key={item.label}
+              transition={{ delay: index * 0.08, duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ amount: 0.25, once: true }}
+              whileHover={shouldReduceMotion ? undefined : { borderColor: "rgba(103,232,249,0.34)", y: -5 }}
+              whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             >
               <item.icon aria-hidden="true" className="h-5 w-5 text-cyan-200" />
               <h2 className="mt-3 text-sm font-semibold text-white">{item.label}</h2>
               <p className="mt-2 text-sm leading-6 text-slate-300">{item.text}</p>
-            </article>
+            </motion.article>
           ))}
         </div>
       </Container>
