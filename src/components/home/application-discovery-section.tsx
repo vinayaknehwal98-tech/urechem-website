@@ -7,17 +7,6 @@ import { AnimatedImage } from "@/components/media/animated-image";
 import { applicationCategories } from "@/data/homepage";
 import { HomeSection } from "./home-section";
 
-const applicationImages = [
-  "/images/spray-foam-application.webp",
-  "/images/spray-foam-application.webp",
-  "/images/foam-manufacturing.webp",
-  "/images/foam-manufacturing.webp",
-  "/images/foam-manufacturing.webp",
-  "/images/formulation-lab.webp",
-  "/images/ureshield-waterproofing.webp",
-  "/images/formulation-lab.webp",
-];
-
 export function ApplicationDiscoverySection() {
   const shouldReduceMotion = useReducedMotion();
 
@@ -29,6 +18,13 @@ export function ApplicationDiscoverySection() {
       intro="Move from desired result to relevant product-family pathways without treating preliminary guidance as final engineering approval."
       title="Explore chemistry through the result you need."
     >
+      <AnimatedImage
+        alt="An application engineer and technical chemist reviewing polyurethane materials at an industrial construction site"
+        className="mb-8 h-72 sm:h-80"
+        imageClassName="object-[center_44%]"
+        sizes="100vw"
+        src="/images/application-engineering.webp"
+      />
       <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {applicationCategories.map((application, index) => (
           <motion.div
@@ -40,18 +36,12 @@ export function ApplicationDiscoverySection() {
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
           >
             <Link
-              className="group relative flex h-full min-h-80 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.045] shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/34 hover:bg-cyan-300/[0.07] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+              className="group relative flex h-full min-h-72 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.045] shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/34 hover:bg-cyan-300/[0.07] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
               href={application.href}
             >
               <div className="absolute right-4 top-4 z-10 rounded-full border border-white/12 bg-navy-950/68 px-2.5 py-1 font-mono text-xs text-cyan-50">
                 {String(index + 1).padStart(2, "0")}
               </div>
-              <AnimatedImage
-                alt={`${application.title} polyurethane application context`}
-                className="h-40 rounded-none border-0 border-b border-white/10 shadow-none"
-                sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
-                src={applicationImages[index]}
-              />
               <div className="relative flex flex-1 flex-col p-5 pb-16">
                 <application.icon aria-hidden="true" className="h-7 w-7 text-cyan-200" />
                 <h3 className="mt-6 text-xl font-black text-white">{application.title}</h3>
