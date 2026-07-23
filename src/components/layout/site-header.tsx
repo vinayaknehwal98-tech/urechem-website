@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { MessageSquareText } from "lucide-react";
 import { MobileNavigation } from "@/components/layout/mobile-navigation";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -7,25 +7,25 @@ import { primaryNavigation } from "@/data/navigation";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-cyan-200/10 bg-navy-950/86 shadow-[0_1px_0_rgba(255,255,255,0.04),0_18px_54px_rgba(0,0,0,0.18)] backdrop-blur-xl supports-[backdrop-filter]:bg-navy-950/72">
+    <header className="sticky top-0 z-40 border-b border-blue-100 bg-white/94 shadow-[0_1px_0_rgba(30,64,175,0.08),0_16px_44px_rgba(15,23,42,0.08)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/86">
       <Container className="flex h-18 items-center justify-between gap-4 lg:gap-5">
         <Link
-          className="group flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+          className="group flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
           href="/"
         >
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[var(--radius-sm)] border border-cyan-200/25 bg-cyan-300/10 text-sm font-black text-cyan-100 shadow-[var(--shadow-cyan)] transition group-hover:border-cyan-100/50">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[var(--radius-sm)] border border-blue-700 bg-blue-700 text-sm font-black text-white shadow-[0_10px_28px_rgba(29,78,216,0.25)] transition group-hover:bg-blue-800">
             U
           </span>
           <span className="min-w-0">
-            <span className="block text-lg font-black leading-none text-white">URECHEM</span>
-            <span className="mt-1 block text-xs font-medium text-cyan-100/80">Polyurethane Intelligence</span>
+            <span className="block text-lg font-black leading-none text-blue-950">URECHEM CHEMICALS</span>
+            <span className="mt-1 block text-xs font-bold text-blue-700">We deliver what we promise</span>
           </span>
         </Link>
 
         <nav aria-label="Primary navigation" className="hidden flex-1 items-center justify-center gap-0.5 lg:flex xl:gap-1">
           {primaryNavigation.map((item) => (
             <Link
-              className="rounded-[var(--radius-sm)] px-2.5 py-2 text-[0.8125rem] font-semibold text-slate-200 transition hover:bg-white/7 hover:text-cyan-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200 xl:px-3 xl:text-sm"
+              className="rounded-[var(--radius-sm)] px-2.5 py-2 text-[0.8125rem] font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 xl:px-3 xl:text-sm"
               href={item.href}
               key={item.href}
             >
@@ -35,9 +35,9 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <ButtonLink className="hidden xl:inline-flex" href="/ask-urechem-ai" size="sm">
-            <Sparkles aria-hidden="true" className="h-4 w-4" />
-            Ask Urechem AI
+          <ButtonLink className="hidden xl:inline-flex" href="/contact?type=Consultation%20request" size="sm">
+            <MessageSquareText aria-hidden="true" className="h-4 w-4" />
+            Consultant
           </ButtonLink>
           <MobileNavigation />
         </div>
