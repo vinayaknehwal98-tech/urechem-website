@@ -198,12 +198,12 @@ export const applicationCategories: ApplicationCategory[] = [
 ];
 
 export const proofMetrics: ProofMetric[] = [
-  { value: 20000, suffix: "+", label: "R&D man-hours", validationRequired: true },
-  { value: 150, suffix: "+", label: "Years cumulative experience", validationRequired: true },
-  { value: 40, suffix: "+", label: "Projects executed", validationRequired: true },
-  { value: 28, suffix: "+", label: "Brands owned", validationRequired: true },
-  { value: 25, suffix: "+", label: "Experienced professionals", validationRequired: true },
-  { value: 6, suffix: "+", label: "Industries served", validationRequired: true },
+  { value: 10000, suffix: "+", label: "R&D man-hours", validationRequired: true },
+  { value: 100, suffix: "+", label: "Years cumulative experience", validationRequired: true },
+  { value: 30, suffix: "+", label: "Projects executed", validationRequired: true },
+  { value: 20, suffix: "+", label: "Brands owned", validationRequired: true },
+  { value: 20, suffix: "+", label: "Experienced professionals", validationRequired: true },
+  { value: 5, suffix: "+", label: "Industries served", validationRequired: true },
 ];
 
 export const workflowStages: WorkflowStage[] = [
