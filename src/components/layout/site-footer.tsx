@@ -21,7 +21,7 @@ export function SiteFooter() {
               </span>
               <span>
                 <span className="block text-lg font-black leading-none text-white">URECHEM</span>
-                <span className="mt-1 block text-xs font-medium text-cyan-100/80">Polyurethane Intelligence</span>
+                <span className="mt-1 block text-xs font-medium text-cyan-100/80">We deliver what we promise</span>
               </span>
             </Link>
             <p className="mt-6 max-w-md text-sm leading-7">

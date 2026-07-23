@@ -17,7 +17,7 @@ export function SiteHeader() {
             U
           </span>
           <span className="min-w-0">
-            <span className="block text-lg font-black leading-none text-blue-950">URECHEM CHEMICALS</span>
+            <span className="block text-lg font-black leading-none text-blue-950">URECHEM CHEMICAL</span>
             <span className="mt-1 block text-xs font-bold text-blue-700">We deliver what we promise</span>
           </span>
         </Link>

@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Urechem Chemicals | Polyurethane Intelligence",
+  title: "Urechem Chemical | We deliver what we promise",
   description:
     "Technical polyurethane and specialty-chemical solutions for application problem-solving, formulation development and implementation support.",
 };

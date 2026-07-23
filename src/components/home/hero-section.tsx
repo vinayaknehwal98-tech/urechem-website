@@ -31,7 +31,7 @@ export function HeroSection() {
 
       <Container className="flex min-h-[calc(100dvh-4.5rem)] flex-col justify-center py-12 sm:py-16 lg:py-20">
         <div className="relative z-10 w-full">
-          <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-200">URECHEM CHEMICALS</p>
+          <p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-200">URECHEM CHEMICAL</p>
           <h1 className="mt-6 w-full text-balance text-[clamp(3.4rem,7.4vw,7.8rem)] font-black leading-[0.86] tracking-[-0.055em] text-white">
             Intelligent chemistry for better polyurethane solutions.
           </h1>

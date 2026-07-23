@@ -72,7 +72,7 @@ export function MobileNavigation() {
                   U
                 </span>
                 <span>
-                  <span className="block text-base font-black text-blue-950">URECHEM CHEMICALS</span>
+                  <span className="block text-base font-black text-blue-950">URECHEM CHEMICAL</span>
                   <span className="block text-xs font-bold text-blue-700">We deliver what we promise</span>
                 </span>
               </Link>
