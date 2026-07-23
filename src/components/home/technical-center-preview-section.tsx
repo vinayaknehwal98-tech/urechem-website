@@ -1,4 +1,5 @@
 import { Search } from "lucide-react";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { ButtonLink } from "@/components/ui/button";
 import { technicalFilters, technicalResources } from "@/data/homepage";
 import { HomeSection } from "./home-section";
@@ -14,6 +15,13 @@ export function TechnicalCenterPreviewSection() {
     >
       <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="rounded-[var(--radius-lg)] border border-cyan-200/18 bg-navy-900/72 p-4 shadow-[var(--shadow-deep)]">
+          <AnimatedImage
+            alt="Polyurethane laboratory specialists reviewing foam testing and formulation work"
+            className="mb-4 h-48 border-white/8 shadow-none"
+            imageClassName="object-[45%_center]"
+            sizes="(min-width: 1024px) 40vw, 100vw"
+            src="/images/formulation-lab.webp"
+          />
           <label className="sr-only" htmlFor="technical-search">
             Search products, applications or technical documents
           </label>

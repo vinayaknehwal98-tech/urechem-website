@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { HomeSection } from "@/components/home/home-section";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { proofMetrics } from "@/data/homepage";
 
 function useCountUp(target: number, active: boolean) {
@@ -47,10 +48,19 @@ export function ProofExpertiseSection() {
       id="proof-expertise"
       title="Research-led. Application-focused."
     >
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" ref={ref}>
-        {proofMetrics.map((metric, index) => (
-          <MetricCard active={inView} index={index} key={metric.label} metric={metric} />
-        ))}
+      <div className="grid items-stretch gap-6 lg:grid-cols-[0.88fr_1.12fr]">
+        <AnimatedImage
+          alt="Urechem formulation specialists evaluating polyurethane foam samples in a modern laboratory"
+          className="min-h-96"
+          imageClassName="object-[46%_center]"
+          sizes="(min-width: 1024px) 44vw, 100vw"
+          src="/images/formulation-lab.webp"
+        />
+        <div className="grid gap-4 sm:grid-cols-2" ref={ref}>
+          {proofMetrics.map((metric, index) => (
+            <MetricCard active={inView} index={index} key={metric.label} metric={metric} />
+          ))}
+        </div>
       </div>
     </HomeSection>
   );

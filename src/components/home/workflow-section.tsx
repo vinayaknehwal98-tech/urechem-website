@@ -3,6 +3,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { HomeSection } from "@/components/home/home-section";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { workflowStages } from "@/data/homepage";
 
 export function WorkflowSection() {
@@ -23,6 +24,13 @@ export function WorkflowSection() {
       intro="A readable project journey from challenge definition to delivery. Certification and compliance references remain project-specific unless verified."
       title="From technical challenge to validated delivery."
     >
+      <AnimatedImage
+        alt="Polyurethane foam production quality control before final delivery"
+        className="mb-10 h-72 sm:h-80"
+        imageClassName="object-[center_52%]"
+        sizes="100vw"
+        src="/images/foam-manufacturing.webp"
+      />
       <div className="relative" ref={ref}>
         <div className="absolute left-4 top-0 h-full w-px bg-white/10 md:left-1/2 md:-translate-x-1/2">
           <motion.div

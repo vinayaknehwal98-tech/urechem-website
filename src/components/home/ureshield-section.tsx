@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Droplets, ShieldCheck } from "lucide-react";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { ureshieldProducts } from "@/data/ureshield";
 import { HomeSection } from "./home-section";
 
@@ -13,22 +14,31 @@ export function UreShieldSection() {
       title="UreShield systems built around demanding construction conditions."
     >
       <div className="grid gap-5 lg:grid-cols-[0.88fr_1.12fr]">
-        <article className="relative overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/20 bg-blue-950 p-7 text-white shadow-[0_24px_80px_rgba(7,26,45,0.28)] sm:p-9">
+        <article className="relative overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/20 bg-blue-950 text-white shadow-[0_24px_80px_rgba(7,26,45,0.28)]">
+          <AnimatedImage
+            alt="Specialists inspecting an applied UreShield-style waterproofing membrane in concrete infrastructure"
+            className="h-64 rounded-none border-0 border-b border-cyan-200/16 shadow-none"
+            imageClassName="object-center"
+            sizes="(min-width: 1024px) 44vw, 100vw"
+            src="/images/ureshield-waterproofing.webp"
+          />
           <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full border border-cyan-200/20" />
           <div className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-cyan-300/10 blur-3xl" />
-          <ShieldCheck aria-hidden="true" className="relative h-9 w-9 text-cyan-200" />
-          <p className="relative mt-7 text-sm font-bold uppercase tracking-[0.2em] text-cyan-100">URESHIELD</p>
-          <h3 className="relative mt-3 text-3xl font-black leading-tight sm:text-4xl">Seamless protection. Controlled injection. Technical validation.</h3>
-          <p className="relative mt-5 max-w-xl leading-7 text-slate-200">
-            Explore single- and two-component PU membranes, specialist grouting products and high-performance polyurea coatings adapted from the supplied reference range through page 62.
-          </p>
-          <Link
-            className="relative mt-8 inline-flex items-center gap-2 rounded-[var(--radius-button)] border border-cyan-200/55 bg-cyan-300 px-5 py-3 font-bold text-navy-950 transition hover:bg-white"
-            href="/products/ureshield-waterproofing-grouting-systems"
-          >
-            Explore UreShield
-            <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
-          </Link>
+          <div className="relative p-7 sm:p-9">
+            <ShieldCheck aria-hidden="true" className="h-9 w-9 text-cyan-200" />
+            <p className="mt-7 text-sm font-bold uppercase tracking-[0.2em] text-cyan-100">URESHIELD</p>
+            <h3 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">Seamless protection. Controlled injection. Technical validation.</h3>
+            <p className="mt-5 max-w-xl leading-7 text-slate-200">
+              Explore single- and two-component PU membranes, specialist grouting products and high-performance polyurea coatings adapted from the supplied reference range through page 62.
+            </p>
+            <Link
+              className="mt-8 inline-flex items-center gap-2 rounded-[var(--radius-button)] border border-cyan-200/55 bg-cyan-300 px-5 py-3 font-bold text-navy-950 transition hover:bg-white"
+              href="/products/ureshield-waterproofing-grouting-systems"
+            >
+              Explore UreShield
+              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+            </Link>
+          </div>
         </article>
 
         <div className="grid gap-4 sm:grid-cols-2">

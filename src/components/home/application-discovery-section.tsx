@@ -3,8 +3,20 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { applicationCategories } from "@/data/homepage";
 import { HomeSection } from "./home-section";
+
+const applicationImages = [
+  "/images/spray-foam-application.webp",
+  "/images/spray-foam-application.webp",
+  "/images/foam-manufacturing.webp",
+  "/images/foam-manufacturing.webp",
+  "/images/foam-manufacturing.webp",
+  "/images/formulation-lab.webp",
+  "/images/ureshield-waterproofing.webp",
+  "/images/formulation-lab.webp",
+];
 
 export function ApplicationDiscoverySection() {
   const shouldReduceMotion = useReducedMotion();
@@ -28,23 +40,32 @@ export function ApplicationDiscoverySection() {
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
           >
             <Link
-              className="group relative flex h-full min-h-80 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.045] p-5 pb-16 shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/34 hover:bg-cyan-300/[0.07] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+              className="group relative flex h-full min-h-80 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.045] shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/34 hover:bg-cyan-300/[0.07] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
               href={application.href}
             >
-              <div className="absolute inset-x-4 top-4 h-24 rounded-full border border-cyan-200/12 opacity-45 [transform:rotate(var(--tilt))]" style={{ "--tilt": `${(index % 4) * 9 - 12}deg` } as React.CSSProperties} />
-              <div className="absolute right-5 top-5 font-mono text-xs text-slate-400">{String(index + 1).padStart(2, "0")}</div>
-              <application.icon aria-hidden="true" className="relative h-7 w-7 text-cyan-200" />
-              <h3 className="relative mt-8 text-xl font-black text-white">{application.title}</h3>
-              <p className="relative mt-3 text-sm leading-6 text-slate-300">{application.description}</p>
-              <div className="relative mt-auto flex flex-wrap gap-2 pt-5">
-                {application.families.map((family) => (
-                  <span
-                    className="rounded-[var(--radius-sm)] border border-white/10 bg-white/[0.06] px-2.5 py-1.5 text-xs font-semibold text-cyan-50"
-                    key={family}
-                  >
-                    {family}
-                  </span>
-                ))}
+              <div className="absolute right-4 top-4 z-10 rounded-full border border-white/12 bg-navy-950/68 px-2.5 py-1 font-mono text-xs text-cyan-50">
+                {String(index + 1).padStart(2, "0")}
+              </div>
+              <AnimatedImage
+                alt={`${application.title} polyurethane application context`}
+                className="h-40 rounded-none border-0 border-b border-white/10 shadow-none"
+                sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
+                src={applicationImages[index]}
+              />
+              <div className="relative flex flex-1 flex-col p-5 pb-16">
+                <application.icon aria-hidden="true" className="h-7 w-7 text-cyan-200" />
+                <h3 className="mt-6 text-xl font-black text-white">{application.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{application.description}</p>
+                <div className="mt-auto flex flex-wrap gap-2 pt-5">
+                  {application.families.map((family) => (
+                    <span
+                      className="rounded-[var(--radius-sm)] border border-white/10 bg-white/[0.06] px-2.5 py-1.5 text-xs font-semibold text-cyan-50"
+                      key={family}
+                    >
+                      {family}
+                    </span>
+                  ))}
+                </div>
               </div>
               <span className="absolute bottom-5 right-5 inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] border border-white/10 bg-white/[0.06] text-cyan-100 transition group-hover:border-cyan-200/50 group-hover:bg-cyan-300/12">
                 <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
