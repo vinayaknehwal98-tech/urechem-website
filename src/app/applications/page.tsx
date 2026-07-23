@@ -14,11 +14,11 @@ export default function Page() {
       <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl">Application-led discovery</h1>
       <p className="mt-4 max-w-3xl text-slate-300">Start from the manufacturing or performance problem, then escalate to expert validation.</p>
       <AnimatedImage
-        alt="Professional polyurethane spray-foam insulation application"
+        alt="An application engineer inspecting sprayed polyurethane foam with thermal imaging equipment"
         className="mt-10 h-72 sm:h-80"
         imageClassName="object-[65%_center]"
         sizes="100vw"
-        src="/images/spray-foam-application.webp"
+        src="/images/application-site-review.webp"
       />
       <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {applications.map((application) => (

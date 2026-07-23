@@ -50,11 +50,11 @@ export function ProofExpertiseSection() {
     >
       <div className="grid items-stretch gap-6 lg:grid-cols-[0.88fr_1.12fr]">
         <AnimatedImage
-          alt="Urechem formulation specialists evaluating polyurethane foam samples in a modern laboratory"
+          alt="A technician monitoring polyurethane foam compression testing in a modern materials laboratory"
           className="min-h-96"
           imageClassName="object-[46%_center]"
           sizes="(min-width: 1024px) 44vw, 100vw"
-          src="/images/formulation-lab.webp"
+          src="/images/materials-testing.webp"
         />
         <div className="grid gap-4 sm:grid-cols-2" ref={ref}>
           {proofMetrics.map((metric, index) => (

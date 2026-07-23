@@ -14,11 +14,11 @@ export default function Page() {
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Urechem frames formulation work through problem identification, research, raw-material alignment, custom development, testing, compliance review, sample approval and delivery.</p>
         </div>
         <AnimatedImage
-          alt="Polyurethane formulation specialists testing and reviewing foam samples"
+          alt="A scientist documenting precision mechanical testing of a polyurethane material specimen"
           className="min-h-96"
           imageClassName="object-[45%_center]"
           sizes="(min-width: 1024px) 58vw, 100vw"
-          src="/images/formulation-lab.webp"
+          src="/images/advanced-rd-testing.webp"
         />
       </div>
     </Container>

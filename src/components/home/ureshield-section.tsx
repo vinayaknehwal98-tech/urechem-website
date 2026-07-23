@@ -16,11 +16,11 @@ export function UreShieldSection() {
       <div className="grid gap-5 lg:grid-cols-[0.88fr_1.12fr]">
         <article className="relative overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/20 bg-blue-950 text-white shadow-[0_24px_80px_rgba(7,26,45,0.28)]">
           <AnimatedImage
-            alt="Specialists inspecting an applied UreShield-style waterproofing membrane in concrete infrastructure"
+            alt="Specialists performing controlled UreShield polyurethane injection grouting in concrete infrastructure"
             className="h-64 rounded-none border-0 border-b border-cyan-200/16 shadow-none"
             imageClassName="object-center"
             sizes="(min-width: 1024px) 44vw, 100vw"
-            src="/images/ureshield-waterproofing.webp"
+            src="/images/ureshield-injection.webp"
           />
           <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full border border-cyan-200/20" />
           <div className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-cyan-300/10 blur-3xl" />

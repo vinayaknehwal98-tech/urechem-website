@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Atom } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { HomeSection } from "@/components/home/home-section";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { productFamilies } from "@/data/homepage";
 import { cn } from "@/lib/utils";
 
@@ -14,15 +14,6 @@ const accentClasses: Record<string, string> = {
   turquoise: "border-turquoise-300/45 bg-turquoise-300/12 text-turquoise-50",
   metal: "border-slate-300/32 bg-white/[0.07] text-slate-50",
 };
-
-const familyVisuals = [
-  "/images/spray-foam-application.webp",
-  "/images/formulation-lab.webp",
-  "/images/foam-manufacturing.webp",
-  "/images/formulation-lab.webp",
-  "/images/foam-manufacturing.webp",
-  "/images/formulation-lab.webp",
-];
 
 export function ProductUniverseSection() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -129,6 +120,12 @@ export function ProductUniverseSection() {
         </div>
 
         <aside className="hidden overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/16 bg-[linear-gradient(145deg,rgba(11,40,64,0.82),rgba(4,17,31,0.92))] shadow-[var(--shadow-deep)] lg:block">
+          <AnimatedImage
+            alt="A curated range of polyurethane foams, coated panels, resin samples and laboratory materials"
+            className="h-48 rounded-none border-0 border-b border-white/10 shadow-none"
+            sizes="40vw"
+            src="/images/product-material-universe.webp"
+          />
           <AnimatePresence initial={false} mode="wait">
             <motion.div
               animate={{ opacity: 1, y: 0 }}
@@ -137,16 +134,6 @@ export function ProductUniverseSection() {
               key={activeFamily.name}
               transition={{ duration: shouldReduceMotion ? 0.01 : 0.36, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="relative h-48 overflow-hidden border-b border-white/10">
-                <Image
-                  alt={`${activeFamily.name} application and production context`}
-                  className="object-cover transition duration-700 hover:scale-105"
-                  fill
-                  sizes="40vw"
-                  src={familyVisuals[activeIndex]}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/76 via-transparent to-transparent" />
-              </div>
               <div className="p-6">
                 <p className="font-mono text-xs font-semibold uppercase text-cyan-100">Selected family</p>
                 <h3 className="mt-4 text-3xl font-black text-white">{activeFamily.name}</h3>

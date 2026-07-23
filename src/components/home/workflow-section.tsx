@@ -25,11 +25,11 @@ export function WorkflowSection() {
       title="From technical challenge to validated delivery."
     >
       <AnimatedImage
-        alt="Polyurethane foam production quality control before final delivery"
+        alt="A technical team coordinating the safe inspection and delivery of an approved chemical system"
         className="mb-10 h-72 sm:h-80"
         imageClassName="object-[center_52%]"
         sizes="100vw"
-        src="/images/foam-manufacturing.webp"
+        src="/images/project-delivery.webp"
       />
       <div className="relative" ref={ref}>
         <div className="absolute left-4 top-0 h-full w-px bg-white/10 md:left-1/2 md:-translate-x-1/2">
