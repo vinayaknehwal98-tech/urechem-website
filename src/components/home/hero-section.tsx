@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowRight, Beaker, Boxes, MessageSquareText, ShieldCheck } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ButtonLink } from "@/components/ui/button";
@@ -34,8 +35,22 @@ export function HeroSection() {
 
   return (
     <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-navy-950">
+      <motion.div
+        animate={shouldReduceMotion ? undefined : { scale: [1.02, 1.065, 1.02], x: [0, -10, 0] }}
+        className="absolute inset-0 -z-20"
+        transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }}
+      >
+        <Image
+          alt="Technician applying closed-cell polyurethane spray foam inside an industrial building"
+          className="object-cover object-[66%_center]"
+          fill
+          priority
+          sizes="100vw"
+          src="/images/spray-foam-application.webp"
+        />
+      </motion.div>
       <MolecularBackground />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_14%_18%,rgba(37,99,235,0.32),transparent_31%),radial-gradient(circle_at_82%_18%,rgba(34,211,238,0.2),transparent_30%),linear-gradient(135deg,rgba(4,17,31,0.98),rgba(8,42,76,0.95)_52%,rgba(4,17,31,0.99))]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_14%_18%,rgba(37,99,235,0.32),transparent_31%),radial-gradient(circle_at_82%_18%,rgba(34,211,238,0.18),transparent_30%),linear-gradient(90deg,rgba(4,17,31,0.97)_0%,rgba(5,24,42,0.91)_42%,rgba(4,17,31,0.58)_72%,rgba(4,17,31,0.44)_100%)]" />
       <div className="absolute inset-0 -z-10 opacity-[0.2] [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:24px_24px]" />
       <div className="absolute inset-x-0 bottom-0 -z-10 h-52 bg-gradient-to-t from-navy-950 to-transparent" />
 
