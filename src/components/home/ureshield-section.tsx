@@ -6,14 +6,14 @@ import { HomeSection } from "./home-section";
 export function UreShieldSection() {
   return (
     <HomeSection
-      className="bg-[linear-gradient(180deg,#ffffff,#eaf4ff)]"
+      className="bg-[linear-gradient(180deg,#071a2d,#0b2840)]"
       eyebrow="Waterproofing and grouting"
       id="ureshield"
       intro="UreShield combines polyurethane membrane and injection-grouting pathways for waterproofing, structural consolidation and water-control challenges."
       title="UreShield systems built around demanding construction conditions."
     >
       <div className="grid gap-5 lg:grid-cols-[0.88fr_1.12fr]">
-        <article className="relative overflow-hidden rounded-[var(--radius-lg)] border border-blue-200 bg-blue-950 p-7 text-white shadow-[0_24px_80px_rgba(7,26,45,0.22)] sm:p-9">
+        <article className="relative overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/20 bg-blue-950 p-7 text-white shadow-[0_24px_80px_rgba(7,26,45,0.28)] sm:p-9">
           <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full border border-cyan-200/20" />
           <div className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-cyan-300/10 blur-3xl" />
           <ShieldCheck aria-hidden="true" className="relative h-9 w-9 text-cyan-200" />
@@ -33,7 +33,7 @@ export function UreShieldSection() {
 
         <div className="grid gap-4 sm:grid-cols-2">
           {ureshieldProducts.map((product) => (
-            <article className="rounded-[var(--radius-lg)] border border-blue-200 bg-white p-5 shadow-[0_14px_45px_rgba(30,64,175,0.08)]" key={product.slug}>
+            <article className="rounded-[var(--radius-lg)] border border-blue-200 bg-white p-5 shadow-[0_14px_45px_rgba(0,0,0,0.14)]" key={product.slug}>
               <div className="flex items-start justify-between gap-4">
                 <Droplets aria-hidden="true" className="h-6 w-6 text-blue-700" />
                 <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[0.7rem] font-bold uppercase tracking-[0.12em] text-blue-800">
