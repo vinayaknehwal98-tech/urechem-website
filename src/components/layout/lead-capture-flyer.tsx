@@ -1,13 +1,18 @@
 "use client";
 
 import { ArrowRight, Mail, Phone, UserRound, X } from "lucide-react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const storageKey = "urechem-consultation-flyer-dismissed";
 
 export function LeadCaptureFlyer() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const dismiss = useCallback(() => {
+    window.sessionStorage.setItem(storageKey, "true");
+    setIsOpen(false);
+  }, []);
 
   useEffect(() => {
     if (window.sessionStorage.getItem(storageKey)) {
@@ -36,12 +41,7 @@ export function LeadCaptureFlyer() {
       document.removeEventListener("keydown", handleEscape);
       document.body.classList.remove("overflow-hidden");
     };
-  }, [isOpen]);
-
-  const dismiss = () => {
-    window.sessionStorage.setItem(storageKey, "true");
-    setIsOpen(false);
-  };
+  }, [dismiss, isOpen]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
