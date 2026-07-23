@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowUpRight, Atom } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { HomeSection } from "@/components/home/home-section";
 import { productFamilies } from "@/data/homepage";
@@ -16,6 +17,7 @@ const accentClasses: Record<string, string> = {
 export function ProductUniverseSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeFamily = productFamilies[activeIndex];
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <HomeSection
@@ -117,35 +119,45 @@ export function ProductUniverseSection() {
         </div>
 
         <aside className="hidden rounded-[var(--radius-lg)] border border-cyan-200/16 bg-[linear-gradient(145deg,rgba(11,40,64,0.82),rgba(4,17,31,0.92))] p-6 shadow-[var(--shadow-deep)] lg:block">
-          <p className="font-mono text-xs font-semibold uppercase text-cyan-100">Selected family</p>
-          <h3 className="mt-4 text-3xl font-black text-white">{activeFamily.name}</h3>
-          <p className="mt-4 text-lg leading-8 text-slate-200">{activeFamily.description}</p>
-          {activeFamily.products.length > 0 ? (
-            <div className="mt-6">
-              <p className="text-sm font-semibold text-slate-300">Known products</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {activeFamily.products.map((product) => (
-                  <span
-                    className="rounded-[var(--radius-sm)] border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-cyan-50"
-                    key={product}
-                  >
-                    {product}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p className="mt-6 rounded-[var(--radius-md)] border border-white/10 bg-white/[0.05] px-4 py-3 text-sm leading-6 text-slate-300">
-              Performance materials in this family are best explored through a technical enquiry.
-            </p>
-          )}
-          <Link
-            className="mt-8 inline-flex items-center gap-2 rounded-[var(--radius-button)] border border-cyan-200/24 bg-cyan-300/10 px-5 py-3 text-sm font-semibold text-cyan-50 transition hover:border-cyan-200/60 hover:bg-cyan-300/16 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
-            href={activeFamily.href}
-          >
-            Explore family
-            <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
-          </Link>
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 16 }}
+              key={activeFamily.name}
+              transition={{ duration: shouldReduceMotion ? 0.01 : 0.36, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p className="font-mono text-xs font-semibold uppercase text-cyan-100">Selected family</p>
+              <h3 className="mt-4 text-3xl font-black text-white">{activeFamily.name}</h3>
+              <p className="mt-4 text-lg leading-8 text-slate-200">{activeFamily.description}</p>
+              {activeFamily.products.length > 0 ? (
+                <div className="mt-6">
+                  <p className="text-sm font-semibold text-slate-300">Known products</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {activeFamily.products.map((product) => (
+                      <span
+                        className="rounded-[var(--radius-sm)] border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-cyan-50"
+                        key={product}
+                      >
+                        {product}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className="mt-6 rounded-[var(--radius-md)] border border-white/10 bg-white/[0.05] px-4 py-3 text-sm leading-6 text-slate-300">
+                  Performance materials in this family are best explored through a technical enquiry.
+                </p>
+              )}
+              <Link
+                className="mt-8 inline-flex items-center gap-2 rounded-[var(--radius-button)] border border-cyan-200/24 bg-cyan-300/10 px-5 py-3 text-sm font-semibold text-cyan-50 transition hover:border-cyan-200/60 hover:bg-cyan-300/16 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                href={activeFamily.href}
+              >
+                Explore family
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+              </Link>
+            </motion.div>
+          </AnimatePresence>
         </aside>
       </div>
     </HomeSection>
