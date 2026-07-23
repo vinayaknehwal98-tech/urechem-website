@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { LeadCaptureFlyer } from "@/components/layout/lead-capture-flyer";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import "./globals.css";
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="en" className="h-full antialiased">
       <body className="flex min-h-full flex-col">
         <SiteHeader />
+        <LeadCaptureFlyer />
         <main className="flex-1">{children}</main>
         <SiteFooter />
       </body>
