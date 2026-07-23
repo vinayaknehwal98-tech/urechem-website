@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { Reveal } from "@/components/motion/reveal";
 import { SectionLabel } from "@/components/ui/section-label";
 import { cn } from "@/lib/utils";
 
@@ -18,12 +19,12 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
       id={id}
     >
       <Container className="relative z-10">
-        <div className="mb-10 max-w-3xl">
+        <Reveal className="mb-10 max-w-3xl">
           <SectionLabel>{eyebrow}</SectionLabel>
           <h2 className="mt-5 text-balance text-4xl font-black leading-tight text-white sm:text-5xl">{title}</h2>
           {intro ? <p className="mt-4 text-lg leading-8 text-slate-300">{intro}</p> : null}
-        </div>
-        {children}
+        </Reveal>
+        <Reveal delay={0.08}>{children}</Reveal>
       </Container>
     </section>
   );
