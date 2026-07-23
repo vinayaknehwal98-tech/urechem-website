@@ -8,7 +8,7 @@ import { primaryNavigation } from "@/data/navigation";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-blue-100 bg-white/94 shadow-[0_1px_0_rgba(30,64,175,0.08),0_16px_44px_rgba(15,23,42,0.08)] backdrop-blur-xl supports-[backdrop-filter]:bg-white/86">
-      <Container className="flex h-18 items-center justify-between gap-4 lg:gap-5">
+      <Container className="grid h-18 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 lg:gap-6">
         <Link
           className="group flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
           href="/"
@@ -22,7 +22,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav aria-label="Primary navigation" className="hidden flex-1 items-center justify-center gap-0.5 lg:flex xl:gap-1">
+        <nav aria-label="Primary navigation" className="hidden items-center justify-between gap-1 px-2 lg:flex xl:px-5">
           {primaryNavigation.map((item) => (
             <Link
               className="rounded-[var(--radius-sm)] px-2.5 py-2 text-[0.8125rem] font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 xl:px-3 xl:text-sm"
