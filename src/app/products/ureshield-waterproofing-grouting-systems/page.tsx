@@ -55,6 +55,10 @@ export default function Page() {
                       </span>
                     ))}
                   </div>
+                  <ButtonLink className="mt-6" href={`/contact?type=TDS%20request&product=${encodeURIComponent(product.name)}`} size="sm">
+                    Ask for TDS
+                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                  </ButtonLink>
                 </div>
 
                 <div className="grid gap-7 p-6 sm:p-7 md:grid-cols-2">

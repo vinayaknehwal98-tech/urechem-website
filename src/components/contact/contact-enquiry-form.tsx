@@ -4,7 +4,7 @@ import { CheckCircle2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
-const enquiryTypes = ["General enquiry", "Sample request", "Quotation request", "Site visit request", "Consultation request"] as const;
+const enquiryTypes = ["General enquiry", "TDS request", "Sample request", "Quotation request", "Site visit request", "Consultation request"] as const;
 
 export function ContactEnquiryForm() {
   const searchParams = useSearchParams();
@@ -14,7 +14,8 @@ export function ContactEnquiryForm() {
     name: searchParams.get("name") ?? "",
     email: searchParams.get("email") ?? "",
     mobile: searchParams.get("mobile") ?? "",
-    context: "",
+    product: searchParams.get("product") ?? "",
+    context: searchParams.get("context") ?? "",
   }));
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -75,6 +76,18 @@ export function ContactEnquiryForm() {
       </div>
 
       <label className="grid gap-2 font-bold text-blue-950">
+        Product
+        <input
+          className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+          name="product"
+          placeholder="Enter or select the product you need a TDS for"
+          required={form.type === "TDS request"}
+          value={form.product}
+          onChange={(event) => setForm((current) => ({ ...current, product: event.target.value }))}
+        />
+      </label>
+
+      <label className="grid gap-2 font-bold text-blue-950">
         Technical context
         <textarea
           className="min-h-36 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 p-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
@@ -92,7 +105,7 @@ export function ContactEnquiryForm() {
       {isPrepared ? (
         <p aria-live="polite" className="flex items-start gap-3 rounded-[var(--radius-md)] border border-blue-200 bg-blue-50 p-4 text-sm leading-6 text-blue-950">
           <CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" />
-          Your enquiry brief is ready. Review the details and continue through the approved Urechem contact channel.
+          Your {form.type === "TDS request" ? `TDS request for ${form.product}` : "enquiry brief"} is ready. Review the details and continue through the approved Urechem contact channel.
         </p>
       ) : null}
     </form>

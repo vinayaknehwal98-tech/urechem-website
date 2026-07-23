@@ -12,7 +12,6 @@ export const primaryNavigation: NavigationItem[] = [
   { label: "Products", href: "/products" },
   { label: "Applications", href: "/applications" },
   { label: "Industries", href: "/industries" },
-  { label: "Technical Center", href: "/technical-center" },
   { label: "Innovation & R&D", href: "/innovation-rd" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
