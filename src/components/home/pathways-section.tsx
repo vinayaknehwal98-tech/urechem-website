@@ -1,9 +1,14 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { pathways } from "@/data/homepage";
 import { HomeSection } from "./home-section";
 
 export function PathwaysSection() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <HomeSection
       className="bg-[linear-gradient(180deg,rgba(4,17,31,1),rgba(7,26,45,0.96))]"
@@ -13,9 +18,13 @@ export function PathwaysSection() {
     >
       <div className="grid gap-4 lg:grid-cols-3">
         {pathways.map((pathway, index) => (
-          <article
+          <motion.article
             className="group relative min-h-80 overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/14 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(11,40,64,0.58)_45%,rgba(4,17,31,0.9))] p-6 shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/36 hover:shadow-[0_26px_90px_rgba(0,0,0,0.36),0_0_42px_rgba(34,211,238,0.1)]"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
             key={pathway.title}
+            transition={{ delay: index * 0.09, duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ amount: 0.25, once: true }}
+            whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(34,211,238,0.18),transparent_30%)] opacity-0 transition duration-300 group-hover:opacity-100" />
             <div className="absolute right-5 top-5 font-mono text-xs text-cyan-100/50">0{index + 1}</div>
@@ -29,7 +38,7 @@ export function PathwaysSection() {
               </ButtonLink>
             </div>
             <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-200/55 to-transparent" />
-          </article>
+          </motion.article>
         ))}
       </div>
     </HomeSection>
