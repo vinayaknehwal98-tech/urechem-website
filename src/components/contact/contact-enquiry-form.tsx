@@ -4,6 +4,8 @@ import { Check, CheckCircle2, Clipboard, Download, Mail } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 import { products } from "@/data/catalog";
+import { injectionGroutingProfiles } from "@/data/injection-grouting";
+import { tpuPathways } from "@/data/tpu-materials";
 
 const enquiryTypes = [
   "General enquiry",
@@ -18,12 +20,39 @@ const enquiryTypes = [
   "Consultation request",
 ] as const;
 
+type EnquiryType = (typeof enquiryTypes)[number];
+
+const documentRequestTypes: EnquiryType[] = [
+  "TDS request",
+  "SDS request",
+  "COA request",
+  "Compliance request",
+  "Processing guide request",
+];
+
+function normaliseEnquiryType(value: string | null): EnquiryType {
+  return enquiryTypes.includes(value as EnquiryType) ? (value as EnquiryType) : "General enquiry";
+}
+
+function safeFilename(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "") || "enquiry";
+}
+
+const enquiryProductOptions = [
+  ...products.map((product) => product.name),
+  ...injectionGroutingProfiles.map((profile) => `Injection grouting ${profile.code}`),
+  ...tpuPathways.map((pathway) => pathway.name),
+];
+
 export function ContactEnquiryForm() {
   const searchParams = useSearchParams();
   const [isPrepared, setIsPrepared] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
   const [form, setForm] = useState(() => ({
-    type: searchParams.get("type") ?? "General enquiry",
+    type: normaliseEnquiryType(searchParams.get("type")),
     name: searchParams.get("name") ?? "",
     email: searchParams.get("email") ?? "",
     mobile: searchParams.get("mobile") ?? "",
@@ -31,6 +60,7 @@ export function ContactEnquiryForm() {
     context: searchParams.get("context") ?? "",
   }));
   const enquiryEmail = process.env.NEXT_PUBLIC_URECHEM_ENQUIRY_EMAIL?.trim();
+  const productRequired = documentRequestTypes.includes(form.type);
 
   const enquiryBrief = useMemo(
     () =>
@@ -51,21 +81,41 @@ export function ContactEnquiryForm() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsPrepared(true);
-    setCopied(false);
+    setCopyState("idle");
   };
 
   const copyBrief = async () => {
-    await navigator.clipboard.writeText(enquiryBrief);
-    setCopied(true);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(enquiryBrief);
+      } else {
+        const field = document.createElement("textarea");
+        field.value = enquiryBrief;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.opacity = "0";
+        document.body.appendChild(field);
+        field.select();
+        const copied = document.execCommand("copy");
+        field.remove();
+        if (!copied) throw new Error("Clipboard copy was rejected");
+      }
+      setCopyState("copied");
+    } catch {
+      setCopyState("failed");
+    }
   };
 
   const downloadBrief = () => {
     const url = URL.createObjectURL(new Blob([enquiryBrief], { type: "text/plain;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = `urechem-${form.type.toLowerCase().replace(/\s+/g, "-")}.txt`;
+    link.download = `urechem-${safeFilename(form.type)}.txt`;
+    link.style.display = "none";
+    document.body.appendChild(link);
     link.click();
-    URL.revokeObjectURL(url);
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
   };
 
   return (
@@ -77,7 +127,7 @@ export function ContactEnquiryForm() {
             className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
             name="type"
             value={form.type}
-            onChange={(event) => setForm((current) => ({ ...current, type: event.target.value }))}
+            onChange={(event) => setForm((current) => ({ ...current, type: normaliseEnquiryType(event.target.value) }))}
           >
             {enquiryTypes.map((type) => <option key={type}>{type}</option>)}
           </select>
@@ -126,26 +176,31 @@ export function ContactEnquiryForm() {
       <label className="grid gap-2 font-bold text-blue-950">
         Product
         <input
-          list="urechem-product-options"
+          aria-describedby="product-help"
           className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+          list="urechem-product-options"
           name="product"
-          placeholder="Enter or select the product you need a TDS for"
-          required={form.type.endsWith("request") && ["TDS request", "SDS request", "COA request", "Compliance request", "Processing guide request"].includes(form.type)}
+          placeholder="Enter or select the product or technical pathway"
+          required={productRequired}
           value={form.product}
           onChange={(event) => setForm((current) => ({ ...current, product: event.target.value }))}
         />
         <datalist id="urechem-product-options">
-          {products.map((product) => <option key={`${product.familySlug}:${product.slug}`} value={product.name} />)}
+          {enquiryProductOptions.map((product) => <option key={product} value={product} />)}
         </datalist>
+        <span className="text-xs font-normal text-slate-500" id="product-help">
+          A product or pathway is required for TDS, SDS, COA, compliance and processing-guide requests.
+        </span>
       </label>
 
       <label className="grid gap-2 font-bold text-blue-950">
         Technical context
-          <textarea
+        <textarea
           aria-describedby="technical-context-help"
           className="min-h-36 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 p-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
           name="context"
           placeholder="Describe the application, substrate, environment, performance goal and project constraints."
+          required
           value={form.context}
           onChange={(event) => setForm((current) => ({ ...current, context: event.target.value }))}
         />
@@ -187,8 +242,8 @@ export function ContactEnquiryForm() {
               onClick={copyBrief}
               type="button"
             >
-              {copied ? <Check aria-hidden="true" className="size-4" /> : <Clipboard aria-hidden="true" className="size-4" />}
-              {copied ? "Copied" : "Copy brief"}
+              {copyState === "copied" ? <Check aria-hidden="true" className="size-4" /> : <Clipboard aria-hidden="true" className="size-4" />}
+              {copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy brief"}
             </button>
             <button
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
@@ -199,6 +254,11 @@ export function ContactEnquiryForm() {
               Download brief
             </button>
           </div>
+          {copyState === "failed" ? (
+            <p className="mt-3 text-xs leading-5 text-red-700">
+              Clipboard access was blocked by the browser. Use “Download brief” or manually select the prepared text.
+            </p>
+          ) : null}
           {!enquiryEmail ? (
             <p className="mt-4 text-xs leading-5 text-slate-600">
               Direct email delivery will be enabled after Urechem confirms the official enquiry inbox.
