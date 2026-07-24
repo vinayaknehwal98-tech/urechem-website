@@ -1,5 +1,6 @@
 import { ArrowRight, Beaker, CheckCircle2, ClipboardCheck, FlaskConical } from "lucide-react";
 import { ValidationNote } from "@/components/catalog/cards";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -19,6 +20,13 @@ export default function Page() {
       <SectionLabel>Technical Center</SectionLabel>
       <h1 className="mt-5 text-4xl font-black tracking-[-0.04em] sm:text-5xl">Testing and validation</h1>
       <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-300">Prepare the information needed for a controlled sample, formulation, compatibility or application review.</p>
+      <AnimatedImage
+        alt="Material specimen undergoing controlled mechanical testing"
+        className="mt-10 h-72 sm:h-80"
+        imageClassName="object-center"
+        sizes="100vw"
+        src="https://images.unsplash.com/photo-1774638900399-e5fcec47e4d5?auto=format&fit=crop&fm=jpg&q=82&w=1900"
+      />
       <div className="mt-6"><ValidationNote /></div>
       <div className="mt-10 grid gap-4 md:grid-cols-2">
         {stages.map(([Icon, title, description], index) => (
