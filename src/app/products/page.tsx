@@ -15,11 +15,11 @@ export default function Page() {
       <p className="mt-4 max-w-3xl text-slate-300">Browse the combined Urechem product range with clear boundaries around specifications, documents and application suitability.</p>
 
       <AnimatedImage
-        alt="A curated library of polyurethane foams, elastomers, coated panels and material samples"
+        alt="Materials laboratory team working with product samples and test equipment"
         className="mt-10 h-72 sm:h-80"
-        imageClassName="object-[center_52%]"
+        imageClassName="object-center"
         sizes="100vw"
-        src="/images/product-sample-library.webp"
+        src="https://images.unsplash.com/photo-1764835711461-117d67799a7d?auto=format&fit=crop&fm=jpg&q=82&w=1900"
       />
 
       <article className="mt-6 grid gap-6 overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/20 bg-[linear-gradient(135deg,rgba(37,99,235,0.2),rgba(34,211,238,0.08),rgba(255,255,255,0.04))] p-6 shadow-[var(--shadow-soft)] sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
