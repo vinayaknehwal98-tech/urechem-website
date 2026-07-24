@@ -1,58 +1,55 @@
 # Combined Source Content Matrix
 
-## Source priority
+## Source status
 
-The following supplied documents have equal editorial priority for the Urechem Chemicals website:
+The Urechem Chemicals PDF and the Geo Constech PDF are equal-priority technical source documents for the website. Public presentation remains entirely under Urechem Chemicals branding, but source terminology, technical boundaries and conflicting data are preserved internally so the website does not silently invent or reconcile unsupported facts.
 
-1. `Introducing URECHEM Chemicals 1- PU- Tech 2025 (1).pdf`
-2. `Introducing Geo Constech- PU- Tech 2425 (1).pdf`
+## Public mapping rules
 
-The public website must remain entirely branded as Urechem Chemicals. Geo Constech is a source document, not a public-facing brand reference.
+- GeoTherm source material maps to the Uretherm public pathway only where the product role and application context align.
+- GeoNate source material maps to the ChemNate public pathway only where the chemistry and grade context align.
+- GeoShield membrane and polyurea material maps to the UreShield public pathway.
+- PuTeRA injection-grouting content is presented through neutral reference codes under the Urechem injection-grouting pathway until official public Urechem grade names are confirmed.
+- TPU content is presented as polyester-based, polyether-based and polycaprolactone-based material pathways because no approved Urechem TPU grade codes were supplied.
+- Pigments, catalysts, silicone oils, cell openers and ageing-control additives are grouped under Urechem formulation support; source brand prefixes are not exposed publicly.
 
-## Integration rules
+## Evidence boundaries
 
-- Merge repeated company, values, services and workflow material into one stronger Urechem narrative.
-- Preserve distinct product, benefit, application and processing information instead of deleting it as duplication.
-- Convert clearly corresponding public range names where the project already uses an approved Urechem equivalent:
-  - GeoTherm -> Uretherm
-  - GeoNate -> ChemNate
-  - GeoShield -> UreShield
-- Do not publish unsupported ownership claims, project statistics, client names, certifications, test values or institutional associations as Urechem facts.
-- Do not invent a grade-name conversion where no approved Urechem naming map exists.
-- Keep technical documents behind enquiry and specialist review rather than publishing fake downloads.
-- Every image-bearing section should use a unique, context-matched visual with restrained motion and reduced-motion support.
+The following may be published when directly supported by the supplied technical content and framed with project-review boundaries:
 
-## Website coverage matrix
+- Product chemistry and component count.
+- Hydrophobic or hydrophilic behaviour stated in the source.
+- Closed-cell, flexible, rigid, high-foaming, low-viscosity or water-reactive descriptions stated in the source.
+- General application pathways such as tunnels, cracks, joints, void filling, slab lifting, waterproofing, insulation, foam, coatings, adhesives and elastomers.
+- General benefits stated in the source when they are not converted into guaranteed design values.
 
-| Content area | Urechem source contribution | Geo Constech source contribution | Public Urechem treatment |
-|---|---|---|---|
-| Company overview | Urechem positioning, safety and innovation | Ground-support, infrastructure and technical-delivery depth | Consolidated Urechem company narrative without unsupported metrics |
-| Vision and values | Commitment, relationships, agility, integrity, growth | Matching values and expanded leadership framing | One concise Urechem values section |
-| Services | Site visits, requirement discovery, application support, supply and checklists | Geotechnical-team framing and project-specific solution development | Urechem technical service pathway |
-| Project workflow | Eight-stage problem-to-delivery workflow | Same workflow with infrastructure context | One interactive Urechem workflow |
-| Spray foam | Uretherm GT 40 and GT 50 descriptions, benefits and uses | GeoTherm range context | Uretherm family and product pages |
-| MDI | ChemNate product set and grade descriptions | GeoNate range context and broader applications | ChemNate MDI family |
-| Polyols | KlayOl PE grades and POP | KlayOl range context | KlayOl polyol family |
-| PPG | KlayOl grade descriptions | KlayOl PPG context | KlayOl PPG family with numbering conflict held for confirmation |
-| Flexible systems | VE4105 A/B and Flex 8305 A/B | Formulation and application context | Flexible systems family |
-| PU membranes | Limited Urechem brochure coverage | 1K and 2K GeoShield membrane detail | UreShield PU membrane pathway |
-| Injection grouting | Limited Urechem brochure coverage | PuTeRA, PuTeRA Earth and grouting-system detail | UreShield technical pathway; source grade names held unless approved |
-| Polyurea | Limited Urechem brochure coverage | Hybrid, pure and hand-applied GeoShield systems | UreShield polyurea pathway |
-| TPU | Not detailed | TPU performance and processing overview | Urechem TPU enquiry pathway |
-| Pigments and catalysts | Additives and processing-aid categories | Pigments and amine-catalyst range context | Urechem formulation-support pathway |
+The following remain blocked unless Urechem supplies current evidence or explicit approval:
 
-## Data that remains client-owned
+- Project counts, tunnel kilometres, heritage or UNESCO claims, client names and market-leadership claims.
+- Certifications, CE status, ROHS, REACH, fire-retardant status and regulatory compliance.
+- Pull-out strength, compressive strength, hydrostatic pressure, design capacity and other engineering values.
+- Exact reaction time, gel time, dosage, shelf life, mixing ratio, application temperature and processing windows.
+- Public conversion of source grade names into new Urechem product names.
+- Conflicting KlayOl PPG 14xx and 24xx numbering.
 
-- Official public enquiry email address.
-- Final KlayOl PPG public numbering: 14xx or 24xx.
-- Any public conversion map for PuTeRA / PuTeRA Earth grade names.
-- Certifications, test reports and compliance claims intended for public display.
-- Project counts, tunnel kilometres, UNESCO/heritage claims, client names and case studies.
+## Content routes implemented
 
-## Image and motion standard
+- `/products/complete-range` — combined product-universe overview.
+- `/products/injection-grouting-systems` — eleven neutral reference profiles for injection, water stopping, consolidation, void filling and slab stabilisation.
+- `/products/tpu-materials` — TPU type and property pathways.
+- `/products/ureshield-waterproofing-grouting-systems` — UreShield PU membrane and polyurea pathways.
 
-- No repeated photograph across separate image-bearing sections.
-- Match imagery to the exact context: laboratory, spray application, injection grouting, membranes, polyurea, materials testing, manufacturing, technical documentation or site review.
-- Use subtle reveal, parallax, hover lift or slow zoom only.
-- Respect `prefers-reduced-motion`.
-- Avoid watermarks, visible third-party branding and misleading project imagery.
+## Visual policy
+
+- Every photographic placement must use a distinct, context-matched image.
+- Brand assets such as logos, marks, icons and social cards may be reused.
+- New technical routes use unique animated vector visuals instead of repeating existing photography.
+- `npm run audit:images` checks static image references for missing files and repeated non-brand photography.
+- All motion must respect reduced-motion preferences.
+
+## Remaining confirmations
+
+1. Official public enquiry email address.
+2. Final KlayOl PPG grade numbering.
+3. Official Urechem naming map for neutral injection-grouting reference codes.
+4. Current evidence for any certification, regulatory, test-value or project-metric claim intended for public use.
