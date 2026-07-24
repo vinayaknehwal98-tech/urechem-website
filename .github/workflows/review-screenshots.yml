@@ -13,7 +13,7 @@ on:
 
 jobs:
   capture:
-    name: Capture full-page production-review screenshots
+    name: Capture production-review screenshots
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -76,6 +76,24 @@ jobs:
             path="${route#*:}"
             npx --yes playwright@1.55.0 screenshot --browser=chromium --full-page --viewport-size=1440,900 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
             npx --yes playwright@1.55.0 screenshot --browser=chromium --full-page --viewport-size=390,844 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
+          done
+
+      - name: Capture homepage image sections after anchor navigation
+        run: |
+          sections=(
+            "home-pathways:/#choose-your-path"
+            "home-product-universe:/#product-universe"
+            "home-ureshield:/#ureshield"
+            "home-applications:/#applications"
+            "home-proof:/#proof-expertise"
+            "home-workflow:/#workflow"
+            "home-technical:/#technical-center-preview"
+          )
+          for section in "${sections[@]}"; do
+            name="${section%%:*}"
+            path="${section#*:}"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
           done
 
       - name: Upload review screenshots
