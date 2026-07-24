@@ -15,7 +15,7 @@ on:
 
 jobs:
   capture:
-    name: Capture production-review route screenshots
+    name: Capture full-page production-review screenshots
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -52,7 +52,7 @@ jobs:
           cat /tmp/urechem-next.log
           exit 1
 
-      - name: Capture desktop and mobile screenshots
+      - name: Capture full-page desktop and mobile screenshots
         run: |
           mkdir -p review-screenshots/latest
           routes=(
@@ -71,8 +71,8 @@ jobs:
           for route in "${routes[@]}"; do
             name="${route%%:*}"
             path="${route#*:}"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --full-page --viewport-size=1440,900 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --full-page --viewport-size=390,844 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
           done
 
       - name: Upload review screenshots
