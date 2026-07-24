@@ -1,5 +1,5 @@
 import { ArrowRight, CheckCircle2, Droplets, ShieldAlert } from "lucide-react";
-import { GroutingApplicationVisual } from "@/components/media/grouting-application-visual";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -36,7 +36,13 @@ export default function Page() {
                 </ButtonLink>
               </div>
             </div>
-            <GroutingApplicationVisual />
+            <AnimatedImage
+              alt="Construction specialist preparing a concrete structure for injection repair"
+              className="h-80"
+              imageClassName="object-center"
+              sizes="(min-width: 1024px) 44vw, 100vw"
+              src="https://images.unsplash.com/photo-1685464197603-787dabbdecbd?auto=format&fit=crop&fm=jpg&q=82&w=1900"
+            />
           </div>
         </Container>
       </section>
