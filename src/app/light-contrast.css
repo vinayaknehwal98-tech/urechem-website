@@ -1,14 +1,87 @@
-/* Safeguards for legacy pale text utilities after the white-theme conversion. */
+/* Full-site safeguards for legacy dark-theme utilities after the white-theme conversion. */
+body [class~="text-white"],
+body [class*="text-white/"] {
+  color: #0f172a !important;
+}
+
+body [class~="text-slate-50"],
+body [class*="text-slate-50/"],
+body [class~="text-slate-100"],
+body [class*="text-slate-100/"],
+body [class~="text-slate-200"],
+body [class*="text-slate-200/"],
+body [class~="text-slate-300"],
+body [class*="text-slate-300/"],
+body [class~="text-slate-400"],
+body [class*="text-slate-400/"] {
+  color: #475569 !important;
+}
+
 body [class~="text-cyan-50"],
 body [class*="text-cyan-50/"],
+body [class~="text-cyan-100"],
+body [class*="text-cyan-100/"],
+body [class~="text-cyan-200"],
+body [class*="text-cyan-200/"],
+body [class~="text-cyan-300"],
+body [class*="text-cyan-300/"],
+body [class~="text-sky-50"],
+body [class*="text-sky-50/"],
+body [class~="text-sky-100"],
+body [class*="text-sky-100/"],
+body [class~="text-sky-200"],
+body [class*="text-sky-200/"],
+body [class~="text-sky-300"],
+body [class*="text-sky-300/"] {
+  color: #0369a1 !important;
+}
+
+body [class~="text-blue-50"],
+body [class*="text-blue-50/"],
+body [class~="text-blue-100"],
+body [class*="text-blue-100/"],
+body [class~="text-blue-200"],
+body [class*="text-blue-200/"],
+body [class~="text-blue-300"],
+body [class*="text-blue-300/"] {
+  color: #1d4ed8 !important;
+}
+
 body [class~="text-turquoise-50"],
 body [class*="text-turquoise-50/"],
 body [class~="text-turquoise-100"],
-body [class*="text-turquoise-100/"] {
-  color: #075985 !important;
+body [class*="text-turquoise-100/"],
+body [class~="text-turquoise-200"],
+body [class*="text-turquoise-200/"],
+body [class~="text-turquoise-300"],
+body [class*="text-turquoise-300/"],
+body [class~="text-teal-50"],
+body [class*="text-teal-50/"],
+body [class~="text-teal-100"],
+body [class*="text-teal-100/"],
+body [class~="text-teal-200"],
+body [class*="text-teal-200/"],
+body [class~="text-teal-300"],
+body [class*="text-teal-300/"] {
+  color: #0f766e !important;
 }
 
-body [class~="text-teal-50"],
-body [class*="text-teal-50/"] {
-  color: #0f766e !important;
+body [class~="text-amber-50"],
+body [class*="text-amber-50/"],
+body [class~="text-amber-100"],
+body [class*="text-amber-100/"],
+body [class~="text-amber-200"],
+body [class*="text-amber-200/"] {
+  color: #92400e !important;
+}
+
+body input::placeholder,
+body textarea::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
+
+body [aria-disabled="true"],
+body :disabled {
+  color: #64748b;
 }
