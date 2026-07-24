@@ -67,6 +67,7 @@ jobs:
             "application-page:/applications/automotive-seating"
             "industries:/industries"
             "technical-center:/technical-center"
+            "testing-validation:/technical-center/testing-validation"
             "about:/about"
             "innovation-rd:/innovation-rd"
             "contact:/contact?type=TDS%20request&product=Injection%20grouting%20Reference%202421"
