@@ -14,11 +14,11 @@ export default function Page() {
       <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl">Industry pathways</h1>
       <p className="mt-4 max-w-3xl text-slate-300">Navigate by operational context and connect to applications commonly evaluated by similar teams.</p>
       <AnimatedImage
-        alt="A modern industrial facility with insulated buildings, process infrastructure and organized logistics"
+        alt="Large industrial process plant with towers, piping and operating equipment"
         className="mt-10 h-72 sm:h-80"
         imageClassName="object-center"
         sizes="100vw"
-        src="/images/industrial-facility.webp"
+        src="https://images.unsplash.com/photo-1768564206500-5cddb1fea679?auto=format&fit=crop&fm=jpg&q=82&w=1900"
       />
       <div className="mt-10 grid gap-5 md:grid-cols-2">
         {industries.map((industry) => (
