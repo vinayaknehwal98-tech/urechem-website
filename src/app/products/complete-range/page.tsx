@@ -157,12 +157,10 @@ export default function Page() {
                   <strong>Technical boundary:</strong> {range.reviewNote}
                 </div>
 
-                {range.href ? (
-                  <ButtonLink className="mt-5" href={range.href} size="sm" variant="secondary">
-                    Explore this pathway
-                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                  </ButtonLink>
-                ) : null}
+                <ButtonLink className="mt-5" href={range.href} size="sm">
+                  Explore this pathway
+                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                </ButtonLink>
               </article>
             ))}
           </div>
