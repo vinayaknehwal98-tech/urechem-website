@@ -1,0 +1,14 @@
+/* Safeguards for legacy pale text utilities after the white-theme conversion. */
+body [class~="text-cyan-50"],
+body [class*="text-cyan-50/"],
+body [class~="text-turquoise-50"],
+body [class*="text-turquoise-50/"],
+body [class~="text-turquoise-100"],
+body [class*="text-turquoise-100/"] {
+  color: #075985 !important;
+}
+
+body [class~="text-teal-50"],
+body [class*="text-teal-50/"] {
+  color: #0f766e !important;
+}
