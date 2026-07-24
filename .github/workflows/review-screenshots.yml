@@ -4,9 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - 'src/app/products/**'
-      - 'src/app/applications/**'
-      - 'src/app/industries/**'
+      - 'src/app/**'
       - 'src/components/**'
       - 'src/data/**'
       - 'package.json'
@@ -56,6 +54,7 @@ jobs:
         run: |
           mkdir -p review-screenshots/latest
           routes=(
+            "home:/"
             "products:/products"
             "complete-range:/products/complete-range"
             "injection-grouting:/products/injection-grouting-systems"
@@ -67,6 +66,10 @@ jobs:
             "applications:/applications"
             "application-page:/applications/automotive-seating"
             "industries:/industries"
+            "technical-center:/technical-center"
+            "about:/about"
+            "innovation-rd:/innovation-rd"
+            "contact:/contact?type=TDS%20request&product=Injection%20grouting%20Reference%202421"
           )
           for route in "${routes[@]}"; do
             name="${route%%:*}"
