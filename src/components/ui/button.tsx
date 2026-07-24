@@ -6,13 +6,13 @@ type ButtonSize = "sm" | "md" | "lg";
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "border-cyan-300/80 bg-cyan-300 text-navy-950 shadow-[var(--shadow-cyan)] hover:border-white hover:bg-white",
+    "border-blue-700 bg-blue-700 text-white shadow-[0_12px_30px_rgba(37,99,235,0.22)] hover:border-blue-800 hover:bg-blue-800 hover:text-white",
   secondary:
-    "border-white/18 bg-white/7 text-white hover:border-cyan-300/70 hover:bg-cyan-300/10 hover:text-cyan-100",
+    "border-blue-200 bg-white text-blue-950 shadow-[0_10px_26px_rgba(30,64,175,0.1)] hover:border-sky-400 hover:bg-sky-50 hover:text-blue-950",
   ghost:
-    "border-transparent bg-transparent text-slate-200 hover:border-white/12 hover:bg-white/7 hover:text-white",
+    "border-blue-100 bg-blue-50/70 text-blue-800 hover:border-blue-300 hover:bg-blue-100 hover:text-blue-950",
   metal:
-    "border-white/15 bg-metallic text-white shadow-[var(--shadow-metal)] hover:border-cyan-200/50 hover:text-cyan-100",
+    "border-slate-200 bg-[linear-gradient(135deg,#ffffff,#eef6ff_55%,#dbeafe)] text-blue-950 shadow-[var(--shadow-metal)] hover:border-sky-300 hover:text-blue-900",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -43,7 +43,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-[var(--radius-button)] border font-semibold transition duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200 disabled:pointer-events-none disabled:opacity-55",
+        "inline-flex shrink-0 items-center justify-center rounded-[var(--radius-button)] border font-semibold transition duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 disabled:pointer-events-none disabled:opacity-55",
         variantClasses[variant],
         sizeClasses[size],
         className,
@@ -62,7 +62,7 @@ export function ButtonLink({
   return (
     <Link
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-[var(--radius-button)] border font-semibold transition duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200",
+        "inline-flex shrink-0 items-center justify-center rounded-[var(--radius-button)] border font-semibold transition duration-200 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600",
         variantClasses[variant],
         sizeClasses[size],
         className,
