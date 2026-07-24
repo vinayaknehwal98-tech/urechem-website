@@ -8,7 +8,7 @@ on:
 
 jobs:
   verify:
-    name: Lint and build
+    name: Lint, image audit and build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,6 +25,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Audit unique image usage
+        run: npm run audit:images
 
       - name: Build
         run: npm run build
