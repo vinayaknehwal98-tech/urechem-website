@@ -49,10 +49,10 @@ export function WorkflowSection() {
               className={`relative rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.045] p-5 shadow-[var(--shadow-soft)] md:grid md:w-[calc(50%_-_2rem)] md:grid-cols-[4rem_1fr] md:gap-5 ${
                 index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
               }`}
-              initial={shouldReduceMotion ? false : { opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+              initial={shouldReduceMotion ? false : { opacity: 0.94, x: index % 2 === 0 ? -10 : 10 }}
               key={stage.title}
-              transition={{ delay: Math.min(index * 0.04, 0.24), duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-              viewport={{ amount: 0.3, once: true }}
+              transition={{ delay: Math.min(index * 0.04, 0.24), duration: 0.56, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ amount: 0.22, once: true }}
               whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
             >
               <span
