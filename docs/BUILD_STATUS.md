@@ -4,7 +4,7 @@ Last verified: July 24, 2026
 
 ## Current milestone
 
-The equal-priority source integration and realistic-image production pass are active in draft PR #3. Both supplied technical PDFs are used as one combined content base while the public website remains entirely under Urechem Chemicals branding.
+The equal-priority source integration, realistic-image production pass and white-theme conversion are active in draft PR #3. Both supplied technical PDFs are used as one combined content base while the public website remains entirely under Urechem Chemicals branding.
 
 ## Completed on main before this pass
 
@@ -26,6 +26,8 @@ The equal-priority source integration and realistic-image production pass are ac
 - TPU page covering polyester-based, polyether-based and polycaprolactone-based material pathways plus the advantages identified in the supplied technical source.
 - Ten distinct realistic photographic placements for the homepage hero, About, Products, Applications, Industries, Technical Center, Testing and Validation, UreShield, Injection Grouting and Contact routes.
 - Every photographic placement uses its own context-matched source and retains subtle motion through the shared animated-image component.
+- Full white-and-blue visual system across the page background, hero, home sections, cards, buttons, labels, image frames, footer and existing dark utility compositions.
+- White-theme typography and contrast rules preserve dark readable copy, blue calls to action and reduced-motion image behaviour across responsive layouts.
 - Automated static-image audit that fails on missing local image files or repeated non-brand photography.
 - CI verification expanded to lint, image audit, production build and full sitemap-route smoke testing.
 - Desktop and mobile screenshot coverage includes the complete range, injection grouting, TPU, UreShield, Technical Center, Testing and Validation and the main discovery routes.
@@ -34,10 +36,10 @@ The equal-priority source integration and realistic-image production pass are ac
 
 ## Verification completed
 
-- Vercel preview deployment succeeded for the realistic-image pass.
+- Vercel preview deployment succeeded for the white-theme pass.
 - GitHub Actions CI passed lint, unique-image audit, production build and sitemap-route smoke testing.
-- Automated desktop/mobile screenshot workflow passed and produced the production-review artifact.
-- Visual review confirmed the new photography renders correctly across the representative desktop routes; mobile screenshots were also generated successfully.
+- Automated desktop/mobile screenshot workflow passed and produced the production-review artifact for commit `661c91d9cefa8f60fe4970ecbeceb046b298cf6e`.
+- Visual review confirmed the white theme, realistic photography, typography contrast, responsive cards, buttons, navigation and footer render correctly across representative desktop and mobile routes.
 - No temporary generated-image staging data remains in the repository.
 
 ## Client confirmations still required
@@ -48,4 +50,4 @@ The equal-priority source integration and realistic-image production pass are ac
 
 ## Release rule
 
-Technical verification for the current image and content implementation is complete. Keep PR #3 in draft and do not label the website fully content-complete until the three client-owned confirmations above are supplied or intentionally deferred for launch. Unsupported metrics, certifications, regulatory claims and engineering values remain blocked unless Urechem supplies current evidence.
+Technical verification for the current white-theme, image and content implementation is complete. Keep PR #3 in draft and do not label the website fully content-complete until the three client-owned confirmations above are supplied or intentionally deferred for launch. Unsupported metrics, certifications, regulatory claims and engineering values remain blocked unless Urechem supplies current evidence.
