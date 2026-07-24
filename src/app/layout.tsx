@@ -3,6 +3,7 @@ import { LeadCaptureFlyer } from "@/components/layout/lead-capture-flyer";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import "./globals.css";
+import "./light-contrast.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://urechem-website.vercel.app"),
