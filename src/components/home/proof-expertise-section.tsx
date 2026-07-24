@@ -1,40 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { HomeSection } from "@/components/home/home-section";
 import { AnimatedImage } from "@/components/media/animated-image";
 import { proofMetrics } from "@/data/homepage";
 
-function useCountUp(target: number, active: boolean) {
-  const [value, setValue] = useState(0);
-  const shouldReduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (!active || shouldReduceMotion) return;
-
-    let frame = 0;
-    const totalFrames = 42;
-    const timer = window.setInterval(() => {
-      frame += 1;
-      const progress = 1 - Math.pow(1 - frame / totalFrames, 3);
-      setValue(Math.round(target * progress));
-      if (frame >= totalFrames) {
-        window.clearInterval(timer);
-        setValue(target);
-      }
-    }, 28);
-
-    return () => window.clearInterval(timer);
-  }, [active, shouldReduceMotion, target]);
-
-  return shouldReduceMotion || !active ? target : value;
-}
-
 export function ProofExpertiseSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.2, once: true });
-
   return (
     <HomeSection
       className="bg-[radial-gradient(circle_at_80%_14%,rgba(45,212,191,0.1),transparent_30%),linear-gradient(180deg,rgba(7,26,45,0.95),rgba(4,17,31,0.98))]"
@@ -50,9 +21,9 @@ export function ProofExpertiseSection() {
           sizes="(min-width: 1024px) 44vw, 100vw"
           src="/images/materials-testing.webp"
         />
-        <div className="grid gap-4 sm:grid-cols-2" ref={ref}>
+        <div className="grid gap-4 sm:grid-cols-2">
           {proofMetrics.map((metric, index) => (
-            <MetricCard active={inView} index={index} key={metric.label} metric={metric} />
+            <MetricCard index={index} key={metric.label} metric={metric} />
           ))}
         </div>
       </div>
@@ -61,15 +32,12 @@ export function ProofExpertiseSection() {
 }
 
 function MetricCard({
-  active,
   index,
   metric,
 }: {
-  active: boolean;
   index: number;
   metric: (typeof proofMetrics)[number];
 }) {
-  const value = useCountUp(metric.value, active);
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -82,7 +50,7 @@ function MetricCard({
       whileInView={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
     >
       <p className="font-mono text-sm font-semibold text-cyan-100">
-        {value.toLocaleString()}
+        {metric.value.toLocaleString()}
         {metric.suffix}
       </p>
       <h3 className="mt-3 text-xl font-black text-white">{metric.label}</h3>
