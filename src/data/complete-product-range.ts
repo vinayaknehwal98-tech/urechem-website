@@ -6,7 +6,7 @@ export type CompleteProductRangeItem = {
   applications: string[];
   representativeProducts: string[];
   reviewNote: string;
-  href?: string;
+  href: string;
 };
 
 export const completeProductRange: CompleteProductRangeItem[] = [
