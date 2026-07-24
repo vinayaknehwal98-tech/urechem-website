@@ -13,6 +13,15 @@ function decodeHtml(value) {
     .replaceAll("&gt;", ">");
 }
 
+function stripTags(value) {
+  return decodeHtml(value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
+}
+
+function getAttribute(tag, name) {
+  const match = tag.match(new RegExp(`\\b${name}\\s*=\\s*["']([^"']*)["']`, "i"));
+  return match ? decodeHtml(match[1].trim()) : null;
+}
+
 function localise(url) {
   const publishedUrl = new URL(url, baseUrl);
   return new URL(`${publishedUrl.pathname}${publishedUrl.search}`, baseUrl);
@@ -37,6 +46,32 @@ async function runPool(items, handler) {
   );
 }
 
+function inspectRenderedPage(body, pathname) {
+  const failures = [];
+  const htmlTag = body.match(/<html\b[^>]*>/i)?.[0];
+  const title = stripTags(body.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "");
+  const h1Elements = [...body.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)]
+    .map((match) => stripTags(match[1]))
+    .filter(Boolean);
+  const metaTags = [...body.matchAll(/<meta\b[^>]*>/gi)].map((match) => match[0]);
+  const descriptionTag = metaTags.find((tag) => getAttribute(tag, "name")?.toLowerCase() === "description");
+  const robotsTag = metaTags.find((tag) => getAttribute(tag, "name")?.toLowerCase() === "robots");
+  const imageTags = [...body.matchAll(/<img\b[^>]*>/gi)].map((match) => match[0]);
+
+  if (!htmlTag || !getAttribute(htmlTag, "lang")) failures.push("missing html lang attribute");
+  if (!title) failures.push("missing or empty document title");
+  if (!descriptionTag || !getAttribute(descriptionTag, "content")) failures.push("missing or empty meta description");
+  if (h1Elements.length !== 1) failures.push(`expected exactly one non-empty H1, found ${h1Elements.length}`);
+
+  const robots = robotsTag ? getAttribute(robotsTag, "content")?.toLowerCase() ?? "" : "";
+  if (robots.includes("noindex")) failures.push("sitemap route is marked noindex");
+
+  const imagesWithoutAlt = imageTags.filter((tag) => getAttribute(tag, "alt") === null);
+  if (imagesWithoutAlt.length > 0) failures.push(`${imagesWithoutAlt.length} rendered image(s) missing an alt attribute`);
+
+  return failures.map((message) => ({ source: pathname, message }));
+}
+
 const sitemapResponse = await fetch(sitemapUrl);
 if (!sitemapResponse.ok) {
   console.error(`Unable to load sitemap: ${sitemapResponse.status} ${sitemapUrl}`);
@@ -52,6 +87,7 @@ if (locations.length === 0) {
 }
 
 const routeFailures = [];
+const pageQualityFailures = [];
 const placeholderLinks = [];
 const internalLinks = new Set();
 
@@ -66,6 +102,7 @@ await runPool(locations, async (location) => {
       return;
     }
 
+    pageQualityFailures.push(...inspectRenderedPage(result.body, publishedUrl.pathname));
     console.log(`✓ route ${result.status} ${publishedUrl.pathname}${publishedUrl.search}`);
 
     for (const match of result.body.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>/gi)) {
@@ -104,6 +141,11 @@ if (routeFailures.length > 0) {
   for (const failure of routeFailures) console.error(`- ${failure.status} ${failure.url}`);
 }
 
+if (pageQualityFailures.length > 0) {
+  console.error("\nRendered SEO/accessibility failures:");
+  for (const failure of pageQualityFailures) console.error(`- ${failure.source}: ${failure.message}`);
+}
+
 if (placeholderLinks.length > 0) {
   console.error("\nPlaceholder or unsafe links:");
   for (const link of placeholderLinks) console.error(`- ${link.source} -> ${link.href}`);
@@ -114,8 +156,10 @@ if (linkFailures.length > 0) {
   for (const failure of linkFailures) console.error(`- ${failure.status} ${failure.url}`);
 }
 
-if (routeFailures.length > 0 || placeholderLinks.length > 0 || linkFailures.length > 0) process.exit(1);
+if (routeFailures.length > 0 || pageQualityFailures.length > 0 || placeholderLinks.length > 0 || linkFailures.length > 0) {
+  process.exit(1);
+}
 
 console.log(
-  `\nProduction crawl passed: ${locations.length} sitemap routes and ${internalLinks.size} unique internal CTA/link destinations returned successful responses with no placeholder links.`,
+  `\nProduction crawl passed: ${locations.length} sitemap routes and ${internalLinks.size} unique internal CTA/link destinations returned successful responses. Every sitemap page has a language, title, description, one H1, indexable robots state and alt attributes on rendered images.`,
 );
