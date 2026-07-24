@@ -34,9 +34,9 @@ export function HeroSection() {
   });
 
   return (
-    <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-navy-950">
+    <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden border-b border-blue-100 bg-white">
       <motion.div
-        animate={shouldReduceMotion ? undefined : { scale: [1.02, 1.065, 1.02], x: [0, -10, 0] }}
+        animate={shouldReduceMotion ? undefined : { scale: [1.02, 1.055, 1.02], x: [0, -8, 0] }}
         className="absolute inset-0 -z-20"
         transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }}
       >
@@ -51,25 +51,25 @@ export function HeroSection() {
         />
       </motion.div>
       <MolecularBackground />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_14%_18%,rgba(37,99,235,0.32),transparent_31%),radial-gradient(circle_at_82%_18%,rgba(34,211,238,0.18),transparent_30%),linear-gradient(90deg,rgba(4,17,31,0.97)_0%,rgba(5,24,42,0.91)_42%,rgba(4,17,31,0.58)_72%,rgba(4,17,31,0.44)_100%)]" />
-      <div className="absolute inset-0 -z-10 opacity-[0.2] [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:24px_24px]" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-52 bg-gradient-to-t from-navy-950 to-transparent" />
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.97)_43%,rgba(248,251,255,0.83)_70%,rgba(239,246,255,0.48)_100%)]" />
+      <div className="absolute inset-0 -z-10 opacity-[0.24] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.24)_1px,transparent_0)] [background-size:24px_24px]" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-52 bg-gradient-to-t from-white to-transparent" />
 
       <Container className="flex min-h-[calc(100dvh-4.5rem)] flex-col justify-center py-12 sm:py-16 lg:py-20">
         <div className="relative z-10 w-full">
-          <motion.p className="text-sm font-black uppercase tracking-[0.22em] text-cyan-200" {...enter(0.08, 18)}>
+          <motion.p className="text-sm font-black uppercase tracking-[0.22em] text-blue-700" {...enter(0.08, 18)}>
             URECHEM CHEMICAL
           </motion.p>
           <motion.h1
-            className="mt-6 w-full text-balance text-[clamp(3.4rem,7.4vw,7.8rem)] font-black leading-[0.86] tracking-[-0.055em] text-white"
+            className="mt-6 w-full max-w-6xl text-balance text-[clamp(3.4rem,7.4vw,7.8rem)] font-black leading-[0.86] tracking-[-0.055em] text-blue-950"
             {...enter(0.16, 42)}
           >
             Intelligent chemistry for better polyurethane solutions.
           </motion.h1>
-          <motion.p className="mt-7 text-2xl font-black text-cyan-100 sm:text-3xl" {...enter(0.3)}>
+          <motion.p className="mt-7 text-2xl font-black text-sky-700 sm:text-3xl" {...enter(0.3)}>
             We deliver what we promise.
           </motion.p>
-          <motion.p className="mt-5 max-w-3xl text-pretty text-lg leading-8 text-slate-200 sm:text-xl" {...enter(0.38)}>
+          <motion.p className="mt-5 max-w-3xl text-pretty text-lg leading-8 text-slate-700 sm:text-xl" {...enter(0.38)}>
             Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
           </motion.p>
 
@@ -90,20 +90,20 @@ export function HeroSection() {
       </Container>
 
       <Container className="relative z-10 pb-10">
-        <div className="grid gap-3 border-t border-white/10 pt-6 md:grid-cols-3">
+        <div className="grid gap-3 border-t border-blue-200/70 pt-6 md:grid-cols-3">
           {proofPoints.map((item, index) => (
             <motion.article
-              className="rounded-[var(--radius-md)] border border-white/10 bg-white/[0.05] p-4 shadow-[var(--shadow-soft)] backdrop-blur-sm"
+              className="rounded-[var(--radius-md)] border border-blue-100 bg-white/90 p-4 shadow-[var(--shadow-soft)] backdrop-blur-md"
               initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
               key={item.label}
               transition={{ delay: index * 0.08, duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ amount: 0.25, once: true }}
-              whileHover={shouldReduceMotion ? undefined : { borderColor: "rgba(103,232,249,0.34)", y: -5 }}
+              whileHover={shouldReduceMotion ? undefined : { borderColor: "rgba(14,165,233,0.4)", y: -5 }}
               whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             >
-              <item.icon aria-hidden="true" className="h-5 w-5 text-cyan-200" />
-              <h2 className="mt-3 text-sm font-semibold text-white">{item.label}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-300">{item.text}</p>
+              <item.icon aria-hidden="true" className="h-5 w-5 text-sky-600" />
+              <h2 className="mt-3 text-sm font-semibold text-blue-950">{item.label}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p>
             </motion.article>
           ))}
         </div>
