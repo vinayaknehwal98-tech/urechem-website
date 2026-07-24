@@ -29,10 +29,10 @@ export function ApplicationDiscoverySection() {
         {applicationCategories.map((application, index) => (
           <motion.div
             className="h-full"
-            initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.97, y: 28 }}
+            initial={shouldReduceMotion ? false : { opacity: 0.94, scale: 0.988, y: 10 }}
             key={application.title}
-            transition={{ delay: (index % 4) * 0.07, duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ amount: 0.2, once: true }}
+            transition={{ delay: (index % 4) * 0.07, duration: 0.56, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ amount: 0.16, once: true }}
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
           >
             <Link
