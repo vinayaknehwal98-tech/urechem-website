@@ -6,6 +6,7 @@ export type CompleteProductRangeItem = {
   applications: string[];
   representativeProducts: string[];
   reviewNote: string;
+  href?: string;
 };
 
 export const completeProductRange: CompleteProductRangeItem[] = [
@@ -18,6 +19,7 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Floors, attics, crawl spaces and walls", "Cold-surface construction applications", "Building and facility insulation"],
     representativeProducts: ["Uretherm GT 40", "Uretherm GT 50"],
     reviewNote: "Installation requires trained applicators and dedicated spray-foam equipment.",
+    href: "/products/uretherm-spray-foam-systems",
   },
   {
     slug: "chemnate-mdi",
@@ -28,6 +30,7 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Polyurethane production", "Adhesives and coatings", "Elastomers and insulation materials"],
     representativeProducts: ["ChemNate PMDI 2401", "ChemNate FMDI 2402", "ChemNate MDI 2450", "ChemNate MDI 2437", "ChemNate C MDI 2096"],
     reviewNote: "Processing conditions and grade selection require Urechem technical review.",
+    href: "/products/chemnate-mdi-range",
   },
   {
     slug: "klayol-polyols",
@@ -38,6 +41,7 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Flexible and moulded foam", "Automotive seating and furniture", "Sealing and protective-film formulations"],
     representativeProducts: ["KlayOl PE 2428", "KlayOl PE 2435", "KlayOl PE 2456", "KlayOl POP"],
     reviewNote: "Molecular weight, solids content and formulation use must be confirmed against the current grade document.",
+    href: "/products/klayol-polyol-range",
   },
   {
     slug: "klayol-ppg",
@@ -48,6 +52,7 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Coatings", "Adhesives and sealants", "Elastomeric formulations"],
     representativeProducts: ["PPG grade set under client confirmation"],
     reviewNote: "The supplied documents contain conflicting 14xx and 24xx grade numbering; public grade numbers remain controlled until confirmed.",
+    href: "/products/klayol-ppg-range",
   },
   {
     slug: "flexible-pu-systems",
@@ -58,6 +63,7 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Furniture and bedding", "Automotive seating", "Flexible and moulded foam"],
     representativeProducts: ["VE4105 A/B", "Flex 8305 A/B"],
     reviewNote: "Performance values and processing windows require Urechem validation.",
+    href: "/products/flexible-systems",
   },
   {
     slug: "ureshield-pu-membranes",
@@ -68,16 +74,18 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Roofs, terraces and car decks", "Basements, tunnels and foundations", "Industrial and commercial structures"],
     representativeProducts: ["UreShield 1K PU-M", "UreShield 2K PU-M"],
     reviewNote: "Substrate preparation, primer, topcoat and exposure requirements must be reviewed per project.",
+    href: "/products/ureshield-waterproofing-grouting-systems",
   },
   {
     slug: "ureshield-injection-grouting",
-    name: "UreShield injection and grouting systems",
+    name: "Urechem injection and grouting systems",
     category: "Ground support and water control",
     summary:
-      "Low-viscosity polyurethane and polyurea-silicate injection pathways for leak sealing, void filling, soil and rock consolidation, and structural reinforcement.",
+      "Low-viscosity polyurethane and polyurea-silicate injection pathways for leak sealing, void filling, soil and rock consolidation, slab lifting and structural reinforcement.",
     applications: ["Tunnels, mines and underground works", "Concrete cracks, joints and cavities", "Dams, foundations and water-retaining structures"],
-    representativeProducts: ["UreShield DrucPietra", "UreShield Druc Pietra V.SF 1", "UreShield DrucHyd 2C"],
-    reviewNote: "Reaction profile, expansion, water pressure and injection method require specialist selection.",
+    representativeProducts: ["Reference profiles 2421, 2410, 2435, 2430, 2455 MV, 2406 HS and 2405 SJ"],
+    reviewNote: "Reference codes preserve source traceability; official public Urechem grade names and design values remain controlled.",
+    href: "/products/injection-grouting-systems",
   },
   {
     slug: "ureshield-polyurea",
@@ -88,6 +96,7 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Bridge decks, parking decks and roofs", "Industrial floors and manufacturing facilities", "Concrete waterproofing and moulded parts"],
     representativeProducts: ["UreShield HPU-101", "UreShield PPU-102", "UreShield HPU-101 Cold", "UreShield HPU-101 Cold SL"],
     reviewNote: "Hot-spray grades require specialised two-component equipment and trained application teams.",
+    href: "/products/ureshield-waterproofing-grouting-systems",
   },
   {
     slug: "eco-grouting-systems",
@@ -96,8 +105,9 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     summary:
       "Source-backed pathways for solvent-free, phthalate-free, controlled-expansion and lower-exotherm grouting enquiries where project conditions demand a tailored response.",
     applications: ["Water cut-off", "Void filling and waterproofing", "Crack and joint sealing"],
-    representativeProducts: ["Project-specific Urechem formulation"],
-    reviewNote: "Source grade names are not published as Urechem grades until the official public naming map is approved.",
+    representativeProducts: ["Reference 2410 Earth-1", "Reference 2425 Earth-2"],
+    reviewNote: "Environmental and regulatory claims are withheld until Urechem supplies current supporting evidence.",
+    href: "/products/injection-grouting-systems",
   },
   {
     slug: "tpu-materials",
@@ -106,8 +116,9 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     summary:
       "Thermoplastic polyurethane pathways combining strength, flexibility, durability, chemical resistance and low-temperature performance.",
     applications: ["Industrial components", "Flexible durable parts", "Application-specific moulding and processing"],
-    representativeProducts: ["TPU selection by technical enquiry"],
+    representativeProducts: ["Polyester-based TPU", "Polyether-based TPU", "Polycaprolactone-based TPU"],
     reviewNote: "Hardness, processing method and performance requirements must be matched to a confirmed grade.",
+    href: "/products/tpu-materials",
   },
   {
     slug: "additives-processing-aids",
@@ -118,5 +129,6 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Foam colouring and stability", "Reaction and processing control", "Surface and ageing-performance support"],
     representativeProducts: ["Pigments", "Amine catalysts", "Silicone oils", "Cell openers", "Anti-UV and anti-yellowing agents"],
     reviewNote: "Specific grade, dosage, compatibility and safety guidance require Urechem technical validation.",
+    href: "/products/additives-processing-aids",
   },
 ];
