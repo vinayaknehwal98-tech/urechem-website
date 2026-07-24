@@ -8,6 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/products/complete-range",
     "/products/compare",
     "/products/ureshield-waterproofing-grouting-systems",
+    "/products/injection-grouting-systems",
+    "/products/tpu-materials",
     "/applications",
     "/industries",
     "/technical-center",
