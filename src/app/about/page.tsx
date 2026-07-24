@@ -14,11 +14,11 @@ export default function Page() {
           <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">Urechem is positioned as a polyurethane and specialty-chemical solutions partner for application problem-solving, formulation development, implementation support, quality validation and supply.</p>
         </div>
         <AnimatedImage
-          alt="Urechem chemists and application engineers collaborating over polyurethane material samples"
+          alt="Laboratory specialist preparing material samples during formulation work"
           className="min-h-96"
-          imageClassName="object-[65%_center]"
+          imageClassName="object-center"
           sizes="(min-width: 1024px) 58vw, 100vw"
-          src="/images/urechem-team.webp"
+          src="https://images.unsplash.com/photo-1646956141183-c993158094d2?auto=format&fit=crop&fm=jpg&q=82&w=1800"
         />
       </div>
     </Container>
