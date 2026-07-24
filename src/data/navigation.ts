@@ -19,13 +19,14 @@ export const primaryNavigation: NavigationItem[] = [
 ];
 
 export const productFamilyLinks: NavigationItem[] = [
-  { label: "UreShield waterproofing and grouting systems", href: "/products/ureshield-waterproofing-grouting-systems" },
+  { label: "Complete product range", href: "/products/complete-range" },
+  { label: "Injection grouting systems", href: "/products/injection-grouting-systems" },
+  { label: "TPU material pathways", href: "/products/tpu-materials" },
+  { label: "UreShield waterproofing and polyurea", href: "/products/ureshield-waterproofing-grouting-systems" },
   { label: "Uretherm spray-foam systems", href: "/products/uretherm-spray-foam-systems" },
   { label: "ChemNate MDI range", href: "/products/chemnate-mdi-range" },
-  { label: "KlayOl polyol range", href: "/products/klayol-polyol-range" },
-  { label: "KlayOl PPG range", href: "/products/klayol-ppg-range" },
-  { label: "Flexible systems", href: "/products/flexible-systems" },
-  { label: "Additives and processing aids", href: "/products/additives-processing-aids" },
+  { label: "KlayOl polyol and PPG ranges", href: "/products/klayol-polyol-range" },
+  { label: "Flexible systems and additives", href: "/products/flexible-systems" },
 ];
 
 export const applicationLinks: NavigationItem[] = [
