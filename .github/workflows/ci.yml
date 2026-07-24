@@ -8,7 +8,7 @@ on:
 
 jobs:
   verify:
-    name: Lint, image audit, build and route smoke
+    name: Lint, contrast, image audit, build and route smoke
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,6 +25,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Audit light-theme contrast coverage
+        run: npm run audit:theme
 
       - name: Audit unique image usage
         run: npm run audit:images
