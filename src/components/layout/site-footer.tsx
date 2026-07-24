@@ -9,17 +9,17 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-white/10 bg-navy-950 text-slate-300">
+    <footer className="border-t border-blue-100 bg-white text-slate-600 shadow-[0_-18px_60px_rgba(30,64,175,0.06)]">
       <Container className="py-14 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_2fr]">
           <div>
             <Link
-              className="group inline-flex items-center rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+              className="group inline-flex items-center rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
               href="/"
             >
-              <BrandLogo tone="dark" />
+              <BrandLogo />
             </Link>
-            <p className="mt-6 max-w-md text-sm leading-7">
+            <p className="mt-6 max-w-md text-sm leading-7 text-slate-600">
               Urechem is a technical polyurethane and specialty-chemical solutions partner for application
               problem-solving, formulation development, implementation support, quality validation and supply.
             </p>
@@ -40,12 +40,12 @@ export function SiteFooter() {
           <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
             {footerGroups.map((group) => (
               <div key={group.title}>
-                <h2 className="font-mono text-xs font-semibold uppercase text-cyan-100">{group.title}</h2>
+                <h2 className="font-mono text-xs font-semibold uppercase text-blue-700">{group.title}</h2>
                 <ul className="mt-4 grid gap-3">
                   {group.links.map((link) => (
                     <li key={link.href}>
                       <Link
-                        className="text-sm leading-6 text-slate-300 transition hover:text-cyan-100 focus-visible:rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                        className="text-sm leading-6 text-slate-600 transition hover:text-blue-800 focus-visible:rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
                         href={link.href}
                       >
                         {link.label}
@@ -58,12 +58,12 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-5 border-t border-white/10 pt-6 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-5 border-t border-blue-100 pt-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <p>&copy; {year} Urechem Chemicals. All rights reserved.</p>
           <nav aria-label="Legal links" className="flex flex-wrap gap-x-5 gap-y-2">
             {legalLinks.map((link) => (
               <Link
-                className="transition hover:text-cyan-100 focus-visible:rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                className="transition hover:text-blue-800 focus-visible:rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
                 href={link.href}
                 key={link.href}
               >
