@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { ContactEnquiryForm } from "@/components/contact/contact-enquiry-form";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { Container } from "@/components/ui/container";
 
 export const metadata = { title: "Contact" };
@@ -14,9 +15,17 @@ export default function Page() {
           Submit a structured enquiry so the Urechem team can route your request to the right commercial or technical consultant.
         </p>
 
+        <AnimatedImage
+          alt="Technical consultants discussing project requirements in a structured meeting"
+          className="mt-10 h-72 sm:h-80"
+          imageClassName="object-center"
+          sizes="100vw"
+          src="https://images.unsplash.com/photo-1758518727929-4506fc031e1c?auto=format&fit=crop&fm=jpg&q=82&w=1900"
+        />
+
         <Suspense
           fallback={
-            <div className="mt-8 min-h-96 animate-pulse rounded-[var(--radius-lg)] border border-blue-200 bg-white shadow-[0_18px_55px_rgba(30,64,175,0.09)]" />
+            <div className="mt-10 min-h-96 animate-pulse rounded-[var(--radius-lg)] border border-blue-200 bg-white shadow-[0_18px_55px_rgba(30,64,175,0.09)]" />
           }
         >
           <ContactEnquiryForm />
