@@ -1,4 +1,5 @@
 import { ArrowRight, CheckCircle2, Droplets, ShieldCheck } from "lucide-react";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -17,7 +18,7 @@ export default function Page() {
         <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:24px_24px]" />
         <Container className="relative z-10">
           <SectionLabel>Urechem Chemicals</SectionLabel>
-          <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_0.42fr] lg:items-end">
+          <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-center">
             <div>
               <h1 className="max-w-5xl text-balance text-5xl font-black leading-[0.98] text-white sm:text-6xl lg:text-7xl">
                 UreShield waterproofing, grouting and polyurea systems
@@ -26,9 +27,18 @@ export default function Page() {
                 Polyurethane membranes, injection-grouting systems and polyurea coatings for waterproofing, structural consolidation, void filling, water control and durable surface protection.
               </p>
             </div>
-            <div className="rounded-[var(--radius-lg)] border border-cyan-200/20 bg-white/7 p-5 backdrop-blur-sm">
-              <ShieldCheck aria-hidden="true" className="h-7 w-7 text-cyan-200" />
-              <p className="mt-4 text-sm leading-6 text-slate-200">{ureshieldReferenceNote}</p>
+            <div className="grid gap-4">
+              <AnimatedImage
+                alt="Construction worker finishing a concrete surface before waterproofing protection"
+                className="h-64"
+                imageClassName="object-center"
+                sizes="(min-width: 1024px) 38vw, 100vw"
+                src="https://images.unsplash.com/photo-1685464196339-46a985b2049b?auto=format&fit=crop&fm=jpg&q=82&w=1900"
+              />
+              <div className="rounded-[var(--radius-lg)] border border-cyan-200/20 bg-white/7 p-5 backdrop-blur-sm">
+                <ShieldCheck aria-hidden="true" className="h-7 w-7 text-cyan-200" />
+                <p className="mt-4 text-sm leading-6 text-slate-200">{ureshieldReferenceNote}</p>
+              </div>
             </div>
           </div>
         </Container>
