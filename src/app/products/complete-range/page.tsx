@@ -156,6 +156,13 @@ export default function Page() {
                 <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
                   <strong>Technical boundary:</strong> {range.reviewNote}
                 </div>
+
+                {range.href ? (
+                  <ButtonLink className="mt-5" href={range.href} size="sm" variant="secondary">
+                    Explore this pathway
+                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                  </ButtonLink>
+                ) : null}
               </article>
             ))}
           </div>
