@@ -7,16 +7,11 @@ import { AnimatedImage } from "@/components/media/animated-image";
 import { proofMetrics } from "@/data/homepage";
 
 function useCountUp(target: number, active: boolean) {
-  const [value, setValue] = useState(active ? target : 0);
+  const [value, setValue] = useState(0);
   const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
-    if (!active) return;
-
-    if (shouldReduceMotion) {
-      setValue(target);
-      return;
-    }
+    if (!active || shouldReduceMotion) return;
 
     let frame = 0;
     const totalFrames = 42;
@@ -33,7 +28,7 @@ function useCountUp(target: number, active: boolean) {
     return () => window.clearInterval(timer);
   }, [active, shouldReduceMotion, target]);
 
-  return value;
+  return shouldReduceMotion || !active ? target : value;
 }
 
 export function ProofExpertiseSection() {
@@ -87,7 +82,7 @@ function MetricCard({
       whileInView={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
     >
       <p className="font-mono text-sm font-semibold text-cyan-100">
-        {active ? value.toLocaleString() : metric.value.toLocaleString()}
+        {value.toLocaleString()}
         {metric.suffix}
       </p>
       <h3 className="mt-3 text-xl font-black text-white">{metric.label}</h3>
