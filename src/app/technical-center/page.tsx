@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Beaker, FileSearch, FileText, ShieldCheck } from "lucide-react";
+import { AnimatedImage } from "@/components/media/animated-image";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 
@@ -18,6 +19,13 @@ export default function Page() {
       <SectionLabel>Technical resources</SectionLabel>
       <h1 className="mt-5 text-4xl font-black tracking-[-0.04em] sm:text-5xl">Technical Center</h1>
       <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-300">A controlled front door for document requests, validation workflows and safe assisted discovery.</p>
+      <AnimatedImage
+        alt="Laboratory specialist operating controlled testing equipment"
+        className="mt-10 h-72 sm:h-80"
+        imageClassName="object-center"
+        sizes="100vw"
+        src="https://images.unsplash.com/photo-1748182447909-dfd52d869cd1?auto=format&fit=crop&fm=jpg&q=82&w=1900"
+      />
       <div className="mt-10 grid gap-5 md:grid-cols-2">
         {items.map(([href, label, description, Icon]) => (
           <Link key={href} href={`/technical-center/${href}`} className="group rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.04] p-6 shadow-[var(--shadow-soft)] transition hover:-translate-y-1 hover:border-cyan-300/60 hover:bg-cyan-300/[0.07] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200">
