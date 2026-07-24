@@ -15,7 +15,7 @@ on:
 
 jobs:
   capture:
-    name: Capture Milestone 2/3 route screenshots
+    name: Capture production-review route screenshots
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,6 +57,10 @@ jobs:
           mkdir -p review-screenshots/latest
           routes=(
             "products:/products"
+            "complete-range:/products/complete-range"
+            "injection-grouting:/products/injection-grouting-systems"
+            "tpu-materials:/products/tpu-materials"
+            "ureshield:/products/ureshield-waterproofing-grouting-systems"
             "product-family:/products/uretherm-spray-foam-systems"
             "product-page:/products/uretherm-spray-foam-systems/uretherm-spray-foam-systems-gt-40"
             "products-compare:/products/compare"
@@ -67,13 +71,13 @@ jobs:
           for route in "${routes[@]}"; do
             name="${route%%:*}"
             path="${route#*:}"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1000 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1000 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
           done
 
       - name: Upload review screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: milestone-2-3-review-screenshots
+          name: production-review-screenshots
           path: review-screenshots/latest/*.png
           if-no-files-found: error
