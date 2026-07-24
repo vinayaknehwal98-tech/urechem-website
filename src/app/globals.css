@@ -93,6 +93,8 @@ body [class~="text-white"] {
   color: #0f172a !important;
 }
 
+body [class~="text-slate-50"],
+body [class~="text-slate-100"],
 body [class~="text-slate-200"],
 body [class~="text-slate-300"] {
   color: #475569 !important;
@@ -103,7 +105,9 @@ body [class~="text-slate-400"] {
 }
 
 body [class~="text-cyan-100"],
-body [class~="text-cyan-200"] {
+body [class~="text-cyan-200"],
+body [class*="text-cyan-100/"],
+body [class*="text-cyan-200/"] {
   color: #075985 !important;
 }
 
@@ -125,8 +129,11 @@ body [class*="border-white/"] {
 }
 
 main section[class*="bg-[linear-gradient"],
+main section[class*="bg-[radial-gradient"],
 main article[class*="bg-[linear-gradient"],
-main aside[class*="bg-[linear-gradient"] {
+main article[class*="bg-[radial-gradient"],
+main aside[class*="bg-[linear-gradient"],
+main aside[class*="bg-[radial-gradient"] {
   background: linear-gradient(145deg, #ffffff 0%, #f8fbff 58%, #edf5ff 100%) !important;
 }
 
