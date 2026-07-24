@@ -41,13 +41,13 @@ export function HeroSection() {
         transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }}
       >
         <Image
-          alt="Technician applying closed-cell polyurethane spray foam inside an industrial building"
-          className="object-cover object-[66%_center]"
+          alt="Large specialty-chemical processing facility operating at dusk"
+          className="object-cover object-center"
           fill
           priority
           quality={88}
           sizes="100vw"
-          src="/images/spray-foam-application.webp"
+          src="https://images.unsplash.com/photo-1777915627530-fc3decb749cf?auto=format&fit=crop&fm=jpg&q=82&w=2400"
         />
       </motion.div>
       <MolecularBackground />
