@@ -5,7 +5,7 @@ import { applications, industries, productFamilies, type ProductFamily } from "@
 
 export function ValidationNote() {
   return (
-    <p className="rounded-md border border-amber-400/30 bg-amber-400/10 p-3 text-sm text-amber-100">
+    <p className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
       <ShieldAlert className="mr-2 inline size-4" />
       Final product selection requires review by qualified Urechem technical stakeholders.
     </p>
@@ -14,18 +14,25 @@ export function ValidationNote() {
 
 export function FamilyCard({ family }: { family: ProductFamily }) {
   return (
-    <article className="rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.04] p-5 shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 hover:border-cyan-300/60 focus-within:border-cyan-300/60">
-      <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-300">{family.shortName}</p>
-      <h3 className="mt-3 text-xl font-semibold text-white">{family.name}</h3>
-      <p className="mt-3 text-sm leading-6 text-slate-300">{family.positioning}</p>
+    <article className="rounded-[var(--radius-lg)] border border-blue-100 bg-white p-5 shadow-[var(--shadow-soft)] transition hover:-translate-y-0.5 hover:border-sky-300 hover:shadow-[0_18px_48px_rgba(30,64,175,0.14)] focus-within:border-blue-400">
+      <p className="font-mono text-xs font-semibold uppercase tracking-[0.22em] text-sky-700">{family.shortName}</p>
+      <h3 className="mt-3 text-xl font-semibold text-slate-950">{family.name}</h3>
+      <p className="mt-3 text-sm leading-6 text-slate-700">{family.positioning}</p>
       <div className="mt-4 flex flex-wrap gap-2">
         {family.products.slice(0, 6).map((product) => (
-          <Link key={product.slug} href={`/products/${family.slug}/${product.slug}`} className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-200 hover:border-cyan-300">
+          <Link
+            key={product.slug}
+            href={`/products/${family.slug}/${product.slug}`}
+            className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-medium text-slate-700 transition hover:border-blue-400 hover:bg-blue-100 hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
             {product.name}
           </Link>
         ))}
       </div>
-      <Link href={`/products/${family.slug}`} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300">
+      <Link
+        href={`/products/${family.slug}`}
+        className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 transition hover:text-blue-900 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+      >
         View family <ArrowRight className="size-4" />
       </Link>
     </article>
@@ -34,18 +41,20 @@ export function FamilyCard({ family }: { family: ProductFamily }) {
 
 export function DocumentStatus() {
   return (
-    <div className="rounded-lg border border-white/10 bg-navy-900 p-4">
-      <h3 className="flex items-center gap-2 font-semibold">
-        <FileText className="size-4 text-cyan-300" />
+    <div className="rounded-lg border border-blue-100 bg-blue-50/70 p-4">
+      <h3 className="flex items-center gap-2 font-semibold text-slate-950">
+        <FileText className="size-4 text-blue-700" />
         Document status
       </h3>
-      <p className="mt-2 text-sm text-slate-300">Technical documents are not published online. Contact Urechem for current document availability.</p>
+      <p className="mt-2 text-sm text-slate-700">Technical documents are not published online. Contact Urechem for current document availability.</p>
     </div>
   );
 }
 
 function Tag({ children, tone = "neutral" }: { children: ReactNode; tone?: "cyan" | "neutral" }) {
-  const className = tone === "cyan" ? "rounded-full bg-cyan-300/10 px-3 py-1 text-sm text-cyan-100" : "rounded-full bg-white/10 px-3 py-1 text-sm text-slate-100";
+  const className = tone === "cyan"
+    ? "rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-medium text-blue-800"
+    : "rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700";
   return <span className={className}>{children}</span>;
 }
 
@@ -55,7 +64,11 @@ export function FamilyLinks({ slugs }: { slugs: string[] }) {
   return (
     <div className="flex flex-wrap gap-2">
       {resolved.map((family) => (
-        <Link key={family.slug} href={`/products/${family.slug}`} className="rounded-full bg-cyan-300/10 px-3 py-1 text-sm text-cyan-100 transition hover:bg-cyan-300/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200">
+        <Link
+          key={family.slug}
+          href={`/products/${family.slug}`}
+          className="rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-sm font-medium text-blue-800 transition hover:border-blue-400 hover:bg-blue-100 hover:text-blue-950 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
           {family.shortName}
         </Link>
       ))}
@@ -79,7 +92,11 @@ export function AppLinks({ slugs }: { slugs: string[] }) {
   return (
     <div className="flex flex-wrap gap-2">
       {resolved.map((application) => (
-        <Link key={application.slug} href={`/applications/${application.slug}`} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-100 transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200">
+        <Link
+          key={application.slug}
+          href={`/applications/${application.slug}`}
+          className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
           {application.name}
         </Link>
       ))}
@@ -103,7 +120,11 @@ export function IndustryLinks({ slugs }: { slugs: string[] }) {
   return (
     <div className="flex flex-wrap gap-2">
       {resolved.map((industry) => (
-        <Link key={industry.slug} href={`/industries/${industry.slug}`} className="rounded-full bg-white/10 px-3 py-1 text-sm text-slate-100 transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200">
+        <Link
+          key={industry.slug}
+          href={`/industries/${industry.slug}`}
+          className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
           {industry.name}
         </Link>
       ))}
