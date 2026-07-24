@@ -12,7 +12,7 @@ export function ApplicationDiscoverySection() {
 
   return (
     <HomeSection
-      className="bg-[linear-gradient(180deg,rgba(4,17,31,0.98),rgba(7,26,45,0.94))]"
+      className="bg-[linear-gradient(180deg,#ffffff,#f3f8ff)]"
       eyebrow="Application discovery"
       id="applications"
       intro="Move from desired result to relevant product-family pathways without treating preliminary guidance as final engineering approval."
@@ -36,20 +36,20 @@ export function ApplicationDiscoverySection() {
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
           >
             <Link
-              className="group relative flex h-full min-h-72 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.045] shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/34 hover:bg-cyan-300/[0.07] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+              className="group relative flex h-full min-h-72 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-sky-300 hover:bg-sky-50/60 hover:shadow-[0_20px_55px_rgba(30,64,175,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
               href={application.href}
             >
-              <div className="absolute right-4 top-4 z-10 rounded-full border border-white/12 bg-navy-950/68 px-2.5 py-1 font-mono text-xs text-cyan-50">
+              <div className="absolute right-4 top-4 z-10 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 font-mono text-xs font-semibold text-blue-700">
                 {String(index + 1).padStart(2, "0")}
               </div>
               <div className="relative flex flex-1 flex-col p-5 pb-16">
-                <application.icon aria-hidden="true" className="h-7 w-7 text-cyan-200" />
-                <h3 className="mt-6 text-xl font-black text-white">{application.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-300">{application.description}</p>
+                <application.icon aria-hidden="true" className="h-7 w-7 text-sky-700" />
+                <h3 className="mt-6 text-xl font-black text-slate-950">{application.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-slate-700">{application.description}</p>
                 <div className="mt-auto flex flex-wrap gap-2 pt-5">
                   {application.families.map((family) => (
                     <span
-                      className="rounded-[var(--radius-sm)] border border-white/10 bg-white/[0.06] px-2.5 py-1.5 text-xs font-semibold text-cyan-50"
+                      className="rounded-[var(--radius-sm)] border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-semibold text-blue-800"
                       key={family}
                     >
                       {family}
@@ -57,7 +57,7 @@ export function ApplicationDiscoverySection() {
                   ))}
                 </div>
               </div>
-              <span className="absolute bottom-5 right-5 inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] border border-white/10 bg-white/[0.06] text-cyan-100 transition group-hover:border-cyan-200/50 group-hover:bg-cyan-300/12">
+              <span className="absolute bottom-5 right-5 inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-button)] border border-blue-200 bg-blue-50 text-blue-700 transition group-hover:border-blue-400 group-hover:bg-blue-100 group-hover:text-blue-900">
                 <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </span>
             </Link>
