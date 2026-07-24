@@ -35,7 +35,7 @@ export function AnimatedImage({
   return (
     <motion.figure
       className={cn(
-        "group relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-navy-900 shadow-[var(--shadow-deep)]",
+        "group relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white shadow-[var(--shadow-deep)]",
         className,
       )}
       initial={shouldReduceMotion ? false : { opacity: 0.96, scale: 0.988, y: 8 }}
@@ -58,11 +58,11 @@ export function AnimatedImage({
           src={src}
         />
       </motion.div>
-      <div className={cn("absolute inset-0 bg-gradient-to-t from-navy-950/62 via-transparent to-white/[0.04]", overlayClassName)} />
+      <div className={cn("absolute inset-0 bg-gradient-to-t from-blue-950/24 via-transparent to-white/[0.08]", overlayClassName)} />
       <motion.div
         aria-hidden="true"
         animate={shouldReduceMotion ? undefined : { x: ["-140%", "360%"] }}
-        className="absolute inset-y-0 left-0 w-1/4 -skew-x-12 bg-gradient-to-r from-transparent via-cyan-100/8 to-transparent"
+        className="absolute inset-y-0 left-0 w-1/4 -skew-x-12 bg-gradient-to-r from-transparent via-white/16 to-transparent"
         transition={{ delay: 1.2, duration: 8, ease: "easeInOut", repeat: Infinity, repeatDelay: 3 }}
       />
     </motion.figure>
