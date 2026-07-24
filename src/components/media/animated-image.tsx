@@ -38,10 +38,10 @@ export function AnimatedImage({
         "group relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-navy-900 shadow-[var(--shadow-deep)]",
         className,
       )}
-      initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.965, y: 26 }}
+      initial={shouldReduceMotion ? false : { opacity: 0.96, scale: 0.988, y: 8 }}
       ref={ref}
-      transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
-      viewport={{ amount: 0.18, once: true }}
+      transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ amount: 0.12, once: true }}
       whileHover={shouldReduceMotion ? undefined : { scale: 1.008, y: -3 }}
       whileInView={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
     >

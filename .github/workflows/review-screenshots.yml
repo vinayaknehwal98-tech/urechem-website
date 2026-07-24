@@ -4,9 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-      - 'src/app/products/**'
-      - 'src/app/applications/**'
-      - 'src/app/industries/**'
+      - 'src/app/**'
       - 'src/components/**'
       - 'src/data/**'
       - 'package.json'
@@ -15,7 +13,7 @@ on:
 
 jobs:
   capture:
-    name: Capture Milestone 2/3 route screenshots
+    name: Capture production-review screenshots
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -52,28 +50,55 @@ jobs:
           cat /tmp/urechem-next.log
           exit 1
 
-      - name: Capture desktop and mobile screenshots
+      - name: Capture full-page desktop and mobile screenshots
         run: |
           mkdir -p review-screenshots/latest
           routes=(
+            "home:/"
             "products:/products"
+            "complete-range:/products/complete-range"
+            "injection-grouting:/products/injection-grouting-systems"
+            "tpu-materials:/products/tpu-materials"
+            "ureshield:/products/ureshield-waterproofing-grouting-systems"
             "product-family:/products/uretherm-spray-foam-systems"
             "product-page:/products/uretherm-spray-foam-systems/uretherm-spray-foam-systems-gt-40"
             "products-compare:/products/compare"
             "applications:/applications"
             "application-page:/applications/automotive-seating"
             "industries:/industries"
+            "technical-center:/technical-center"
+            "about:/about"
+            "innovation-rd:/innovation-rd"
+            "contact:/contact?type=TDS%20request&product=Injection%20grouting%20Reference%202421"
           )
           for route in "${routes[@]}"; do
             name="${route%%:*}"
             path="${route#*:}"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1000 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1000 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --full-page --viewport-size=1440,900 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --full-page --viewport-size=390,844 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
+          done
+
+      - name: Capture homepage image sections after anchor navigation
+        run: |
+          sections=(
+            "home-pathways:/#choose-your-path"
+            "home-product-universe:/#product-universe"
+            "home-ureshield:/#ureshield"
+            "home-applications:/#applications"
+            "home-proof:/#proof-expertise"
+            "home-workflow:/#workflow"
+            "home-technical:/#technical-center-preview"
+          )
+          for section in "${sections[@]}"; do
+            name="${section%%:*}"
+            path="${section#*:}"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
           done
 
       - name: Upload review screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: milestone-2-3-review-screenshots
+          name: production-review-screenshots
           path: review-screenshots/latest/*.png
           if-no-files-found: error
