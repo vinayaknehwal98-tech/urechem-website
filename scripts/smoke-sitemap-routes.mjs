@@ -2,10 +2,39 @@ import process from "node:process";
 
 const baseUrl = process.env.SMOKE_BASE_URL ?? "http://127.0.0.1:3000";
 const sitemapUrl = new URL("/sitemap.xml", baseUrl);
+const concurrency = 8;
 
-async function request(url) {
+function decodeHtml(value) {
+  return value
+    .replaceAll("&amp;", "&")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&#39;", "'")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">");
+}
+
+function localise(url) {
+  const publishedUrl = new URL(url, baseUrl);
+  return new URL(`${publishedUrl.pathname}${publishedUrl.search}`, baseUrl);
+}
+
+async function fetchPage(url) {
   const response = await fetch(url, { redirect: "follow" });
-  return { status: response.status, ok: response.ok, finalUrl: response.url };
+  const contentType = response.headers.get("content-type") ?? "";
+  const body = contentType.includes("text/html") ? await response.text() : "";
+  return { status: response.status, ok: response.ok, finalUrl: response.url, body };
+}
+
+async function runPool(items, handler) {
+  let cursor = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+      while (cursor < items.length) {
+        const item = items[cursor++];
+        await handler(item);
+      }
+    }),
+  );
 }
 
 const sitemapResponse = await fetch(sitemapUrl);
@@ -15,39 +44,78 @@ if (!sitemapResponse.ok) {
 }
 
 const sitemap = await sitemapResponse.text();
-const locations = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => match[1].replaceAll("&amp;", "&"));
+const locations = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((match) => decodeHtml(match[1]));
 
 if (locations.length === 0) {
   console.error("No routes were found in sitemap.xml");
   process.exit(1);
 }
 
-const failures = [];
-const concurrency = 8;
-let cursor = 0;
+const routeFailures = [];
+const placeholderLinks = [];
+const internalLinks = new Set();
 
-async function worker() {
-  while (cursor < locations.length) {
-    const index = cursor++;
-    const publishedUrl = new URL(locations[index]);
-    const localUrl = new URL(`${publishedUrl.pathname}${publishedUrl.search}`, baseUrl);
+await runPool(locations, async (location) => {
+  const publishedUrl = new URL(location);
+  const localUrl = localise(location);
 
-    try {
-      const result = await request(localUrl);
-      if (!result.ok) failures.push({ url: localUrl.toString(), status: result.status });
-      else console.log(`✓ ${result.status} ${publishedUrl.pathname}${publishedUrl.search}`);
-    } catch (error) {
-      failures.push({ url: localUrl.toString(), status: error instanceof Error ? error.message : String(error) });
+  try {
+    const result = await fetchPage(localUrl);
+    if (!result.ok) {
+      routeFailures.push({ url: localUrl.toString(), status: result.status });
+      return;
     }
+
+    console.log(`✓ route ${result.status} ${publishedUrl.pathname}${publishedUrl.search}`);
+
+    for (const match of result.body.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>/gi)) {
+      const href = decodeHtml(match[1].trim());
+      if (!href) continue;
+      if (href === "#" || href.startsWith("javascript:")) {
+        placeholderLinks.push({ source: publishedUrl.pathname, href });
+        continue;
+      }
+      if (href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:")) continue;
+
+      const resolved = new URL(href, localUrl);
+      if (resolved.origin === new URL(baseUrl).origin) {
+        resolved.hash = "";
+        internalLinks.add(resolved.toString());
+      }
+    }
+  } catch (error) {
+    routeFailures.push({ url: localUrl.toString(), status: error instanceof Error ? error.message : String(error) });
   }
-}
+});
 
-await Promise.all(Array.from({ length: Math.min(concurrency, locations.length) }, () => worker()));
+const linkFailures = [];
+await runPool([...internalLinks], async (link) => {
+  try {
+    const result = await fetchPage(link);
+    if (!result.ok) linkFailures.push({ url: link, status: result.status });
+    else console.log(`✓ link  ${result.status} ${new URL(link).pathname}${new URL(link).search}`);
+  } catch (error) {
+    linkFailures.push({ url: link, status: error instanceof Error ? error.message : String(error) });
+  }
+});
 
-if (failures.length > 0) {
+if (routeFailures.length > 0) {
   console.error("\nSitemap route failures:");
-  for (const failure of failures) console.error(`- ${failure.status} ${failure.url}`);
-  process.exit(1);
+  for (const failure of routeFailures) console.error(`- ${failure.status} ${failure.url}`);
 }
 
-console.log(`\nSitemap smoke test passed: ${locations.length} routes returned successful responses.`);
+if (placeholderLinks.length > 0) {
+  console.error("\nPlaceholder or unsafe links:");
+  for (const link of placeholderLinks) console.error(`- ${link.source} -> ${link.href}`);
+}
+
+if (linkFailures.length > 0) {
+  console.error("\nInternal link failures:");
+  for (const failure of linkFailures) console.error(`- ${failure.status} ${failure.url}`);
+}
+
+if (routeFailures.length > 0 || placeholderLinks.length > 0 || linkFailures.length > 0) process.exit(1);
+
+console.log(
+  `\nProduction crawl passed: ${locations.length} sitemap routes and ${internalLinks.size} unique internal CTA/link destinations returned successful responses with no placeholder links.`,
+);
