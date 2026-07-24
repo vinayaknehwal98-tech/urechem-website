@@ -13,13 +13,19 @@ export const metadata: Metadata = {
   description:
     "Technical polyurethane and specialty-chemical solutions for application problem-solving, formulation development and implementation support.",
   applicationName: "Urechem Chemicals",
+  icons: {
+    icon: "/brand/urechem-logo.png",
+    apple: "/brand/urechem-logo.png",
+  },
   keywords: [
     "polyurethane systems",
     "spray foam",
     "polyol",
     "MDI",
     "waterproofing",
+    "injection grouting",
     "polyurea",
+    "thermoplastic polyurethane",
     "specialty chemicals",
   ],
   openGraph: {
@@ -29,14 +35,14 @@ export const metadata: Metadata = {
     title: "Urechem Chemicals | We deliver what we promise",
     description:
       "Technical polyurethane and specialty-chemical solutions for real-world applications.",
-    images: [{ url: "/brand/urechem-logo.png", alt: "Urechem Chemicals" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Urechem Chemicals — The pinnacle of polyurethane solutions" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Urechem Chemicals | We deliver what we promise",
     description:
       "Technical polyurethane and specialty-chemical solutions for real-world applications.",
-    images: ["/brand/urechem-logo.png"],
+    images: ["/opengraph-image"],
   },
 };
 
