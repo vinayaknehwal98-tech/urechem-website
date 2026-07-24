@@ -4,7 +4,7 @@ Last verified: July 24, 2026
 
 ## Current milestone
 
-The equal-priority source integration is active in draft PR #3. Both supplied technical PDFs are being used as one combined content base while the public website remains entirely under Urechem Chemicals branding.
+The equal-priority source integration and realistic-image production pass are active in draft PR #3. Both supplied technical PDFs are used as one combined content base while the public website remains entirely under Urechem Chemicals branding.
 
 ## Completed on main before this pass
 
@@ -24,19 +24,21 @@ The equal-priority source integration is active in draft PR #3. Both supplied te
 - Complete Urechem product-universe route covering spray foam, MDI, polyols, PPG, flexible systems, PU membranes, injection grouting, polyurea, environment-conscious grouting pathways, TPU and processing aids.
 - Source-backed injection-grouting page with eleven distinct reference profiles covering water stopping, consolidation, void filling, slab lifting and stabilisation pathways.
 - TPU page covering polyester-based, polyether-based and polycaprolactone-based material pathways plus the advantages identified in the supplied technical source.
-- Unique animated vector visuals for the complete product universe, injection grouting and TPU pages; no photograph is reused for these new placements.
-- Automated static-image audit that fails on missing image files or repeated non-brand photography.
-- CI verification expanded to lint, image audit and production build.
-- Desktop and mobile screenshot coverage expanded to include the complete range, injection grouting, TPU and UreShield routes.
+- Ten distinct realistic photographic placements for the homepage hero, About, Products, Applications, Industries, Technical Center, Testing and Validation, UreShield, Injection Grouting and Contact routes.
+- Every photographic placement uses its own context-matched source and retains subtle motion through the shared animated-image component.
+- Automated static-image audit that fails on missing local image files or repeated non-brand photography.
+- CI verification expanded to lint, image audit, production build and full sitemap-route smoke testing.
+- Desktop and mobile screenshot coverage includes the complete range, injection grouting, TPU, UreShield, Technical Center, Testing and Validation and the main discovery routes.
 - Sitemap updated for every new public route.
 - Combined-source content matrix records safe brand mappings, evidence boundaries and blocked unsupported claims.
 
-## Verification in progress
+## Verification completed
 
-- Vercel preview build for the latest PR head.
-- GitHub Actions CI: lint, image audit and production build.
-- Automated desktop/mobile screenshot workflow for eleven representative routes.
-- Follow-up review of generated screenshots, route output and any duplicate-image findings.
+- Vercel preview deployment succeeded for the realistic-image pass.
+- GitHub Actions CI passed lint, unique-image audit, production build and sitemap-route smoke testing.
+- Automated desktop/mobile screenshot workflow passed and produced the production-review artifact.
+- Visual review confirmed the new photography renders correctly across the representative desktop routes; mobile screenshots were also generated successfully.
+- No temporary generated-image staging data remains in the repository.
 
 ## Client confirmations still required
 
@@ -46,4 +48,4 @@ The equal-priority source integration is active in draft PR #3. Both supplied te
 
 ## Release rule
 
-Do not merge PR #3 or label the website 100% production-ready until CI, image audit, Vercel preview, desktop/mobile screenshots and the final route review all pass. Unsupported metrics, certifications, regulatory claims and engineering values remain blocked unless Urechem supplies current evidence.
+Technical verification for the current image and content implementation is complete. Keep PR #3 in draft and do not label the website fully content-complete until the three client-owned confirmations above are supplied or intentionally deferred for launch. Unsupported metrics, certifications, regulatory claims and engineering values remain blocked unless Urechem supplies current evidence.
