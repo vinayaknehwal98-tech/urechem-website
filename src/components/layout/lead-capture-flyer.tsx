@@ -5,48 +5,65 @@ import { usePathname } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const storageKey = "urechem-consultation-flyer-dismissed-v2";
-const dismissalWindow = 7 * 24 * 60 * 60 * 1000;
-const flyerDelay = 6000;
+const sessionStorageKey = "urechem-consultation-flyer-dismissed-session-v3";
+const flyerDelay = 4500;
+const maximumIntroWait = 5000;
 
 export function LeadCaptureFlyer() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
+  const forcePreviewRef = useRef(false);
 
-  const dismiss = useCallback(() => {
-    window.localStorage.setItem(storageKey, String(Date.now()));
-    setIsOpen(false);
+  const rememberDismissal = useCallback(() => {
+    if (!forcePreviewRef.current) {
+      window.sessionStorage.setItem(sessionStorageKey, "true");
+    }
   }, []);
 
+  const dismiss = useCallback(() => {
+    rememberDismissal();
+    setIsOpen(false);
+  }, [rememberDismissal]);
+
   useEffect(() => {
-    if (pathname === "/contact" || pathname.startsWith("/privacy") || pathname.startsWith("/terms") || pathname.startsWith("/legal")) {
+    if (
+      pathname === "/contact" ||
+      pathname.startsWith("/privacy") ||
+      pathname.startsWith("/terms") ||
+      pathname.startsWith("/legal")
+    ) {
+      setIsOpen(false);
       return;
     }
 
     const forceFlyer = new URLSearchParams(window.location.search).get("flyer") === "force";
-    const dismissedAt = Number(window.localStorage.getItem(storageKey) ?? "0");
+    forcePreviewRef.current = forceFlyer;
 
-    if (!forceFlyer && dismissedAt && Date.now() - dismissedAt < dismissalWindow) {
+    if (!forceFlyer && window.sessionStorage.getItem(sessionStorageKey) === "true") {
       return;
     }
 
     let cancelled = false;
     let timer = 0;
+    const startedWaitingAt = Date.now();
 
     const showFlyer = () => {
       if (cancelled) return;
 
-      if (document.documentElement.hasAttribute("data-urechem-intro-active")) {
-        timer = window.setTimeout(showFlyer, 350);
+      const introIsActive = document.documentElement.hasAttribute("data-urechem-intro-active");
+      const hasWaitedTooLong = Date.now() - startedWaitingAt >= maximumIntroWait;
+
+      if (introIsActive && !hasWaitedTooLong) {
+        timer = window.setTimeout(showFlyer, 250);
         return;
       }
 
       setIsOpen(true);
     };
 
-    timer = window.setTimeout(showFlyer, forceFlyer ? 700 : flyerDelay);
+    timer = window.setTimeout(showFlyer, forceFlyer ? 250 : flyerDelay);
 
     return () => {
       cancelled = true;
@@ -109,7 +126,7 @@ export function LeadCaptureFlyer() {
       mobile: String(formData.get("mobile") ?? ""),
     });
 
-    window.localStorage.setItem(storageKey, String(Date.now()));
+    rememberDismissal();
     window.location.assign(`/contact?${params.toString()}`);
   };
 
@@ -148,7 +165,10 @@ export function LeadCaptureFlyer() {
         <div className="grid gap-7 p-6 sm:p-9">
           <div className="pr-12">
             <p className="text-sm font-black uppercase tracking-[0.17em] text-blue-700">Urechem Chemicals</p>
-            <h2 className="mt-3 max-w-xl text-3xl font-black leading-tight text-blue-950 sm:text-4xl" id="consultation-flyer-title">
+            <h2
+              className="mt-3 max-w-xl text-3xl font-black leading-tight text-blue-950 sm:text-4xl"
+              id="consultation-flyer-title"
+            >
               Unlock expert polyurethane guidance.
             </h2>
             <p className="mt-4 max-w-xl leading-7 text-slate-600">
@@ -160,8 +180,17 @@ export function LeadCaptureFlyer() {
             <label className="grid gap-2 text-sm font-bold text-blue-950">
               Name
               <span className="relative">
-                <UserRound aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600" />
-                <input autoComplete="name" className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" name="name" placeholder="Your name" required />
+                <UserRound
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600"
+                />
+                <input
+                  autoComplete="name"
+                  className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                  name="name"
+                  placeholder="Your name"
+                  required
+                />
               </span>
             </label>
 
@@ -169,22 +198,47 @@ export function LeadCaptureFlyer() {
               <label className="grid gap-2 text-sm font-bold text-blue-950">
                 Email address
                 <span className="relative">
-                  <Mail aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600" />
-                  <input autoComplete="email" className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" name="email" placeholder="name@company.com" required type="email" />
+                  <Mail
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600"
+                  />
+                  <input
+                    autoComplete="email"
+                    className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                    name="email"
+                    placeholder="name@company.com"
+                    required
+                    type="email"
+                  />
                 </span>
               </label>
 
               <label className="grid gap-2 text-sm font-bold text-blue-950">
                 Mobile number
                 <span className="relative">
-                  <Phone aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600" />
-                  <input autoComplete="tel" className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100" inputMode="tel" name="mobile" placeholder="Mobile number" required type="tel" />
+                  <Phone
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-blue-600"
+                  />
+                  <input
+                    autoComplete="tel"
+                    className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                    inputMode="tel"
+                    name="mobile"
+                    placeholder="Mobile number"
+                    required
+                    type="tel"
+                  />
                 </span>
               </label>
             </div>
 
             <div className="mt-1 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <button className="text-sm font-semibold text-slate-500 underline-offset-4 hover:text-blue-800 hover:underline" type="button" onClick={dismiss}>
+              <button
+                className="text-sm font-semibold text-slate-500 underline-offset-4 hover:text-blue-800 hover:underline"
+                type="button"
+                onClick={dismiss}
+              >
                 Continue browsing
               </button>
               <Button className="w-full sm:w-auto" size="lg" type="submit">
