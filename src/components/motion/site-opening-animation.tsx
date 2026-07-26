@@ -97,6 +97,38 @@ function deviceNeedsSkipOption() {
   );
 }
 
+function OpeningDroplet() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="urechem-opening__droplet-svg"
+      focusable="false"
+      viewBox="0 0 120 160"
+    >
+      <defs>
+        <linearGradient id="urechem-opening-drop-blue" x1="24" x2="96" y1="22" y2="148" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#2563eb" />
+          <stop offset="0.5" stopColor="#0ea5e9" />
+          <stop offset="1" stopColor="#22d3ee" />
+        </linearGradient>
+        <linearGradient id="urechem-opening-drop-shine" x1="36" x2="61" y1="55" y2="121" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0.78" />
+          <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M60 3C51 24 18 60 18 99C18 133 36 157 60 157C84 157 102 133 102 99C102 60 69 24 60 3Z"
+        fill="url(#urechem-opening-drop-blue)"
+      />
+      <path
+        d="M43 58C34 72 29 89 31 104C33 120 40 132 51 139C44 124 43 109 47 94C50 81 56 71 63 62C56 57 49 56 43 58Z"
+        fill="url(#urechem-opening-drop-shine)"
+      />
+      <ellipse cx="48" cy="52" fill="#ffffff" opacity="0.44" rx="6" ry="11" transform="rotate(28 48 52)" />
+    </svg>
+  );
+}
+
 export function SiteOpeningAnimation() {
   const [isVisible, setIsVisible] = useState(true);
   const [showSkip, setShowSkip] = useState(false);
@@ -210,9 +242,12 @@ export function SiteOpeningAnimation() {
       const maximumRadius = Math.hypot(viewportWidth, viewportHeight) * 0.58;
       const targetRect = logoMark?.getBoundingClientRect();
       const dropletSize = Math.max(60, Math.min(92, viewportWidth * 0.07));
-      const targetScale = targetRect ? Math.max(0.42, targetRect.width / dropletSize) : 0.56;
+      const targetDropletWidth = targetRect ? targetRect.width * 0.52 : dropletSize * 0.48;
+      const targetScale = Math.max(0.28, targetDropletWidth / dropletSize);
       const targetX = targetRect ? targetRect.left + targetRect.width / 2 - viewportWidth / 2 : 0;
-      const targetY = targetRect ? targetRect.top + targetRect.height / 2 - viewportHeight / 2 : -viewportHeight * 0.42;
+      const targetY = targetRect
+        ? targetRect.top + targetRect.height * 0.54 - viewportHeight / 2
+        : -viewportHeight * 0.42;
 
       gsap.set(overlay, { opacity: 1 });
       gsap.set(dropletRef.current, {
@@ -377,7 +412,7 @@ export function SiteOpeningAnimation() {
 
       <div aria-hidden="true" className="urechem-opening__trail" ref={trailRef} />
       <div aria-hidden="true" className="urechem-opening__droplet" ref={dropletRef}>
-        <img alt="" height="128" src="/brand/urechem-mark.png" width="128" />
+        <OpeningDroplet />
       </div>
 
       <span className="sr-only" role="status">Loading Urechem Chemical</span>
