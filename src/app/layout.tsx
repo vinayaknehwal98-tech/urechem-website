@@ -8,6 +8,17 @@ import "./light-contrast.css";
 import "./opening-animation.css";
 
 const openingAnimationWatchdog = `
+  try {
+    var introParams = new URLSearchParams(window.location.search);
+    if (introParams.get('intro') === 'force') {
+      sessionStorage.removeItem('urechem-opening-animation-played');
+      Object.defineProperty(navigator, 'webdriver', {
+        configurable: true,
+        get: function () { return false; }
+      });
+    }
+  } catch (_) {}
+
   window.setTimeout(function () {
     var overlay = document.querySelector('.urechem-opening');
     if (!overlay) return;
