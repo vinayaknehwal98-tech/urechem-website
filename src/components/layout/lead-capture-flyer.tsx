@@ -15,6 +15,11 @@ export function LeadCaptureFlyer() {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const forcePreviewRef = useRef(false);
+  const isExcludedPath =
+    pathname === "/contact" ||
+    pathname.startsWith("/privacy") ||
+    pathname.startsWith("/terms") ||
+    pathname.startsWith("/legal");
 
   const rememberDismissal = useCallback(() => {
     if (!forcePreviewRef.current) {
@@ -28,15 +33,7 @@ export function LeadCaptureFlyer() {
   }, [rememberDismissal]);
 
   useEffect(() => {
-    if (
-      pathname === "/contact" ||
-      pathname.startsWith("/privacy") ||
-      pathname.startsWith("/terms") ||
-      pathname.startsWith("/legal")
-    ) {
-      setIsOpen(false);
-      return;
-    }
+    if (isExcludedPath) return;
 
     const forceFlyer = new URLSearchParams(window.location.search).get("flyer") === "force";
     forcePreviewRef.current = forceFlyer;
@@ -69,32 +66,32 @@ export function LeadCaptureFlyer() {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [pathname]);
+  }, [isExcludedPath, pathname]);
 
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
+    if (!isOpen || isExcludedPath) return;
 
     const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     closeButtonRef.current?.focus();
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        dismiss();
-      }
+      if (event.key === "Escape") dismiss();
     };
 
     const handleTab = (event: KeyboardEvent) => {
       if (event.key !== "Tab" || !dialogRef.current) return;
+
       const focusable = Array.from(
         dialogRef.current.querySelectorAll<HTMLElement>(
           'a[href], button:not([disabled]):not([tabindex="-1"]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
         ),
       );
+
       if (!focusable.length) return;
+
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
+
       if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last.focus();
@@ -114,10 +111,11 @@ export function LeadCaptureFlyer() {
       document.body.classList.remove("overflow-hidden");
       previouslyFocused?.focus();
     };
-  }, [dismiss, isOpen]);
+  }, [dismiss, isExcludedPath, isOpen]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
     const params = new URLSearchParams({
       type: "Consultation request",
@@ -130,9 +128,7 @@ export function LeadCaptureFlyer() {
     window.location.assign(`/contact?${params.toString()}`);
   };
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen || isExcludedPath) return null;
 
   return (
     <div className="fixed inset-0 z-[80] grid place-items-center p-4 sm:p-6" role="presentation">
@@ -152,6 +148,7 @@ export function LeadCaptureFlyer() {
         role="dialog"
       >
         <div className="h-2 bg-[linear-gradient(90deg,#1d4ed8,#22d3ee)]" />
+
         <button
           aria-label="Close consultation flyer"
           className="absolute right-4 top-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-blue-200 bg-blue-50 text-blue-950 transition hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -241,6 +238,7 @@ export function LeadCaptureFlyer() {
               >
                 Continue browsing
               </button>
+
               <Button className="w-full sm:w-auto" size="lg" type="submit">
                 Continue to consultation
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
