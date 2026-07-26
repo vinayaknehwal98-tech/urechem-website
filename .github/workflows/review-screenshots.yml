@@ -97,6 +97,18 @@ jobs:
             npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
           done
 
+      - name: Capture opening animation checkpoints
+        run: |
+          desktop_checkpoints=(450 1000 1500 2200 2800 3400)
+          for checkpoint in "${desktop_checkpoints[@]}"; do
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout="${checkpoint}" "http://127.0.0.1:3000/?intro=force&checkpoint=${checkpoint}" "review-screenshots/latest/opening-${checkpoint}ms-desktop.png"
+          done
+
+          mobile_checkpoints=(650 1450 2400 3400)
+          for checkpoint in "${mobile_checkpoints[@]}"; do
+            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout="${checkpoint}" "http://127.0.0.1:3000/?intro=force&checkpoint=${checkpoint}" "review-screenshots/latest/opening-${checkpoint}ms-mobile.png"
+          done
+
       - name: Upload review screenshots
         uses: actions/upload-artifact@v4
         with:
