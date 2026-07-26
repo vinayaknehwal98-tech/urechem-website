@@ -30,6 +30,7 @@ export function BrandLogo({
           compact ? "h-11 w-11" : "h-14 w-14",
           animateDrop && "logo-drop-in",
         )}
+        data-urechem-logo-mark
       >
         <Image
           alt=""
@@ -48,6 +49,7 @@ export function BrandLogo({
             compact ? "text-[0.98rem]" : "text-[1.22rem]",
             tone === "dark" ? "text-white" : "text-blue-950",
           )}
+          data-urechem-logo-name
         >
           Urechem Chemical
         </span>
@@ -57,6 +59,7 @@ export function BrandLogo({
             compact ? "text-[0.58rem]" : "text-[0.65rem]",
             tone === "dark" ? "text-cyan-100/80 group-hover:text-cyan-100" : "text-blue-600 group-hover:text-sky-600",
           )}
+          data-urechem-logo-tagline
         >
           We deliver what we promise
         </span>
