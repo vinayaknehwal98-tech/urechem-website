@@ -1,11 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { ArrowRight, Beaker, Boxes, MessageSquareText, ShieldCheck } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { MolecularBackground } from "@/components/visuals/molecular-background";
+
+const HERO_VIDEO =
+  "https://videos.pexels.com/video-files/9339478/9339478-uhd_3840_2160_24fps.mp4";
+
+const HERO_POSTER =
+  "https://images.unsplash.com/photo-1777915627530-fc3decb749cf?auto=format&fit=crop&fm=jpg&q=82&w=2400";
 
 const proofPoints = [
   {
@@ -31,24 +36,29 @@ export function HeroSection() {
   return (
     <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden border-b border-blue-100 bg-white">
       <motion.div
-        animate={shouldReduceMotion ? undefined : { scale: [1.02, 1.055, 1.02], x: [0, -8, 0] }}
-        className="absolute inset-0 -z-20"
+        animate={shouldReduceMotion ? undefined : { scale: [1.015, 1.04, 1.015], x: [0, -7, 0] }}
+        className="absolute inset-0 -z-30 overflow-hidden bg-slate-100"
         transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }}
       >
-        <Image
-          alt="Large specialty-chemical processing facility operating at dusk"
-          className="object-cover object-center"
-          fill
-          priority
-          quality={88}
-          sizes="100vw"
-          src="https://images.unsplash.com/photo-1777915627530-fc3decb749cf?auto=format&fit=crop&fm=jpg&q=82&w=2400"
-        />
+        <video
+          aria-hidden="true"
+          autoPlay={!shouldReduceMotion}
+          className="h-full w-full object-cover object-[72%_center] [filter:saturate(.82)_brightness(1.06)_contrast(.94)]"
+          loop
+          muted
+          playsInline
+          poster={HERO_POSTER}
+          preload="metadata"
+        >
+          <source src={HERO_VIDEO} type="video/mp4" />
+        </video>
       </motion.div>
+
+      <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,#ffffff_0%,rgba(255,255,255,0.995)_38%,rgba(255,255,255,0.985)_53%,rgba(248,251,255,0.90)_63%,rgba(239,246,255,0.54)_76%,rgba(239,246,255,0.15)_90%,rgba(239,246,255,0.04)_100%)]" />
+      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.04)_58%,rgba(255,255,255,0.86)_100%)]" />
       <MolecularBackground />
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,255,255,0.99)_0%,rgba(255,255,255,0.97)_43%,rgba(248,251,255,0.83)_70%,rgba(239,246,255,0.48)_100%)]" />
-      <div className="absolute inset-0 -z-10 opacity-[0.24] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.24)_1px,transparent_0)] [background-size:24px_24px]" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-52 bg-gradient-to-t from-white to-transparent" />
+      <div className="absolute inset-0 -z-10 opacity-[0.16] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.22)_1px,transparent_0)] [background-size:24px_24px]" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-52 bg-gradient-to-t from-white via-white/75 to-transparent" />
 
       <Container className="flex min-h-[calc(100dvh-4.5rem)] flex-col justify-center py-12 sm:py-16 lg:py-20">
         <div className="relative z-10 w-full">
