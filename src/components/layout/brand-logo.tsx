@@ -20,14 +20,16 @@ export function BrandLogo({
     <span
       className={cn(
         "relative flex shrink-0 items-center",
-        compact ? "h-12 w-[13.5rem] gap-2" : "h-14 w-[16.75rem] gap-2.5",
+        compact
+          ? "h-10 w-[11.25rem] gap-2 sm:h-12 sm:w-[13.5rem]"
+          : "h-10 w-[11.5rem] gap-2 sm:h-14 sm:w-[16.75rem] sm:gap-2.5",
         className,
       )}
     >
       <span
         className={cn(
           "relative grid shrink-0 place-items-center transition duration-500 group-hover:-translate-y-0.5 group-hover:drop-shadow-[0_8px_18px_rgba(14,165,233,0.24)]",
-          compact ? "h-11 w-11" : "h-14 w-14",
+          compact ? "h-9 w-9 sm:h-11 sm:w-11" : "h-10 w-10 sm:h-14 sm:w-14",
           animateDrop && "logo-drop-in",
         )}
         data-urechem-logo-mark
@@ -46,7 +48,7 @@ export function BrandLogo({
         <span
           className={cn(
             "logo-name-reveal block whitespace-nowrap font-black uppercase leading-none tracking-[-0.035em]",
-            compact ? "text-[0.98rem]" : "text-[1.22rem]",
+            compact ? "text-[0.82rem] sm:text-[0.98rem]" : "text-[0.82rem] sm:text-[1.22rem]",
             tone === "dark" ? "text-white" : "text-blue-950",
           )}
           data-urechem-logo-name
@@ -55,8 +57,8 @@ export function BrandLogo({
         </span>
         <span
           className={cn(
-            "logo-tagline-reveal mt-1.5 block whitespace-nowrap font-bold leading-none transition-colors duration-300",
-            compact ? "text-[0.58rem]" : "text-[0.65rem]",
+            "logo-tagline-reveal mt-1 block whitespace-nowrap font-bold leading-none transition-colors duration-300 sm:mt-1.5",
+            compact ? "text-[0.5rem] sm:text-[0.58rem]" : "text-[0.5rem] sm:text-[0.65rem]",
             tone === "dark" ? "text-cyan-100/80 group-hover:text-cyan-100" : "text-blue-600 group-hover:text-sky-600",
           )}
           data-urechem-logo-tagline
