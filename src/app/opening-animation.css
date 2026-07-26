@@ -15,53 +15,6 @@
   z-index: 9999;
 }
 
-.urechem-opening__ghost {
-  align-items: center;
-  display: flex;
-  gap: 0.9rem;
-  left: 50%;
-  opacity: 0.1;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  user-select: none;
-  width: min(27rem, calc(100vw - 3rem));
-  z-index: 4;
-}
-
-.urechem-opening__ghost img {
-  flex: 0 0 auto;
-  height: clamp(4.6rem, 8vw, 7.3rem);
-  object-fit: contain;
-  width: clamp(4.6rem, 8vw, 7.3rem);
-}
-
-.urechem-opening__ghost div {
-  min-width: 0;
-}
-
-.urechem-opening__ghost strong,
-.urechem-opening__ghost span {
-  display: block;
-  white-space: nowrap;
-}
-
-.urechem-opening__ghost strong {
-  color: #0f2f66;
-  font-size: clamp(1.18rem, 2.1vw, 2rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.urechem-opening__ghost span {
-  color: #2563eb;
-  font-size: clamp(0.62rem, 1vw, 0.82rem);
-  font-weight: 700;
-  margin-top: 0.55rem;
-}
-
 .urechem-opening__liquid {
   height: 100%;
   inset: 0;
@@ -77,7 +30,7 @@
 }
 
 .urechem-opening__trail {
-  background: linear-gradient(180deg, rgba(37, 99, 235, 0), rgba(14, 165, 233, 0.28) 58%, rgba(34, 211, 238, 0.05));
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0), rgba(14, 165, 233, 0.22) 60%, rgba(34, 211, 238, 0.03));
   filter: blur(5px);
   height: min(24vh, 13rem);
   left: 50%;
@@ -86,13 +39,13 @@
   position: absolute;
   top: calc(50% - min(24vh, 13rem));
   transform: translateX(-50%);
-  width: clamp(1.15rem, 2.4vw, 2.2rem);
+  width: clamp(1rem, 2vw, 1.8rem);
   z-index: 5;
 }
 
 .urechem-opening__droplet {
   backface-visibility: hidden;
-  filter: drop-shadow(0 14px 20px rgba(14, 165, 233, 0.2));
+  filter: drop-shadow(0 14px 20px rgba(14, 165, 233, 0.18));
   height: clamp(3.75rem, 7vw, 5.75rem);
   left: 50%;
   position: absolute;
@@ -110,18 +63,18 @@
 }
 
 .urechem-opening__droplet::after {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0));
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0));
   border-radius: 999px;
   content: "";
   filter: blur(0.6px);
-  height: 30%;
-  left: 28%;
-  opacity: 0.46;
+  height: 28%;
+  left: 29%;
+  opacity: 0.42;
   pointer-events: none;
   position: absolute;
-  top: 18%;
+  top: 19%;
   transform: rotate(-22deg);
-  width: 15%;
+  width: 14%;
 }
 
 .urechem-opening__skip {
@@ -145,7 +98,7 @@
 
 .urechem-opening__skip:hover {
   background: #eff6ff;
-  border-color: rgba(37, 99, 235, 0.5);
+  border-color: rgba(37, 99,235,0.5);
   transform: translateY(-1px);
 }
 
@@ -167,19 +120,6 @@ html[data-urechem-intro-active="true"] [data-hero-intro] {
 }
 
 @media (max-width: 640px) {
-  .urechem-opening__ghost {
-    gap: 0.65rem;
-    justify-content: center;
-  }
-
-  .urechem-opening__ghost strong {
-    font-size: 1.05rem;
-  }
-
-  .urechem-opening__ghost span {
-    font-size: 0.56rem;
-  }
-
   .urechem-opening__skip {
     bottom: max(1rem, env(safe-area-inset-bottom));
     right: max(1rem, env(safe-area-inset-right));
@@ -191,9 +131,5 @@ html[data-urechem-intro-active="true"] [data-hero-intro] {
   .urechem-opening__liquid,
   .urechem-opening__droplet {
     display: none;
-  }
-
-  .urechem-opening__ghost {
-    opacity: 0.12;
   }
 }
