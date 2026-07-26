@@ -1,6 +1,6 @@
 .urechem-opening {
   align-items: center;
-  background: #ffffff;
+  background: transparent;
   contain: strict;
   display: flex;
   height: 100dvh;
@@ -72,7 +72,8 @@
 }
 
 .urechem-opening__splash {
-  transform-box: fill-box;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
 }
 
 .urechem-opening__trail {
@@ -155,10 +156,14 @@
 
 html[data-urechem-intro-active="true"] [data-urechem-logo-mark],
 html[data-urechem-intro-active="true"] [data-urechem-logo-name],
-html[data-urechem-intro-active="true"] [data-urechem-logo-tagline],
-html[data-urechem-intro-active="true"] [data-hero-intro] {
+html[data-urechem-intro-active="true"] [data-urechem-logo-tagline] {
   opacity: 0;
   visibility: hidden;
+}
+
+html[data-urechem-intro-active="true"] [data-hero-intro] {
+  opacity: 0;
+  visibility: visible;
 }
 
 @media (max-width: 640px) {
