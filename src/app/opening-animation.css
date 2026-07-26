@@ -1,0 +1,176 @@
+.urechem-opening {
+  align-items: center;
+  background: #ffffff;
+  display: flex;
+  height: 100dvh;
+  inset: 0;
+  isolation: isolate;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: auto;
+  position: fixed;
+  width: 100vw;
+  z-index: 9999;
+}
+
+.urechem-opening__ghost {
+  align-items: center;
+  display: flex;
+  gap: 0.9rem;
+  left: 50%;
+  opacity: 0.1;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  width: min(27rem, calc(100vw - 3rem));
+  z-index: 2;
+}
+
+.urechem-opening__ghost img {
+  flex: 0 0 auto;
+  height: clamp(4.6rem, 8vw, 7.3rem);
+  object-fit: contain;
+  width: clamp(4.6rem, 8vw, 7.3rem);
+}
+
+.urechem-opening__ghost div {
+  min-width: 0;
+}
+
+.urechem-opening__ghost strong,
+.urechem-opening__ghost span {
+  display: block;
+  white-space: nowrap;
+}
+
+.urechem-opening__ghost strong {
+  color: #0f2f66;
+  font-size: clamp(1.18rem, 2.1vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.urechem-opening__ghost span {
+  color: #2563eb;
+  font-size: clamp(0.62rem, 1vw, 0.82rem);
+  font-weight: 700;
+  margin-top: 0.55rem;
+}
+
+.urechem-opening__liquid {
+  height: 100%;
+  inset: 0;
+  overflow: visible;
+  position: absolute;
+  width: 100%;
+  z-index: 3;
+}
+
+.urechem-opening__splash {
+  transform-box: fill-box;
+}
+
+.urechem-opening__trail {
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0), rgba(14, 165, 233, 0.28) 58%, rgba(34, 211, 238, 0.05));
+  filter: blur(5px);
+  height: min(24vh, 13rem);
+  left: 50%;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: calc(50% - min(24vh, 13rem));
+  transform: translateX(-50%);
+  width: clamp(1.15rem, 2.4vw, 2.2rem);
+  z-index: 5;
+}
+
+.urechem-opening__droplet {
+  filter: drop-shadow(0 14px 20px rgba(14, 165, 233, 0.2));
+  height: clamp(4.25rem, 7vw, 5.75rem);
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(4.25rem, 7vw, 5.75rem);
+  will-change: transform, opacity;
+  z-index: 6;
+}
+
+.urechem-opening__droplet img {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.urechem-opening__skip {
+  appearance: none;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(37, 99, 235, 0.24);
+  border-radius: 999px;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  color: #1e3a8a;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 0.7rem 1rem;
+  position: absolute;
+  right: max(1.25rem, env(safe-area-inset-right));
+  text-transform: uppercase;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+  z-index: 8;
+}
+
+.urechem-opening__skip:hover {
+  background: #eff6ff;
+  border-color: rgba(37, 99, 235, 0.5);
+  transform: translateY(-1px);
+}
+
+.urechem-opening__skip:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 4px;
+}
+
+html[data-urechem-intro-active="true"] [data-urechem-logo-mark],
+html[data-urechem-intro-active="true"] [data-urechem-logo-name],
+html[data-urechem-intro-active="true"] [data-urechem-logo-tagline],
+html[data-urechem-intro-active="true"] [data-hero-intro] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (max-width: 640px) {
+  .urechem-opening__ghost {
+    gap: 0.65rem;
+    justify-content: center;
+  }
+
+  .urechem-opening__ghost strong {
+    font-size: 1.05rem;
+  }
+
+  .urechem-opening__ghost span {
+    font-size: 0.56rem;
+  }
+
+  .urechem-opening__skip {
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .urechem-opening__trail,
+  .urechem-opening__liquid,
+  .urechem-opening__droplet {
+    display: none;
+  }
+
+  .urechem-opening__ghost {
+    opacity: 0.12;
+  }
+}
