@@ -45,7 +45,7 @@
 
 .urechem-opening__droplet {
   backface-visibility: hidden;
-  filter: drop-shadow(0 14px 20px rgba(14, 165, 233, 0.18));
+  filter: drop-shadow(0 16px 22px rgba(14, 165, 233, 0.2));
   height: clamp(3.75rem, 7vw, 5.75rem);
   left: 50%;
   position: absolute;
@@ -56,25 +56,11 @@
   z-index: 6;
 }
 
-.urechem-opening__droplet img {
+.urechem-opening__droplet-svg {
+  display: block;
   height: 100%;
-  object-fit: contain;
+  overflow: visible;
   width: 100%;
-}
-
-.urechem-opening__droplet::after {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0));
-  border-radius: 999px;
-  content: "";
-  filter: blur(0.6px);
-  height: 28%;
-  left: 29%;
-  opacity: 0.42;
-  pointer-events: none;
-  position: absolute;
-  top: 19%;
-  transform: rotate(-22deg);
-  width: 14%;
 }
 
 .urechem-opening__skip {
@@ -98,7 +84,7 @@
 
 .urechem-opening__skip:hover {
   background: #eff6ff;
-  border-color: rgba(37, 99,235,0.5);
+  border-color: rgba(37, 99, 235, 0.5);
   transform: translateY(-1px);
 }
 
