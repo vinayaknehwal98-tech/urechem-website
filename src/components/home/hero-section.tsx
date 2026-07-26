@@ -27,11 +27,6 @@ const proofPoints = [
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
-  const enter = (delay: number, distance = 28) => ({
-    animate: { opacity: 1, y: 0 },
-    initial: shouldReduceMotion ? false : { opacity: 0, y: distance },
-    transition: { delay, duration: 0.72, ease: [0.22, 1, 0.36, 1] as const },
-  });
 
   return (
     <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden border-b border-blue-100 bg-white">
@@ -57,23 +52,23 @@ export function HeroSection() {
 
       <Container className="flex min-h-[calc(100dvh-4.5rem)] flex-col justify-center py-12 sm:py-16 lg:py-20">
         <div className="relative z-10 w-full">
-          <motion.p className="text-sm font-black uppercase tracking-[0.22em] text-blue-700" {...enter(0.08, 18)}>
+          <p className="text-sm font-black uppercase tracking-[0.22em] text-blue-700" data-hero-intro>
             URECHEM CHEMICAL
-          </motion.p>
-          <motion.h1
+          </p>
+          <h1
             className="mt-6 w-full max-w-6xl text-balance text-[clamp(3.4rem,7.4vw,7.8rem)] font-black leading-[0.86] tracking-[-0.055em] text-blue-950"
-            {...enter(0.16, 42)}
+            data-hero-intro
           >
             Intelligent chemistry for better polyurethane solutions.
-          </motion.h1>
-          <motion.p className="mt-7 text-2xl font-black text-sky-700 sm:text-3xl" {...enter(0.3)}>
+          </h1>
+          <p className="mt-7 text-2xl font-black text-sky-700 sm:text-3xl" data-hero-intro>
             We deliver what we promise.
-          </motion.p>
-          <motion.p className="mt-5 max-w-3xl text-pretty text-lg leading-8 text-slate-700 sm:text-xl" {...enter(0.38)}>
+          </p>
+          <p className="mt-5 max-w-3xl text-pretty text-lg leading-8 text-slate-700 sm:text-xl" data-hero-intro>
             Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
-          </motion.p>
+          </p>
 
-          <motion.div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap" {...enter(0.46)}>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap" data-hero-intro>
             <ButtonLink href="/ai-solution-finder" size="lg">
               Describe Your Challenge
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
@@ -85,7 +80,7 @@ export function HeroSection() {
             <ButtonLink href="/products" size="lg" variant="ghost">
               Explore Products
             </ButtonLink>
-          </motion.div>
+          </div>
         </div>
       </Container>
 
