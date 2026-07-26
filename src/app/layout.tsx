@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { LeadCaptureFlyer } from "@/components/layout/lead-capture-flyer";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { SiteOpeningAnimation } from "@/components/motion/site-opening-animation";
 import "./globals.css";
 import "./light-contrast.css";
+import "./opening-animation.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://urechem-website.vercel.app"),
@@ -61,6 +63,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        <SiteOpeningAnimation />
         <SiteHeader />
         <LeadCaptureFlyer />
         <main className="flex-1" id="main-content" tabIndex={-1}>{children}</main>
