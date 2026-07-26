@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const storageKey = "urechem-consultation-flyer-dismissed";
+const storageKey = "urechem-consultation-flyer-dismissed-v2";
 const dismissalWindow = 7 * 24 * 60 * 60 * 1000;
+const flyerDelay = 6000;
 
 export function LeadCaptureFlyer() {
   const pathname = usePathname();
@@ -24,13 +25,33 @@ export function LeadCaptureFlyer() {
       return;
     }
 
+    const forceFlyer = new URLSearchParams(window.location.search).get("flyer") === "force";
     const dismissedAt = Number(window.localStorage.getItem(storageKey) ?? "0");
-    if (dismissedAt && Date.now() - dismissedAt < dismissalWindow) {
+
+    if (!forceFlyer && dismissedAt && Date.now() - dismissedAt < dismissalWindow) {
       return;
     }
 
-    const timer = window.setTimeout(() => setIsOpen(true), 8000);
-    return () => window.clearTimeout(timer);
+    let cancelled = false;
+    let timer = 0;
+
+    const showFlyer = () => {
+      if (cancelled) return;
+
+      if (document.documentElement.hasAttribute("data-urechem-intro-active")) {
+        timer = window.setTimeout(showFlyer, 350);
+        return;
+      }
+
+      setIsOpen(true);
+    };
+
+    timer = window.setTimeout(showFlyer, forceFlyer ? 700 : flyerDelay);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -97,7 +118,7 @@ export function LeadCaptureFlyer() {
   }
 
   return (
-    <div className="fixed inset-0 z-[70] grid place-items-center p-4 sm:p-6" role="presentation">
+    <div className="fixed inset-0 z-[80] grid place-items-center p-4 sm:p-6" role="presentation">
       <button
         aria-hidden="true"
         className="absolute inset-0 h-full w-full cursor-default bg-blue-950/72 backdrop-blur-sm"
