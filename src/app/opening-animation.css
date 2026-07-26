@@ -89,12 +89,12 @@
 
 .urechem-opening__droplet {
   filter: drop-shadow(0 14px 20px rgba(14, 165, 233, 0.2));
-  height: clamp(4.25rem, 7vw, 5.75rem);
+  height: clamp(3.75rem, 7vw, 5.75rem);
   left: 50%;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: clamp(4.25rem, 7vw, 5.75rem);
+  width: clamp(3.75rem, 7vw, 5.75rem);
   will-change: transform, opacity;
   z-index: 6;
 }
