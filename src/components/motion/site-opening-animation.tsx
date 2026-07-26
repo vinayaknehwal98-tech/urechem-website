@@ -101,7 +101,6 @@ export function SiteOpeningAnimation() {
   const [isVisible, setIsVisible] = useState(true);
   const [showSkip, setShowSkip] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const ghostRef = useRef<HTMLDivElement>(null);
   const dropletRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLDivElement>(null);
   const coverRef = useRef<SVGRectElement>(null);
@@ -216,7 +215,6 @@ export function SiteOpeningAnimation() {
       const targetY = targetRect ? targetRect.top + targetRect.height / 2 - viewportHeight / 2 : -viewportHeight * 0.42;
 
       gsap.set(overlay, { opacity: 1 });
-      gsap.set(ghostRef.current, { opacity: 0.11, scale: 0.98 });
       gsap.set(dropletRef.current, {
         opacity: 1,
         scaleX: 0.78,
@@ -229,7 +227,7 @@ export function SiteOpeningAnimation() {
       gsap.set(revealRef.current, { attr: { r: 0 } });
       gsap.set(liquidRef.current, { attr: { r: 4 }, opacity: 0 });
       gsap.set(rippleRef.current, { attr: { r: 8 }, opacity: 0 });
-      gsap.set(splashRef.current, { opacity: 0, scale: 0.25, transformOrigin: "50% 50%" });
+      gsap.set(splashRef.current, { opacity: 0, scale: 0.18, transformOrigin: "50% 50%" });
       gsap.set([logoMark, logoName, logoTagline], { opacity: 0, visibility: "visible" });
       gsap.set(heroElements, { opacity: 0, y: 26 });
 
@@ -237,8 +235,7 @@ export function SiteOpeningAnimation() {
       timelineRef.current = timeline;
 
       timeline
-        .to(ghostRef.current, { duration: 0.34, ease: "power1.out", opacity: 0.16, scale: 1 }, 0)
-        .to(trailRef.current, { duration: 0.2, ease: "power1.out", opacity: 0.42, scaleY: 1 }, 0.18)
+        .to(trailRef.current, { duration: 0.2, ease: "power1.out", opacity: 0.3, scaleY: 1 }, 0.18)
         .to(
           dropletRef.current,
           {
@@ -251,17 +248,16 @@ export function SiteOpeningAnimation() {
           0.18,
         )
         .to(trailRef.current, { duration: 0.16, ease: "power1.in", opacity: 0, scaleY: 0.4 }, 0.78)
-        .to(dropletRef.current, { duration: 0.09, ease: "power2.out", scaleX: 1.34, scaleY: 0.68, y: 5 }, 0.96)
-        .to(dropletRef.current, { duration: 0.18, ease: "back.out(2.2)", scaleX: 0.94, scaleY: 1.06, y: -4 }, 1.05)
-        .to(splashRef.current, { duration: 0.3, ease: "power2.out", opacity: 0.9, scale: 1 }, 0.98)
-        .to(splashRef.current, { duration: 0.46, ease: "power1.out", opacity: 0, scale: 1.5 }, 1.22)
-        .to(rippleRef.current, { attr: { r: 92 }, duration: 0.62, ease: "power2.out", opacity: 0.55, strokeWidth: 1 }, 1.01)
-        .to(rippleRef.current, { attr: { r: 150 }, duration: 0.5, ease: "power1.out", opacity: 0 }, 1.5)
-        .to(liquidRef.current, { attr: { r: maximumRadius * 0.98 }, duration: 1.12, ease: "power3.inOut", opacity: 0.22 }, 1.12)
+        .to(dropletRef.current, { duration: 0.09, ease: "power2.out", scaleX: 1.3, scaleY: 0.7, y: 4 }, 0.96)
+        .to(dropletRef.current, { duration: 0.18, ease: "back.out(2)", scaleX: 0.96, scaleY: 1.04, y: -3 }, 1.05)
+        .to(splashRef.current, { duration: 0.24, ease: "power2.out", opacity: 0.78, scale: 1 }, 0.98)
+        .to(splashRef.current, { duration: 0.4, ease: "power1.out", opacity: 0, scale: 1.32 }, 1.2)
+        .to(rippleRef.current, { attr: { r: 84 }, duration: 0.58, ease: "power2.out", opacity: 0.42, strokeWidth: 1 }, 1.01)
+        .to(rippleRef.current, { attr: { r: 142 }, duration: 0.46, ease: "power1.out", opacity: 0 }, 1.46)
+        .to(liquidRef.current, { attr: { r: maximumRadius * 0.98 }, duration: 1.12, ease: "power3.inOut", opacity: 0.2 }, 1.12)
         .to(revealRef.current, { attr: { r: maximumRadius * 1.08 }, duration: 1.18, ease: "power3.inOut" }, 1.12)
         .to(liquidRef.current, { duration: 0.54, ease: "power2.out", opacity: 0 }, 1.86)
         .to(coverRef.current, { duration: 0.2, opacity: 0 }, 2.16)
-        .to(ghostRef.current, { duration: 0.28, ease: "power1.out", opacity: 0 }, 1.94)
         .to(
           dropletRef.current,
           {
@@ -333,14 +329,6 @@ export function SiteOpeningAnimation() {
 
   return (
     <div className="urechem-opening" ref={overlayRef}>
-      <div aria-hidden="true" className="urechem-opening__ghost" ref={ghostRef}>
-        <img alt="" height="126" src="/brand/urechem-mark.png" width="126" />
-        <div>
-          <strong>Urechem Chemical</strong>
-          <span>We deliver what we promise.</span>
-        </div>
-      </div>
-
       <svg aria-hidden="true" className="urechem-opening__liquid" preserveAspectRatio="none">
         <defs>
           <linearGradient id="urechem-liquid-blue" x1="0" x2="1" y1="0" y2="1">
@@ -376,14 +364,14 @@ export function SiteOpeningAnimation() {
           r="8"
           ref={rippleRef}
           stroke="#38bdf8"
-          strokeWidth="7"
+          strokeWidth="6"
         />
         <g className="urechem-opening__splash" ref={splashRef}>
-          <ellipse cx="50%" cy="50%" fill="#0ea5e9" opacity="0.58" rx="56" ry="10" />
-          <circle cx="46.5%" cy="47.7%" fill="#2563eb" r="6" />
-          <circle cx="53.9%" cy="47.2%" fill="#22d3ee" r="5" />
-          <circle cx="43.8%" cy="50.8%" fill="#0ea5e9" r="4" />
-          <circle cx="56.2%" cy="50.4%" fill="#2563eb" r="3.5" />
+          <ellipse cx="50%" cy="50%" fill="#0ea5e9" opacity="0.42" rx="44" ry="7" />
+          <circle cx="47.4%" cy="48.2%" fill="#2563eb" r="4.5" />
+          <circle cx="52.8%" cy="47.9%" fill="#22d3ee" r="4" />
+          <circle cx="45.6%" cy="50.6%" fill="#0ea5e9" r="3" />
+          <circle cx="54.4%" cy="50.4%" fill="#2563eb" r="2.6" />
         </g>
       </svg>
 
