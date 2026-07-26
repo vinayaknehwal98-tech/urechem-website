@@ -25,6 +25,8 @@
 }
 
 .urechem-opening__splash {
+  opacity: 0;
+  transform: scale(0.18);
   transform-box: view-box;
   transform-origin: 50% 50%;
 }
@@ -45,12 +47,13 @@
 
 .urechem-opening__droplet {
   backface-visibility: hidden;
-  filter: drop-shadow(0 16px 22px rgba(14, 165, 233, 0.2));
+  filter: drop-shadow(0 14px 20px rgba(14, 165, 233, 0.18));
   height: clamp(3.75rem, 7vw, 5.75rem);
   left: 50%;
+  opacity: 0;
   position: absolute;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% - 70vh));
   width: clamp(3.75rem, 7vw, 5.75rem);
   will-change: transform, opacity;
   z-index: 6;
@@ -64,33 +67,7 @@
 }
 
 .urechem-opening__skip {
-  appearance: none;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(37, 99, 235, 0.24);
-  border-radius: 999px;
-  bottom: max(1.25rem, env(safe-area-inset-bottom));
-  color: #1e3a8a;
-  cursor: pointer;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  padding: 0.7rem 1rem;
-  position: absolute;
-  right: max(1.25rem, env(safe-area-inset-right));
-  text-transform: uppercase;
-  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
-  z-index: 8;
-}
-
-.urechem-opening__skip:hover {
-  background: #eff6ff;
-  border-color: rgba(37, 99, 235, 0.5);
-  transform: translateY(-1px);
-}
-
-.urechem-opening__skip:focus-visible {
-  outline: 2px solid #2563eb;
-  outline-offset: 4px;
+  display: none !important;
 }
 
 html[data-urechem-intro-active="true"] [data-urechem-logo-mark],
@@ -103,13 +80,6 @@ html[data-urechem-intro-active="true"] [data-urechem-logo-tagline] {
 html[data-urechem-intro-active="true"] [data-hero-intro] {
   opacity: 0;
   visibility: visible;
-}
-
-@media (max-width: 640px) {
-  .urechem-opening__skip {
-    bottom: max(1rem, env(safe-area-inset-bottom));
-    right: max(1rem, env(safe-area-inset-right));
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
