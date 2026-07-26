@@ -84,14 +84,14 @@ export function HeroSection() {
   }, [shouldReduceMotion, videoFailed]);
 
   return (
-    <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden border-b border-blue-100 bg-white">
+    <section className="relative isolate overflow-hidden border-b border-blue-100 bg-white md:min-h-[calc(100dvh-4.5rem)]">
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-30 overflow-hidden bg-slate-100 bg-cover bg-[72%_center]"
+        className="absolute inset-x-0 bottom-0 -z-30 h-[36%] min-h-64 overflow-hidden bg-slate-100 bg-cover bg-[82%_center] md:inset-0 md:h-auto md:min-h-0 md:bg-[72%_center]"
         style={{ backgroundImage: `url(${HERO_POSTER})` }}
       >
         <video
-          className={`h-full w-full object-cover object-[72%_center] [backface-visibility:hidden] [filter:saturate(.82)_brightness(1.06)_contrast(.94)] [transform:translateZ(0)] transition-opacity duration-700 ease-out ${
+          className={`h-full w-full object-cover object-[82%_center] [backface-visibility:hidden] [filter:saturate(.78)_brightness(1.08)_contrast(.92)] [transform:translateZ(0)] transition-opacity duration-700 ease-out md:object-[72%_center] ${
             videoIsPlaying && !videoFailed && !shouldReduceMotion ? "opacity-100" : "opacity-0"
           }`}
           disablePictureInPicture
@@ -109,47 +109,49 @@ export function HeroSection() {
         </video>
       </div>
 
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,#ffffff_0%,rgba(255,255,255,0.995)_38%,rgba(255,255,255,0.985)_53%,rgba(248,251,255,0.90)_63%,rgba(239,246,255,0.54)_76%,rgba(239,246,255,0.15)_90%,rgba(239,246,255,0.04)_100%)]" />
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.04)_58%,rgba(255,255,255,0.86)_100%)]" />
-      <MolecularBackground />
-      <div className="absolute inset-0 -z-10 opacity-[0.16] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.22)_1px,transparent_0)] [background-size:24px_24px]" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-52 bg-gradient-to-t from-white via-white/75 to-transparent" />
+      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#ffffff_0%,rgba(255,255,255,0.995)_58%,rgba(255,255,255,0.94)_72%,rgba(248,251,255,0.72)_88%,rgba(239,246,255,0.42)_100%)] md:bg-[linear-gradient(90deg,#ffffff_0%,rgba(255,255,255,0.995)_38%,rgba(255,255,255,0.985)_53%,rgba(248,251,255,0.90)_63%,rgba(239,246,255,0.54)_76%,rgba(239,246,255,0.15)_90%,rgba(239,246,255,0.04)_100%)]" />
+      <div className="absolute inset-0 -z-20 hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.04)_58%,rgba(255,255,255,0.86)_100%)] md:block" />
+      <div className="hidden md:block">
+        <MolecularBackground />
+      </div>
+      <div className="absolute inset-0 -z-10 opacity-[0.08] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.22)_1px,transparent_0)] [background-size:24px_24px] md:opacity-[0.16]" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-white via-white/80 to-transparent md:h-52" />
 
-      <Container className="flex min-h-[calc(100dvh-4.5rem)] flex-col justify-center py-12 sm:py-16 lg:py-20">
+      <Container className="flex flex-col justify-start pb-14 pt-10 sm:pb-16 sm:pt-14 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-20">
         <div className="relative z-10 w-full">
-          <p className="text-sm font-black uppercase tracking-[0.22em] text-blue-700" data-hero-intro>
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700 sm:text-sm sm:tracking-[0.22em]" data-hero-intro>
             URECHEM CHEMICAL
           </p>
           <h1
-            className="mt-6 w-full max-w-6xl text-balance text-[clamp(3.4rem,7.4vw,7.8rem)] font-black leading-[0.86] tracking-[-0.055em] text-blue-950"
+            className="mt-4 max-w-[21rem] text-[clamp(2.55rem,11vw,3.05rem)] font-black leading-[0.92] tracking-[-0.045em] text-blue-950 sm:mt-6 sm:max-w-6xl sm:text-[clamp(3.4rem,7.4vw,7.8rem)] sm:leading-[0.86] sm:tracking-[-0.055em]"
             data-hero-intro
           >
             Intelligent chemistry for better polyurethane solutions.
           </h1>
-          <p className="mt-7 text-2xl font-black text-sky-700 sm:text-3xl" data-hero-intro>
+          <p className="mt-6 max-w-[22rem] text-xl font-black leading-tight text-sky-700 sm:mt-7 sm:max-w-none sm:text-3xl" data-hero-intro>
             We deliver what we promise.
           </p>
-          <p className="mt-5 max-w-3xl text-pretty text-lg leading-8 text-slate-700 sm:text-xl" data-hero-intro>
+          <p className="mt-4 max-w-[34rem] text-base leading-7 text-slate-700 sm:mt-5 sm:text-xl sm:leading-8" data-hero-intro>
             Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap" data-hero-intro>
-            <ButtonLink href="/ai-solution-finder" size="lg">
+          <div className="mt-6 grid max-w-[34rem] grid-cols-1 gap-2.5 sm:mt-8 sm:flex sm:max-w-none sm:flex-row sm:flex-wrap sm:gap-3" data-hero-intro>
+            <ButtonLink className="h-11 w-full px-4 text-sm sm:h-12 sm:w-auto sm:px-6 sm:text-base" href="/ai-solution-finder" size="lg">
               Describe Your Challenge
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </ButtonLink>
-            <ButtonLink href="/contact?type=Consultation%20request" size="lg" variant="secondary">
+            <ButtonLink className="h-11 w-full px-4 text-sm sm:h-12 sm:w-auto sm:px-6 sm:text-base" href="/contact?type=Consultation%20request" size="lg" variant="secondary">
               <MessageSquareText aria-hidden="true" className="h-4 w-4" />
               Talk to a Consultant
             </ButtonLink>
-            <ButtonLink href="/products" size="lg" variant="ghost">
+            <ButtonLink className="h-11 w-full px-4 text-sm sm:h-12 sm:w-auto sm:px-6 sm:text-base" href="/products" size="lg" variant="ghost">
               Explore Products
             </ButtonLink>
           </div>
         </div>
       </Container>
 
-      <Container className="relative z-10 pb-10">
+      <Container className="relative z-10 hidden pb-10 md:block">
         <div className="grid gap-3 border-t border-blue-200/70 pt-6 md:grid-cols-3">
           {proofPoints.map((item, index) => (
             <motion.article
