@@ -7,6 +7,19 @@ import "./globals.css";
 import "./light-contrast.css";
 import "./opening-animation.css";
 
+const openingAnimationWatchdog = `
+  window.setTimeout(function () {
+    var overlay = document.querySelector('.urechem-opening');
+    if (!overlay) return;
+    overlay.style.display = 'none';
+    overlay.style.pointerEvents = 'none';
+    document.documentElement.removeAttribute('data-urechem-intro-active');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    try { sessionStorage.setItem('urechem-opening-animation-played', 'true'); } catch (_) {}
+  }, 6500);
+`;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://urechem-website.vercel.app"),
   title: {
@@ -63,7 +76,9 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
+        <noscript><style>{`.urechem-opening{display:none!important}`}</style></noscript>
         <SiteOpeningAnimation />
+        <script dangerouslySetInnerHTML={{ __html: openingAnimationWatchdog }} />
         <SiteHeader />
         <LeadCaptureFlyer />
         <main className="flex-1" id="main-content" tabIndex={-1}>{children}</main>
