@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Beaker, Boxes, MessageSquareText, ShieldCheck } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ButtonLink } from "@/components/ui/button";
@@ -10,7 +11,7 @@ const HERO_VIDEO =
   "https://videos.pexels.com/video-files/9339478/9339478-uhd_3840_2160_24fps.mp4";
 
 const HERO_POSTER =
-  "https://images.unsplash.com/photo-1777915627530-fc3decb749cf?auto=format&fit=crop&fm=jpg&q=82&w=2400";
+  "https://images.pexels.com/videos/9339478/pexels-photo-9339478.jpeg?auto=compress&fit=crop&w=2200";
 
 const proofPoints = [
   {
@@ -32,27 +33,81 @@ const proofPoints = [
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoIsPlaying, setVideoIsPlaying] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || shouldReduceMotion || videoFailed) return;
+
+    const html = document.documentElement;
+    let cancelled = false;
+    let introObserver: MutationObserver | null = null;
+
+    const playVideo = () => {
+      if (cancelled || document.hidden || html.hasAttribute("data-urechem-intro-active")) return;
+
+      void video.play().catch(() => {
+        if (!cancelled) setVideoFailed(true);
+      });
+    };
+
+    if (html.hasAttribute("data-urechem-intro-active")) {
+      introObserver = new MutationObserver(() => {
+        if (!html.hasAttribute("data-urechem-intro-active")) {
+          introObserver?.disconnect();
+          window.requestAnimationFrame(playVideo);
+        }
+      });
+      introObserver.observe(html, { attributes: true, attributeFilter: ["data-urechem-intro-active"] });
+    } else {
+      window.requestAnimationFrame(playVideo);
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        video.pause();
+      } else {
+        playVideo();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      cancelled = true;
+      introObserver?.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      video.pause();
+    };
+  }, [shouldReduceMotion, videoFailed]);
 
   return (
     <section className="relative isolate min-h-[calc(100dvh-4.5rem)] overflow-hidden border-b border-blue-100 bg-white">
-      <motion.div
-        animate={shouldReduceMotion ? undefined : { scale: [1.015, 1.04, 1.015], x: [0, -7, 0] }}
-        className="absolute inset-0 -z-30 overflow-hidden bg-slate-100"
-        transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" }}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-30 overflow-hidden bg-slate-100 bg-cover bg-[72%_center]"
+        style={{ backgroundImage: `url(${HERO_POSTER})` }}
       >
         <video
-          aria-hidden="true"
-          autoPlay={!shouldReduceMotion}
-          className="h-full w-full object-cover object-[72%_center] [filter:saturate(.82)_brightness(1.06)_contrast(.94)]"
+          className={`h-full w-full object-cover object-[72%_center] [backface-visibility:hidden] [filter:saturate(.82)_brightness(1.06)_contrast(.94)] [transform:translateZ(0)] transition-opacity duration-700 ease-out ${
+            videoIsPlaying && !videoFailed && !shouldReduceMotion ? "opacity-100" : "opacity-0"
+          }`}
+          disablePictureInPicture
           loop
           muted
+          onError={() => setVideoFailed(true)}
+          onPlaying={() => setVideoIsPlaying(true)}
           playsInline
           poster={HERO_POSTER}
           preload="metadata"
+          ref={videoRef}
+          tabIndex={-1}
         >
           <source src={HERO_VIDEO} type="video/mp4" />
         </video>
-      </motion.div>
+      </div>
 
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,#ffffff_0%,rgba(255,255,255,0.995)_38%,rgba(255,255,255,0.985)_53%,rgba(248,251,255,0.90)_63%,rgba(239,246,255,0.54)_76%,rgba(239,246,255,0.15)_90%,rgba(239,246,255,0.04)_100%)]" />
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.04)_58%,rgba(255,255,255,0.86)_100%)]" />
