@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Beaker, Boxes, MessageSquareText, ShieldCheck } from "lucide-react";
+import { Beaker, Boxes, ShieldCheck } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { MolecularBackground } from "@/components/visuals/molecular-background";
 
@@ -109,45 +108,31 @@ export function HeroSection() {
         </video>
       </div>
 
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#ffffff_0%,rgba(255,255,255,0.995)_58%,rgba(255,255,255,0.94)_72%,rgba(248,251,255,0.72)_88%,rgba(239,246,255,0.42)_100%)] md:bg-[linear-gradient(90deg,#ffffff_0%,rgba(255,255,255,0.995)_38%,rgba(255,255,255,0.985)_53%,rgba(248,251,255,0.90)_63%,rgba(239,246,255,0.54)_76%,rgba(239,246,255,0.15)_90%,rgba(239,246,255,0.04)_100%)]" />
+      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#ffffff_0%,rgba(255,255,255,0.995)_58%,rgba(255,255,255,0.94)_72%,rgba(248,251,255,0.72)_88%,rgba(239,246,255,0.42)_100%)] md:bg-[linear-gradient(90deg,#ffffff_0%,rgba(255,255,255,0.997)_40%,rgba(255,255,255,0.988)_55%,rgba(248,251,255,0.92)_65%,rgba(239,246,255,0.56)_77%,rgba(239,246,255,0.16)_90%,rgba(239,246,255,0.04)_100%)]" />
       <div className="absolute inset-0 -z-20 hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.04)_58%,rgba(255,255,255,0.86)_100%)] md:block" />
       <div className="hidden md:block">
         <MolecularBackground />
       </div>
-      <div className="absolute inset-0 -z-10 opacity-[0.08] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.22)_1px,transparent_0)] [background-size:24px_24px] md:opacity-[0.16]" />
+      <div className="absolute inset-0 -z-10 opacity-[0.06] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.20)_1px,transparent_0)] [background-size:26px_26px] md:opacity-[0.12]" />
       <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-white via-white/80 to-transparent md:h-52" />
 
-      <Container className="flex flex-col justify-start pb-14 pt-10 sm:pb-16 sm:pt-14 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-20">
-        <div className="relative z-10 w-full">
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700 sm:text-sm sm:tracking-[0.22em]" data-hero-intro>
+      <Container className="flex flex-col justify-start pb-14 pt-9 sm:pb-16 sm:pt-12 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-16">
+        <div className="relative z-10 w-full max-w-5xl md:-translate-y-6">
+          <p className="text-xs font-black uppercase tracking-[0.21em] text-blue-700 sm:text-sm sm:tracking-[0.24em]" data-hero-intro>
             URECHEM CHEMICAL
           </p>
           <h1
-            className="mt-4 max-w-[21rem] text-[clamp(2.55rem,11vw,3.05rem)] font-black leading-[0.92] tracking-[-0.045em] text-blue-950 sm:mt-6 sm:max-w-6xl sm:text-[clamp(3.4rem,7.4vw,7.8rem)] sm:leading-[0.86] sm:tracking-[-0.055em]"
+            className="mt-3 max-w-[20rem] text-[clamp(2.3rem,10vw,2.8rem)] font-black leading-[0.94] tracking-[-0.042em] text-blue-950 sm:mt-4 sm:max-w-5xl sm:text-[clamp(3.1rem,5.7vw,6.15rem)] sm:leading-[0.9] sm:tracking-[-0.052em]"
             data-hero-intro
           >
             Intelligent chemistry for better polyurethane solutions.
           </h1>
-          <p className="mt-6 max-w-[22rem] text-xl font-black leading-tight text-sky-700 sm:mt-7 sm:max-w-none sm:text-3xl" data-hero-intro>
+          <p className="mt-4 max-w-[22rem] text-xl font-black leading-tight text-sky-700 sm:mt-5 sm:max-w-none sm:text-3xl" data-hero-intro>
             We deliver what we promise.
           </p>
-          <p className="mt-4 max-w-[34rem] text-base leading-7 text-slate-700 sm:mt-5 sm:text-xl sm:leading-8" data-hero-intro>
+          <p className="mt-3 max-w-2xl text-base leading-7 text-slate-700 sm:mt-4 sm:text-lg sm:leading-8" data-hero-intro>
             Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
           </p>
-
-          <div className="mt-6 grid max-w-[34rem] grid-cols-1 gap-2.5 sm:mt-8 sm:flex sm:max-w-none sm:flex-row sm:flex-wrap sm:gap-3" data-hero-intro>
-            <ButtonLink className="h-11 w-full px-4 text-sm sm:h-12 sm:w-auto sm:px-6 sm:text-base" href="/ai-solution-finder" size="lg">
-              Describe Your Challenge
-              <ArrowRight aria-hidden="true" className="h-4 w-4" />
-            </ButtonLink>
-            <ButtonLink className="h-11 w-full px-4 text-sm sm:h-12 sm:w-auto sm:px-6 sm:text-base" href="/contact?type=Consultation%20request" size="lg" variant="secondary">
-              <MessageSquareText aria-hidden="true" className="h-4 w-4" />
-              Talk to a Consultant
-            </ButtonLink>
-            <ButtonLink className="h-11 w-full px-4 text-sm sm:h-12 sm:w-auto sm:px-6 sm:text-base" href="/products" size="lg" variant="ghost">
-              Explore Products
-            </ButtonLink>
-          </div>
         </div>
       </Container>
 
