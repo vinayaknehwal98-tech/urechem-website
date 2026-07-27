@@ -117,20 +117,20 @@ export function HeroSection() {
       <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-white via-white/80 to-transparent md:h-52" />
 
       <Container className="flex flex-col justify-start pb-14 pt-9 sm:pb-16 sm:pt-12 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-16">
-        <div className="relative z-10 w-full max-w-4xl md:-translate-y-7">
+        <div className="relative z-10 w-full max-w-3xl md:-translate-y-8">
           <p className="text-xs font-black uppercase tracking-[0.21em] text-blue-700 sm:text-sm sm:tracking-[0.24em]" data-hero-intro>
             URECHEM CHEMICAL
           </p>
           <h1
-            className="mt-3 max-w-[20rem] text-[clamp(2.2rem,9.4vw,2.65rem)] font-black leading-[0.96] tracking-[-0.04em] text-blue-950 sm:mt-4 sm:max-w-4xl sm:text-[clamp(2.75rem,4vw,4.25rem)] sm:leading-[0.95] sm:tracking-[-0.045em]"
+            className="mt-3 max-w-[20rem] text-[clamp(2.15rem,9vw,2.55rem)] font-black leading-[0.97] tracking-[-0.038em] text-blue-950 sm:mt-4 sm:max-w-3xl sm:text-[clamp(2.55rem,3.25vw,3.5rem)] sm:leading-[0.98] sm:tracking-[-0.04em]"
             data-hero-intro
           >
             Intelligent chemistry for better polyurethane solutions.
           </h1>
-          <p className="mt-4 max-w-[22rem] text-lg font-black leading-tight text-sky-700 sm:mt-5 sm:max-w-none sm:text-2xl" data-hero-intro>
+          <p className="mt-3 max-w-[22rem] text-lg font-black leading-tight text-sky-700 sm:mt-4 sm:max-w-none sm:text-[1.35rem]" data-hero-intro>
             We deliver what we promise.
           </p>
-          <p className="mt-3 max-w-xl text-base leading-7 text-slate-700 sm:mt-4 sm:text-lg sm:leading-8" data-hero-intro>
+          <p className="mt-2.5 max-w-lg text-base leading-7 text-slate-700 sm:mt-3 sm:text-base sm:leading-7" data-hero-intro>
             Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
           </p>
         </div>
