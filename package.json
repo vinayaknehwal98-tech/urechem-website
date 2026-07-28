@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "brand:normalize": "node scripts/normalize-brand-name.mjs",
+    "predev": "npm run brand:normalize",
     "dev": "next dev",
+    "prebuild": "npm run brand:normalize",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
