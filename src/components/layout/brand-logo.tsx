@@ -14,58 +14,33 @@ export function BrandLogo({
   className,
   compact = false,
   priority = false,
-  tone = "light",
 }: BrandLogoProps) {
   return (
     <span
       className={cn(
         "relative flex shrink-0 items-center",
         compact
-          ? "h-10 w-[11.25rem] gap-2 sm:h-12 sm:w-[13.5rem]"
-          : "h-10 w-[11.5rem] gap-2 sm:h-14 sm:w-[16.75rem] sm:gap-2.5",
+          ? "h-10 w-[9.5rem] sm:h-12 sm:w-[11.25rem]"
+          : "h-10 w-[9.5rem] sm:h-14 sm:w-[13rem]",
         className,
       )}
+      data-urechem-logo-mark
     >
-      <span
+      <Image
+        alt="Urechem Chemicals"
         className={cn(
-          "relative grid shrink-0 place-items-center transition duration-500 group-hover:-translate-y-0.5 group-hover:drop-shadow-[0_8px_18px_rgba(14,165,233,0.24)]",
-          compact ? "h-9 w-9 sm:h-11 sm:w-11" : "h-10 w-10 sm:h-14 sm:w-14",
+          "h-full w-full object-contain object-left transition duration-500 group-hover:-translate-y-0.5 group-hover:drop-shadow-[0_8px_18px_rgba(14,165,233,0.24)]",
           animateDrop && "logo-drop-in",
         )}
-        data-urechem-logo-mark
-      >
-        <Image
-          alt=""
-          aria-hidden="true"
-          className="logo-mark-float h-full w-full object-contain"
-          height={256}
-          priority={priority}
-          src="/brand/urechem-mark.png"
-          width={256}
-        />
-      </span>
-      <span className="min-w-0">
-        <span
-          className={cn(
-            "logo-name-reveal block whitespace-nowrap font-black uppercase leading-none tracking-[-0.035em]",
-            compact ? "text-[0.82rem] sm:text-[0.98rem]" : "text-[0.82rem] sm:text-[1.22rem]",
-            tone === "dark" ? "text-white" : "text-blue-950",
-          )}
-          data-urechem-logo-name
-        >
-          Urechem Chemical
-        </span>
-        <span
-          className={cn(
-            "logo-tagline-reveal mt-1 block whitespace-nowrap font-bold leading-none transition-colors duration-300 sm:mt-1.5",
-            compact ? "text-[0.5rem] sm:text-[0.58rem]" : "text-[0.5rem] sm:text-[0.65rem]",
-            tone === "dark" ? "text-cyan-100/80 group-hover:text-cyan-100" : "text-blue-600 group-hover:text-sky-600",
-          )}
-          data-urechem-logo-tagline
-        >
-          We deliver what we promise
-        </span>
-      </span>
+        height={243}
+        priority={priority}
+        sizes={compact ? "(min-width: 640px) 180px, 152px" : "(min-width: 640px) 208px, 152px"}
+        src="/brand/urechem-logo.png"
+        width={900}
+      />
+
+      <span aria-hidden="true" className="sr-only" data-urechem-logo-name />
+      <span aria-hidden="true" className="sr-only" data-urechem-logo-tagline />
     </span>
   );
 }
