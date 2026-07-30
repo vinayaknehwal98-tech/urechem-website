@@ -1,9 +1,9 @@
 import { ArrowRight, CheckCircle2, Droplets, ShieldCheck } from "lucide-react";
-import { AnimatedImage } from "@/components/media/animated-image";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 import { ureshieldProducts, ureshieldReferenceNote } from "@/data/ureshield";
+import { getProductBackground } from "@/data/product-backgrounds";
 
 const REMOVED_URESHIELD_PRODUCTS = new Set([
   "UreShield DrucPietra",
@@ -21,34 +21,63 @@ export default function Page() {
   const visibleProducts = ureshieldProducts.filter(
     (product) => !REMOVED_URESHIELD_PRODUCTS.has(product.name),
   );
+  const background = getProductBackground("ureshield-waterproofing-polyurea-systems");
 
   return (
     <>
-      <section className="relative overflow-hidden border-b border-cyan-200/15 bg-[linear-gradient(135deg,#04111f,#0b2840_58%,#0b4a6f)] py-18 sm:py-24">
-        <div className="absolute inset-0 opacity-25 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:24px_24px]" />
-        <Container className="relative z-10">
-          <SectionLabel>Urechem Chemicals</SectionLabel>
-          <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-center">
+      <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden border-b border-blue-100 py-16 sm:py-20 lg:py-24">
+        <div
+          aria-hidden="true"
+          className="application-background-motion absolute inset-0 -z-30 bg-cover"
+          style={{
+            backgroundImage: `url(${background.src})`,
+            backgroundPosition: background.position,
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-20"
+          style={{
+            background:
+              "linear-gradient(90deg,rgba(248,251,255,0.98) 0%,rgba(248,251,255,0.93) 38%,rgba(239,246,255,0.70) 62%,rgba(3,20,38,0.38) 82%,rgba(3,20,38,0.56) 100%)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(circle at 78% 36%,rgba(14,165,233,0.22),transparent 27rem),radial-gradient(circle at 15% 86%,rgba(37,99,235,0.11),transparent 24rem)",
+          }}
+        />
+
+        <Container className="relative w-full">
+          <div className="grid gap-10 lg:grid-cols-[1fr_0.72fr] lg:items-center xl:gap-16">
             <div>
-              <h1 className="max-w-5xl text-balance text-5xl font-black leading-[0.98] text-white sm:text-6xl lg:text-7xl">
+              <SectionLabel>Urechem Chemicals</SectionLabel>
+              <h1 className="mt-6 max-w-5xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
                 UreShield waterproofing and polyurea systems
               </h1>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-200">
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-700">
                 Polyurethane membranes and polyurea coatings for waterproofing and durable surface protection across construction and industrial applications.
               </p>
-            </div>
-            <div className="grid gap-4">
-              <AnimatedImage
-                alt="Construction worker finishing a concrete surface before waterproofing protection"
-                className="h-64"
-                imageClassName="object-center"
-                sizes="(min-width: 1024px) 38vw, 100vw"
-                src="https://images.unsplash.com/photo-1685464196339-46a985b2049b?auto=format&fit=crop&fm=jpg&q=82&w=1900"
-              />
-              <div className="rounded-[var(--radius-lg)] border border-cyan-200/20 bg-white/7 p-5 backdrop-blur-sm">
-                <ShieldCheck aria-hidden="true" className="h-7 w-7 text-cyan-200" />
-                <p className="mt-4 text-sm leading-6 text-slate-200">{ureshieldReferenceNote}</p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <ButtonLink href="/contact?type=Consultation%20request&product=UreShield" size="lg">
+                  Discuss a UreShield requirement
+                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                </ButtonLink>
+                <ButtonLink href="/products/compare" size="lg" variant="secondary">
+                  Compare systems
+                </ButtonLink>
               </div>
+            </div>
+
+            <div className="rounded-[2rem] border border-white/45 bg-white/72 p-6 shadow-[0_28px_90px_rgba(2,18,36,0.24)] backdrop-blur-md sm:p-8">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-700 shadow-lg">
+                <ShieldCheck aria-hidden="true" className="h-7 w-7 text-white" />
+              </span>
+              <p className="mt-5 text-sm font-black uppercase tracking-[0.16em] text-blue-700">Reference boundary</p>
+              <p className="mt-3 leading-7 text-slate-700">{ureshieldReferenceNote}</p>
             </div>
           </div>
         </Container>
@@ -56,7 +85,14 @@ export default function Page() {
 
       <section className="bg-[linear-gradient(180deg,#f8fbff,#eaf4ff)] py-16 sm:py-20">
         <Container>
-          <div className="grid gap-6 lg:grid-cols-2" data-catalog="waterproofing-polyurea-only">
+          <div className="max-w-4xl">
+            <SectionLabel>UreShield range</SectionLabel>
+            <h2 className="mt-5 text-4xl font-black tracking-[-0.04em] text-blue-950 sm:text-5xl">
+              Waterproofing membranes and polyurea protection systems
+            </h2>
+          </div>
+
+          <div className="mt-10 grid gap-6 lg:grid-cols-2" data-catalog="waterproofing-polyurea-only">
             {visibleProducts.map((product) => (
               <article className="overflow-hidden rounded-[var(--radius-lg)] border border-blue-200 bg-white shadow-[0_18px_55px_rgba(30,64,175,0.09)]" key={product.slug}>
                 <div className="border-b border-blue-100 bg-blue-50 p-6 sm:p-7">
@@ -66,7 +102,7 @@ export default function Page() {
                       {product.category}
                     </span>
                   </div>
-                  <h2 className="mt-5 text-2xl font-black text-blue-950 sm:text-3xl">{product.name}</h2>
+                  <h3 className="mt-5 text-2xl font-black text-blue-950 sm:text-3xl">{product.name}</h3>
                   <p className="mt-3 leading-7 text-slate-700">{product.summary}</p>
                   <div className="mt-5 flex flex-wrap gap-2">
                     {product.features.map((feature) => (
@@ -83,7 +119,7 @@ export default function Page() {
 
                 <div className="grid gap-7 p-6 sm:p-7 md:grid-cols-2">
                   <div>
-                    <h3 className="font-black text-blue-950">Benefits</h3>
+                    <h4 className="font-black text-blue-950">Benefits</h4>
                     <ul className="mt-4 grid gap-3">
                       {product.benefits.map((benefit) => (
                         <li className="flex gap-3 text-sm leading-6 text-slate-700" key={benefit}>
@@ -94,7 +130,7 @@ export default function Page() {
                     </ul>
                   </div>
                   <div>
-                    <h3 className="font-black text-blue-950">Applications</h3>
+                    <h4 className="font-black text-blue-950">Applications</h4>
                     <ul className="mt-4 grid gap-3">
                       {product.applications.map((application) => (
                         <li className="flex gap-3 text-sm leading-6 text-slate-700" key={application}>
