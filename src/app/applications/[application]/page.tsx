@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: Promise<{ application: 
         <>
           <div
             aria-hidden="true"
-            className="thermal-insulation-background-zoom absolute inset-0 -z-30 bg-cover bg-[center_44%] md:bg-[center_48%]"
+            className="foam-background-zoom absolute inset-0 -z-30 bg-cover bg-[center_44%] md:bg-[center_48%]"
             style={{ backgroundImage: `url(${THERMAL_INSULATION_BACKGROUND})` }}
           />
           <div
