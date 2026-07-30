@@ -83,14 +83,14 @@ export function HeroSection() {
   }, [shouldReduceMotion, videoFailed]);
 
   return (
-    <section className="relative isolate overflow-hidden border-b border-blue-100 bg-white md:min-h-[calc(100dvh-4.5rem)]">
+    <section className="relative isolate overflow-hidden border-b border-blue-100 bg-slate-100 md:min-h-[calc(100dvh-4.5rem)]">
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 -z-30 h-[36%] min-h-64 overflow-hidden bg-slate-100 bg-cover bg-[82%_center] md:inset-0 md:h-auto md:min-h-0 md:bg-[72%_center]"
+        className="absolute inset-0 -z-30 overflow-hidden bg-slate-100 bg-cover bg-[70%_center] md:bg-center"
         style={{ backgroundImage: `url(${HERO_POSTER})` }}
       >
         <video
-          className={`h-full w-full object-cover object-[82%_center] [backface-visibility:hidden] [filter:saturate(.78)_brightness(1.08)_contrast(.92)] [transform:translateZ(0)] transition-opacity duration-700 ease-out md:object-[72%_center] ${
+          className={`h-full w-full object-cover object-[70%_center] [backface-visibility:hidden] [filter:saturate(.84)_brightness(1.02)_contrast(.94)] [transform:translateZ(0)] transition-opacity duration-700 ease-out md:object-center ${
             videoIsPlaying && !videoFailed && !shouldReduceMotion ? "opacity-100" : "opacity-0"
           }`}
           disablePictureInPicture
@@ -108,13 +108,13 @@ export function HeroSection() {
         </video>
       </div>
 
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,#ffffff_0%,rgba(255,255,255,0.995)_58%,rgba(255,255,255,0.94)_72%,rgba(248,251,255,0.72)_88%,rgba(239,246,255,0.42)_100%)] md:bg-[linear-gradient(90deg,#ffffff_0%,rgba(255,255,255,0.997)_40%,rgba(255,255,255,0.988)_55%,rgba(248,251,255,0.92)_65%,rgba(239,246,255,0.56)_77%,rgba(239,246,255,0.16)_90%,rgba(239,246,255,0.04)_100%)]" />
-      <div className="absolute inset-0 -z-20 hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.10)_0%,rgba(255,255,255,0.04)_58%,rgba(255,255,255,0.86)_100%)] md:block" />
+      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(255,255,255,0.90)_0%,rgba(255,255,255,0.78)_48%,rgba(248,251,255,0.52)_72%,rgba(239,246,255,0.24)_100%)] md:bg-[linear-gradient(90deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.78)_34%,rgba(255,255,255,0.58)_52%,rgba(239,246,255,0.26)_73%,rgba(239,246,255,0.06)_100%)]" />
+      <div className="absolute inset-0 -z-20 hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0.01)_62%,rgba(255,255,255,0.34)_100%)] md:block" />
       <div className="hidden md:block">
         <MolecularBackground />
       </div>
-      <div className="absolute inset-0 -z-10 opacity-[0.06] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.20)_1px,transparent_0)] [background-size:26px_26px] md:opacity-[0.12]" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-white via-white/80 to-transparent md:h-52" />
+      <div className="absolute inset-0 -z-10 opacity-[0.04] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.20)_1px,transparent_0)] [background-size:26px_26px] md:opacity-[0.08]" />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-white/45 via-white/10 to-transparent md:h-40" />
 
       <Container className="flex flex-col justify-start pb-14 pt-9 sm:pb-16 sm:pt-12 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-16">
         <div className="relative z-10 w-full max-w-3xl md:-translate-y-8">
