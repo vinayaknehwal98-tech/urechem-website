@@ -4,6 +4,9 @@ import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 import { completeProductRange } from "@/data/complete-product-range";
 
+const PU_FOAM_BACKGROUND =
+  "https://images.unsplash.com/photo-1768321917437-1f1f6ae2ad28?auto=format&fit=crop&fm=jpg&q=86&w=2200";
+
 export const metadata = {
   title: "Complete Product Range",
   description:
@@ -16,7 +19,7 @@ export default function Page() {
       <section className="relative overflow-hidden border-b border-cyan-200/15 bg-[linear-gradient(135deg,#03101e,#09263e_55%,#075985)] py-18 sm:py-24">
         <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.32)_1px,transparent_0)] [background-size:26px_26px]" />
         <Container className="relative z-10">
-          <div className="grid gap-10 lg:grid-cols-[1fr_0.82fr] lg:items-center">
+          <div className="grid gap-10 lg:grid-cols-[1fr_0.92fr] lg:items-center">
             <div>
               <SectionLabel>Combined technical range</SectionLabel>
               <h1 className="mt-6 max-w-5xl text-balance text-5xl font-black leading-[0.98] tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">
@@ -36,57 +39,135 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-cyan-100/20 bg-white/7 p-6 shadow-[var(--shadow-deep)] backdrop-blur-sm sm:p-8">
-              <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-300/15 blur-3xl motion-safe:animate-pulse" />
+            <div
+              className="relative isolate min-h-[460px] overflow-hidden rounded-[var(--radius-lg)] border border-blue-200/60 p-5 shadow-[0_30px_90px_rgba(30,64,175,0.24)] sm:p-7"
+              style={{ background: "linear-gradient(145deg, #061a31 0%, #082f49 48%, #0c4a6e 100%)" }}
+            >
+              <div
+                aria-hidden="true"
+                className="foam-background-zoom absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${PU_FOAM_BACKGROUND})` }}
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(2,18,36,0.58) 0%, rgba(7,47,78,0.48) 48%, rgba(15,76,110,0.60) 100%)",
+                }}
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 opacity-35"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 18% 18%, rgba(103,232,249,0.65), transparent 22%), radial-gradient(circle at 84% 76%, rgba(59,130,246,0.62), transparent 24%)",
+                }}
+              />
+              <div className="relative z-10 flex justify-center">
+                <span
+                  className="rounded-full border px-4 py-2 text-xs font-black uppercase tracking-[0.18em]"
+                  style={{
+                    background: "rgba(255,255,255,0.88)",
+                    borderColor: "rgba(186,230,253,0.95)",
+                    color: "#075985",
+                  }}
+                >
+                  PU chemistry pathways
+                </span>
+              </div>
+
               <svg
                 aria-labelledby="complete-range-visual-title complete-range-visual-description"
-                className="relative mx-auto h-auto w-full max-w-xl"
+                className="relative z-10 mx-auto mt-3 h-auto w-full max-w-xl"
                 role="img"
                 viewBox="0 0 720 520"
               >
                 <title id="complete-range-visual-title">Urechem product universe</title>
                 <desc id="complete-range-visual-description">
-                  A network of product and material pathways connected around Urechem technical review.
+                  A high-contrast network of product and material pathways connected around Urechem technical review.
                 </desc>
                 <defs>
                   <linearGradient id="range-node" x1="0" x2="1" y1="0" y2="1">
-                    <stop offset="0" stopColor="#67e8f9" />
-                    <stop offset="1" stopColor="#2563eb" />
+                    <stop offset="0" stopColor="#38bdf8" />
+                    <stop offset="0.52" stopColor="#2563eb" />
+                    <stop offset="1" stopColor="#1e3a8a" />
                   </linearGradient>
                   <linearGradient id="range-core" x1="0" x2="1" y1="0" y2="1">
-                    <stop offset="0" stopColor="#e0f2fe" />
-                    <stop offset="1" stopColor="#7dd3fc" />
+                    <stop offset="0" stopColor="#ecfeff" />
+                    <stop offset="0.55" stopColor="#bae6fd" />
+                    <stop offset="1" stopColor="#60a5fa" />
                   </linearGradient>
+                  <filter id="node-shadow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feDropShadow dx="0" dy="11" floodColor="#020617" floodOpacity="0.45" stdDeviation="9" />
+                  </filter>
+                  <filter id="node-glow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feDropShadow dx="0" dy="0" floodColor="#67e8f9" floodOpacity="0.55" stdDeviation="9" />
+                  </filter>
                 </defs>
-                <g fill="none" stroke="#67e8f9" strokeOpacity="0.42" strokeWidth="3">
+                <g fill="none" stroke="#e0f2fe" strokeOpacity="0.76" strokeWidth="4">
                   <path d="M360 260 170 135M360 260 360 70M360 260 550 135M360 260 615 300M360 260 510 445M360 260 210 445M360 260 105 300" />
                 </g>
-                <g fill="url(#range-node)" stroke="#cffafe" strokeWidth="3">
-                  <path d="m170 78 50 29v58l-50 29-50-29v-58z" />
-                  <path d="m360 15 50 29v58l-50 29-50-29V44z" />
-                  <path d="m550 78 50 29v58l-50 29-50-29v-58z" />
-                  <path d="m615 243 50 29v58l-50 29-50-29v-58z" />
-                  <path d="m510 388 50 29v58l-50 29-50-29v-58z" />
-                  <path d="m210 388 50 29v58l-50 29-50-29v-58z" />
-                  <path d="m105 243 50 29v58l-50 29-50-29v-58z" />
+                <g fill="url(#range-node)" filter="url(#node-shadow)" stroke="#e0f2fe" strokeWidth="4">
+                  <path d="m170 72 56 32v64l-56 32-56-32v-64z" />
+                  <path d="m360 7 56 32v64l-56 32-56-32V39z" />
+                  <path d="m550 72 56 32v64l-56 32-56-32v-64z" />
+                  <path d="m615 237 56 32v64l-56 32-56-32v-64z" />
+                  <path d="m510 382 56 32v64l-56 32-56-32v-64z" />
+                  <path d="m210 382 56 32v64l-56 32-56-32v-64z" />
+                  <path d="m105 237 56 32v64l-56 32-56-32v-64z" />
                 </g>
-                <path d="m360 167 81 47v93l-81 47-81-47v-93z" fill="url(#range-core)" stroke="#fff" strokeWidth="4" />
-                <g fill="#fff" fontFamily="Arial, sans-serif" fontSize="18" fontWeight="700" textAnchor="middle">
-                  <text x="170" y="142">SPRAY FOAM</text>
-                  <text x="360" y="79">MDI</text>
-                  <text x="550" y="142">POLYOLS</text>
-                  <text x="615" y="307">MEMBRANES</text>
-                  <text x="510" y="452">POLYUREA</text>
-                  <text x="210" y="452">TPU + AIDS</text>
-                  <text x="105" y="307">FLEXIBLE</text>
+                <path
+                  d="m360 158 89 51v102l-89 51-89-51V209z"
+                  fill="url(#range-core)"
+                  filter="url(#node-glow)"
+                  stroke="#fff"
+                  strokeWidth="5"
+                />
+                <g
+                  fill="#ffffff"
+                  fontFamily="Arial, sans-serif"
+                  fontSize="17"
+                  fontWeight="900"
+                  letterSpacing="0.4"
+                  paintOrder="stroke"
+                  stroke="#082f49"
+                  strokeWidth="1.8"
+                  textAnchor="middle"
+                >
+                  <text x="170" y="130">
+                    <tspan x="170">SPRAY</tspan>
+                    <tspan dy="21" x="170">FOAM</tspan>
+                  </text>
+                  <text fontSize="20" x="360" y="78">MDI</text>
+                  <text x="550" y="141">POLYOLS</text>
+                  <text fontSize="15.5" x="615" y="306">MEMBRANES</text>
+                  <text fontSize="16" x="510" y="451">POLYUREA</text>
+                  <text x="210" y="438">
+                    <tspan x="210">TPU +</tspan>
+                    <tspan dy="21" x="210">AIDS</tspan>
+                  </text>
+                  <text fontSize="15.5" x="105" y="289">
+                    <tspan x="105">FLEXIBLE</tspan>
+                    <tspan dy="21" x="105">SYSTEMS</tspan>
+                  </text>
                 </g>
                 <g fill="#082f49" fontFamily="Arial, sans-serif" textAnchor="middle">
-                  <text fontSize="25" fontWeight="800" x="360" y="250">URECHEM</text>
-                  <text fontSize="17" fontWeight="700" x="360" y="278">TECHNICAL RANGE</text>
+                  <text fontSize="31" fontWeight="900" letterSpacing="0.8" x="360" y="250">URECHEM</text>
+                  <text fontSize="18" fontWeight="900" letterSpacing="1.2" x="360" y="280">TECHNICAL</text>
+                  <text fontSize="18" fontWeight="900" letterSpacing="1.2" x="360" y="302">RANGE</text>
                 </g>
               </svg>
-              <p className="relative mt-5 text-center text-sm leading-6 text-cyan-50/85">
-                Each pathway stays connected to application context, document requests and specialist validation rather than unsupported automatic selection.
+
+              <p
+                className="relative z-10 mx-auto -mt-1 max-w-xl rounded-2xl border px-5 py-4 text-center text-sm font-semibold leading-6 shadow-lg backdrop-blur-md"
+                style={{
+                  background: "rgba(2,18,36,0.72)",
+                  borderColor: "rgba(186,230,253,0.35)",
+                  color: "#f0f9ff",
+                }}
+              >
+                Clear product-family pathways connected to application context, document requests and specialist validation.
               </p>
             </div>
           </div>
