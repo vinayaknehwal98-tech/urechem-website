@@ -209,6 +209,22 @@ main aside {
   }
 }
 
+@keyframes application-background-motion {
+  0% {
+    opacity: 0.82;
+    transform: scale(1.025) translate3d(0, 0, 0);
+  }
+
+  14% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.14) translate3d(-1.25%, -0.8%, 0);
+  }
+}
+
 .logo-drop-in {
   animation: logo-drop-in 1.05s cubic-bezier(0.2, 0.9, 0.24, 1.18) both;
   transform-origin: center bottom;
@@ -231,6 +247,12 @@ main aside {
   animation: foam-background-zoom 14s ease-in-out infinite alternate;
   transform-origin: center;
   will-change: transform;
+}
+
+.application-background-motion {
+  animation: application-background-motion 16s ease-in-out infinite alternate;
+  transform-origin: center;
+  will-change: opacity, transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
