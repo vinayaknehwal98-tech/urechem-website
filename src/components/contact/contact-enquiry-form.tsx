@@ -4,7 +4,6 @@ import { Check, CheckCircle2, Clipboard, Download, Mail } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { FormEvent, useMemo, useState } from "react";
 import { products } from "@/data/catalog";
-import { injectionGroutingProfiles } from "@/data/injection-grouting";
 import { tpuPathways } from "@/data/tpu-materials";
 
 const enquiryTypes = [
@@ -43,7 +42,6 @@ function safeFilename(value: string) {
 
 const enquiryProductOptions = [
   ...products.map((product) => product.name),
-  ...injectionGroutingProfiles.map((profile) => `Injection grouting ${profile.code}`),
   ...tpuPathways.map((pathway) => pathway.name),
 ];
 
