@@ -5,6 +5,12 @@ import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 import { ureshieldProducts, ureshieldReferenceNote } from "@/data/ureshield";
 
+const REMOVED_URESHIELD_PRODUCTS = new Set([
+  "UreShield DrucPietra",
+  "UreShield Druc Pietra V.SF 1",
+  "UreShield DrucHyd 2C",
+]);
+
 export const metadata = {
   title: "UreShield Waterproofing & Polyurea Systems",
   description:
@@ -12,6 +18,10 @@ export const metadata = {
 };
 
 export default function Page() {
+  const visibleProducts = ureshieldProducts.filter(
+    (product) => !REMOVED_URESHIELD_PRODUCTS.has(product.name),
+  );
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-cyan-200/15 bg-[linear-gradient(135deg,#04111f,#0b2840_58%,#0b4a6f)] py-18 sm:py-24">
@@ -46,8 +56,8 @@ export default function Page() {
 
       <section className="bg-[linear-gradient(180deg,#f8fbff,#eaf4ff)] py-16 sm:py-20">
         <Container>
-          <div className="grid gap-6 lg:grid-cols-2">
-            {ureshieldProducts.map((product) => (
+          <div className="grid gap-6 lg:grid-cols-2" data-catalog="waterproofing-polyurea-only">
+            {visibleProducts.map((product) => (
               <article className="overflow-hidden rounded-[var(--radius-lg)] border border-blue-200 bg-white shadow-[0_18px_55px_rgba(30,64,175,0.09)]" key={product.slug}>
                 <div className="border-b border-blue-100 bg-blue-50 p-6 sm:p-7">
                   <div className="flex flex-wrap items-center justify-between gap-4">
