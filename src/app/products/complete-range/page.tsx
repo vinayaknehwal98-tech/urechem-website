@@ -7,7 +7,7 @@ import { completeProductRange } from "@/data/complete-product-range";
 export const metadata = {
   title: "Complete Product Range",
   description:
-    "Explore the combined Urechem Chemicals range across spray foam, MDI, polyols, PPG, waterproofing, grouting, polyurea, TPU and formulation-support pathways.",
+    "Explore the combined Urechem Chemicals range across spray foam, MDI, polyols, PPG, flexible systems, waterproofing, polyurea, TPU and formulation-support pathways.",
 };
 
 export default function Page() {
@@ -23,7 +23,7 @@ export default function Page() {
                 The complete Urechem product universe
               </h1>
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-200">
-                One structured pathway across insulation systems, raw materials, formulated polyurethane systems, waterproofing, grouting, polyurea, TPU and processing support—compiled from the complete supplied technical reference set.
+                One structured pathway across insulation systems, raw materials, flexible polyurethane systems, waterproofing, polyurea, TPU and processing support—compiled from the supplied technical reference set.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <ButtonLink href="/products" size="lg">
@@ -46,7 +46,7 @@ export default function Page() {
               >
                 <title id="complete-range-visual-title">Urechem product universe</title>
                 <desc id="complete-range-visual-description">
-                  A network of unique hexagonal material pathways connected around Urechem technical review.
+                  A network of product and material pathways connected around Urechem technical review.
                 </desc>
                 <defs>
                   <linearGradient id="range-node" x1="0" x2="1" y1="0" y2="1">
@@ -78,7 +78,7 @@ export default function Page() {
                   <text x="615" y="307">MEMBRANES</text>
                   <text x="510" y="452">POLYUREA</text>
                   <text x="210" y="452">TPU + AIDS</text>
-                  <text x="105" y="307">GROUTING</text>
+                  <text x="105" y="307">FLEXIBLE</text>
                 </g>
                 <g fill="#082f49" fontFamily="Arial, sans-serif" textAnchor="middle">
                   <text fontSize="25" fontWeight="800" x="360" y="250">URECHEM</text>
@@ -98,10 +98,10 @@ export default function Page() {
           <div className="max-w-4xl">
             <SectionLabel>Range architecture</SectionLabel>
             <h2 className="mt-5 text-4xl font-black tracking-[-0.035em] text-blue-950 sm:text-5xl">
-              Every supplied product pathway, organised under Urechem
+              Urechem product pathways, organised for technical discovery
             </h2>
             <p className="mt-4 text-lg leading-8 text-slate-700">
-              Repeated brochure material is consolidated, while distinct product, application and processing information remains visible in the most relevant technical pathway.
+              Product and processing information is grouped into the most relevant technical pathway so visitors can find the correct family without unsupported recommendations.
             </p>
           </div>
 
@@ -169,7 +169,7 @@ export default function Page() {
             <div>
               <p className="text-sm font-black uppercase tracking-[0.16em] text-blue-700">Need a controlled recommendation?</p>
               <h2 className="mt-2 max-w-3xl text-2xl font-black text-blue-950 sm:text-3xl">
-                Share the substrate, environment, process, performance target and required documents.
+                Share the application, environment, process, performance target and required documents.
               </h2>
             </div>
             <ButtonLink className="mt-6 shrink-0 sm:mt-0" href="/technical-brief-builder" size="lg">
