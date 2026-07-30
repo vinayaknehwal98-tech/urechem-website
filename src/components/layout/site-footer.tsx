@@ -1,24 +1,8 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  Boxes,
-  FileText,
-  FlaskConical,
-  Mail,
-  Sparkles,
-  UsersRound,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, FlaskConical, Mail, Sparkles } from "lucide-react";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { Container } from "@/components/ui/container";
 import { footerGroups, legalLinks } from "@/data/navigation";
-
-const footerGroupIcons: Record<string, LucideIcon> = {
-  "Product families": Boxes,
-  Applications: FlaskConical,
-  "Technical Center": FileText,
-  Company: UsersRound,
-};
 
 const trustPoints = ["Application-led", "Expert reviewed", "Quality focused"] as const;
 
@@ -26,160 +10,141 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer
-      className="relative isolate overflow-hidden border-t border-blue-100 text-slate-700"
-      style={{
-        background:
-          "radial-gradient(circle at 8% 8%,rgba(14,165,233,0.10),transparent 24rem),radial-gradient(circle at 94% 24%,rgba(37,99,235,0.08),transparent 26rem),linear-gradient(180deg,#f8fbff 0%,#eef5fb 100%)",
-      }}
-    >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-12 left-1/2 -z-10 -translate-x-1/2 select-none whitespace-nowrap text-[18vw] font-black leading-none tracking-[-0.08em] text-blue-950/[0.025]"
+    <footer className="relative overflow-hidden border-t border-[#ded6c8]" style={{ background: "#f4efe6" }}>
+      <section
+        className="relative isolate overflow-hidden"
+        style={{ background: "linear-gradient(120deg,#061525 0%,#0a2944 72%,#0d3b58 100%)" }}
       >
-        URECHEM
-      </div>
+        <svg
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-30"
+          preserveAspectRatio="none"
+          viewBox="0 0 1600 260"
+        >
+          <g fill="none" stroke="rgba(122,218,255,0.45)" strokeWidth="1.5">
+            <path d="M-40 210 C220 40 420 250 680 100 S1130 15 1640 150" />
+            <path d="M130 30 L330 125 L510 52 L735 165 L980 60 L1190 150 L1475 38" />
+          </g>
+          <g fill="#65d5f7">
+            <circle cx="130" cy="30" r="5" />
+            <circle cx="330" cy="125" r="7" />
+            <circle cx="510" cy="52" r="5" />
+            <circle cx="735" cy="165" r="7" />
+            <circle cx="980" cy="60" r="6" />
+            <circle cx="1190" cy="150" r="7" />
+            <circle cx="1475" cy="38" r="5" />
+          </g>
+        </svg>
 
-      <Container className="relative py-11 sm:py-14">
-        <section className="overflow-hidden rounded-[1.6rem] border border-blue-200/70 bg-white/80 shadow-[0_24px_70px_rgba(30,64,175,0.10)] backdrop-blur-sm">
-          <div className="grid gap-7 px-6 py-7 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-blue-700">Technical support</p>
-              <h2 className="mt-2 max-w-3xl text-2xl font-black tracking-[-0.035em] text-blue-950 sm:text-3xl">
-                Have an application challenge? Start with the context, not the catalogue.
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                Share the substrate, process, environment and performance target. We will help structure the next technical step.
+        <Container className="relative grid gap-7 py-9 sm:py-11 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10">
+                <FlaskConical aria-hidden="true" className="h-5 w-5" style={{ color: "#7dd3fc" }} />
+              </span>
+              <p className="text-xs font-black uppercase tracking-[0.2em]" style={{ color: "#f4b942" }}>
+                Technical partnership
               </p>
             </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Link
-                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-700 px-5 font-black text-white shadow-[0_14px_34px_rgba(29,78,216,0.24)] transition duration-200 hover:-translate-y-0.5 hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
-                href="/contact?type=Consultation%20request"
-              >
-                <Mail aria-hidden="true" className="h-4.5 w-4.5" />
-                Start an enquiry
-                <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
-              <Link
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-blue-200 bg-white px-5 font-bold text-blue-950 transition duration-200 hover:-translate-y-0.5 hover:border-blue-400 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
-                href="/ask-urechem-ai"
-              >
-                <Sparkles aria-hidden="true" className="h-4.5 w-4.5 text-blue-600" />
-                Ask Urechem AI
-              </Link>
-            </div>
+            <h2 className="mt-4 text-3xl font-black tracking-[-0.04em] sm:text-4xl" style={{ color: "#ffffff" }}>
+              Tell us what needs to perform.
+            </h2>
+            <p className="mt-3 max-w-2xl leading-7" style={{ color: "#cbd5e1" }}>
+              Share the application, substrate, process and performance target. We will help map the right technical route.
+            </p>
           </div>
-        </section>
 
-        <div className="mt-12 grid gap-x-10 gap-y-12 xl:grid-cols-[1.35fr_repeat(4,minmax(0,1fr))]">
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 font-black shadow-[0_14px_34px_rgba(0,0,0,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(0,0,0,0.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              href="/contact?type=Consultation%20request"
+              style={{ background: "#f4b942", color: "#071a2d" }}
+            >
+              <Mail aria-hidden="true" className="h-4.5 w-4.5" />
+              Discuss a requirement
+              <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+            </Link>
+            <Link
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border px-6 font-bold backdrop-blur-sm transition duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              href="/ask-urechem-ai"
+              style={{ borderColor: "rgba(255,255,255,0.22)", background: "rgba(255,255,255,0.07)", color: "#ffffff" }}
+            >
+              <Sparkles aria-hidden="true" className="h-4.5 w-4.5" style={{ color: "#7dd3fc" }} />
+              Ask Urechem AI
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      <Container className="relative py-11 sm:py-14">
+        <div className="grid gap-x-12 gap-y-11 xl:grid-cols-[1.35fr_repeat(4,minmax(0,1fr))]">
           <section className="max-w-sm">
             <Link
-              className="group inline-flex rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+              className="group inline-flex rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a2944]"
               href="/"
             >
               <BrandLogo className="h-14 w-[13rem] sm:h-16 sm:w-[15rem]" />
             </Link>
+            <p className="mt-6 text-sm leading-7 text-[#596273]">
+              Technical polyurethane and specialty-chemical solutions for application problem-solving, formulation support, validation and supply.
+            </p>
 
-            <div className="relative mt-7 aspect-[4/3] max-w-[18rem] overflow-hidden rounded-[1.5rem] border border-blue-200/80 bg-white/70 shadow-[0_18px_45px_rgba(30,64,175,0.09)]">
-              <svg aria-hidden="true" className="h-full w-full" viewBox="0 0 360 270">
-                <defs>
-                  <linearGradient id="footer-drop-gradient" x1="0" x2="1" y1="0" y2="1">
-                    <stop offset="0" stopColor="#67e8f9" />
-                    <stop offset="0.52" stopColor="#38bdf8" />
-                    <stop offset="1" stopColor="#1d4ed8" />
-                  </linearGradient>
-                  <linearGradient id="footer-line-gradient" x1="0" x2="1">
-                    <stop offset="0" stopColor="#93c5fd" stopOpacity="0.18" />
-                    <stop offset="0.5" stopColor="#2563eb" stopOpacity="0.55" />
-                    <stop offset="1" stopColor="#67e8f9" stopOpacity="0.15" />
-                  </linearGradient>
-                </defs>
-
-                <rect height="270" rx="26" width="360" fill="rgba(255,255,255,0.22)" />
-                <g fill="none" stroke="url(#footer-line-gradient)" strokeWidth="2">
-                  <path d="M32 198 92 154 148 182 208 126 276 154 330 108" />
-                  <path d="M28 78 96 112 156 72 222 96 292 54" />
-                  <path d="M96 112 92 154M156 72 148 182M222 96 208 126M292 54 276 154" />
-                </g>
-                <g fill="#bfdbfe" stroke="#ffffff" strokeWidth="3">
-                  <circle cx="32" cy="198" r="8" />
-                  <circle cx="92" cy="154" r="10" />
-                  <circle cx="148" cy="182" r="7" />
-                  <circle cx="208" cy="126" r="9" />
-                  <circle cx="276" cy="154" r="8" />
-                  <circle cx="330" cy="108" r="6" />
-                  <circle cx="28" cy="78" r="7" />
-                  <circle cx="96" cy="112" r="8" />
-                  <circle cx="156" cy="72" r="6" />
-                  <circle cx="222" cy="96" r="8" />
-                  <circle cx="292" cy="54" r="6" />
-                </g>
-
-                <circle cx="180" cy="136" r="66" fill="#dbeafe" opacity="0.72" />
-                <circle cx="180" cy="136" r="51" fill="#eff6ff" opacity="0.92" />
-                <path
-                  d="M180 78c-19 30-43 54-43 82 0 24 19 43 43 43s43-19 43-43c0-28-24-52-43-82Z"
-                  fill="url(#footer-drop-gradient)"
-                  stroke="#ffffff"
-                  strokeWidth="5"
-                />
-                <path d="M165 151c3 15 12 24 27 28" fill="none" stroke="#ffffff" strokeLinecap="round" strokeWidth="5" opacity="0.82" />
-              </svg>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {trustPoints.map((point) => (
+                <span
+                  className="rounded-full border px-3 py-1.5 text-xs font-bold"
+                  key={point}
+                  style={{ borderColor: "#d8cfbf", background: "rgba(255,255,255,0.56)", color: "#16324a" }}
+                >
+                  {point}
+                </span>
+              ))}
             </div>
 
-            <p className="mt-6 text-sm leading-7 text-slate-600">
-              Technical polyurethane and specialty-chemical solutions supported by application context, formulation work and expert validation.
+            <p className="mt-7 text-sm font-black uppercase tracking-[0.13em]" style={{ color: "#b7791f" }}>
+              We deliver what we promise.
             </p>
           </section>
 
-          {footerGroups.map((group) => {
-            const Icon = footerGroupIcons[group.title] ?? Boxes;
-            return (
-              <section className="min-w-0" key={group.title}>
-                <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-blue-200 bg-white text-blue-700 shadow-[0_8px_20px_rgba(30,64,175,0.08)]">
-                    <Icon aria-hidden="true" className="h-4.5 w-4.5" />
-                  </span>
-                  <h2 className="font-black tracking-[-0.015em] text-blue-950">{group.title}</h2>
-                </div>
-                <div className="mt-4 h-0.5 w-10 rounded-full bg-blue-600" />
-                <ul className="mt-5 grid gap-3">
-                  {group.links.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        className="group flex items-start gap-2 text-sm leading-6 text-slate-600 transition duration-200 hover:translate-x-0.5 hover:text-blue-800 focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
-                        href={link.href}
-                      >
-                        <ArrowRight aria-hidden="true" className="mt-1.5 h-3.5 w-3.5 shrink-0 text-blue-500 transition-transform duration-200 group-hover:translate-x-0.5" />
-                        <span>{link.label}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            );
-          })}
+          {footerGroups.map((group, groupIndex) => (
+            <section className="min-w-0" key={group.title}>
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-black tabular-nums" style={{ color: "#c78a24" }}>
+                  0{groupIndex + 1}
+                </span>
+                <h2 className="font-black tracking-[-0.015em]" style={{ color: "#071a2d" }}>
+                  {group.title}
+                </h2>
+              </div>
+              <div className="mt-4 h-px w-full" style={{ background: "linear-gradient(90deg,#c78a24,rgba(199,138,36,0.10))" }} />
+              <ul className="mt-5 grid gap-2.5">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      className="group flex items-start gap-2 text-sm leading-6 transition duration-200 hover:translate-x-0.5 focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a2944]"
+                      href={link.href}
+                      style={{ color: "#5f6774" }}
+                    >
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="mt-1.5 h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+                        style={{ color: "#c78a24" }}
+                      />
+                      <span className="transition-colors duration-200 group-hover:text-[#071a2d]">{link.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
         </div>
 
-        <div className="mt-12 flex flex-col gap-5 border-t border-blue-200/80 pt-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap gap-2.5">
-            {trustPoints.map((point) => (
-              <span className="rounded-full border border-blue-200 bg-white/70 px-3.5 py-2 text-xs font-bold text-blue-900" key={point}>
-                {point}
-              </span>
-            ))}
-          </div>
-          <p className="text-sm font-black uppercase tracking-[0.14em] text-blue-800">We deliver what we promise.</p>
-        </div>
-
-        <div className="mt-6 flex flex-col gap-4 border-t border-blue-200/80 pt-5 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t pt-5 text-sm sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: "#d8cfbf", color: "#747b86" }}>
           <p>&copy; {year} Urechem Chemicals. All rights reserved.</p>
           <nav aria-label="Legal links" className="flex flex-wrap gap-x-6 gap-y-2">
             {legalLinks.map((link) => (
               <Link
-                className="transition hover:text-blue-800 focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+                className="transition hover:text-[#071a2d] focus-visible:rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0a2944]"
                 href={link.href}
                 key={link.href}
               >
