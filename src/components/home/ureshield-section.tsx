@@ -4,7 +4,17 @@ import { AnimatedImage } from "@/components/media/animated-image";
 import { ureshieldProducts } from "@/data/ureshield";
 import { HomeSection } from "./home-section";
 
+const REMOVED_URESHIELD_PRODUCTS = new Set([
+  "UreShield DrucPietra",
+  "UreShield Druc Pietra V.SF 1",
+  "UreShield DrucHyd 2C",
+]);
+
 export function UreShieldSection() {
+  const visibleProducts = ureshieldProducts.filter(
+    (product) => !REMOVED_URESHIELD_PRODUCTS.has(product.name),
+  );
+
   return (
     <HomeSection
       className="bg-[linear-gradient(180deg,#071a2d,#0b2840)]"
@@ -41,8 +51,8 @@ export function UreShieldSection() {
           </div>
         </article>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          {ureshieldProducts.map((product) => (
+        <div className="grid gap-4 sm:grid-cols-2" data-catalog="waterproofing-polyurea-only">
+          {visibleProducts.map((product) => (
             <article className="rounded-[var(--radius-lg)] border border-blue-200 bg-white p-5 shadow-[0_14px_45px_rgba(0,0,0,0.14)]" key={product.slug}>
               <div className="flex items-start justify-between gap-4">
                 <Droplets aria-hidden="true" className="h-6 w-6 text-blue-700" />
