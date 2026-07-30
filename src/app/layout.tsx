@@ -50,7 +50,6 @@ export const metadata: Metadata = {
     "polyol",
     "MDI",
     "waterproofing",
-    "injection grouting",
     "polyurea",
     "thermoplastic polyurethane",
     "specialty chemicals",
