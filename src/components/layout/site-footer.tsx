@@ -2,10 +2,12 @@ import Link from "next/link";
 import {
   ArrowRight,
   Boxes,
+  BrainCircuit,
   Building2,
   FileText,
   FlaskConical,
   Headphones,
+  Layers3,
   Mail,
   ShieldCheck,
   Sparkles,
@@ -18,260 +20,330 @@ import { footerGroups, legalLinks } from "@/data/navigation";
 
 const footerGroupIcons: Record<string, LucideIcon> = {
   "Product families": Boxes,
-  Applications: FlaskConical,
+  Applications: Layers3,
   "Technical Center": FileText,
   Company: UsersRound,
 };
 
-const footerActions = [
+const orbitLinks = [
   {
-    label: "Submit an enquiry",
-    href: "/contact",
-    icon: Mail,
-    primary: true,
+    label: "Products",
+    text: "Explore the range",
+    href: "/products",
+    icon: Boxes,
+    position: "left-[7%] top-[16%]",
   },
   {
-    label: "Speak to a technical expert",
+    label: "Applications",
+    text: "Start with the need",
+    href: "/applications",
+    icon: Layers3,
+    position: "right-[5%] top-[18%]",
+  },
+  {
+    label: "Innovation",
+    text: "Build a new pathway",
+    href: "/innovation-rd",
+    icon: FlaskConical,
+    position: "bottom-[12%] left-[8%]",
+  },
+  {
+    label: "Expert support",
+    text: "Discuss the challenge",
     href: "/contact?type=Consultation%20request",
     icon: Headphones,
-    primary: false,
-  },
-  {
-    label: "Ask Urechem AI",
-    href: "/ask-urechem-ai",
-    icon: Sparkles,
-    primary: false,
+    position: "bottom-[10%] right-[5%]",
   },
 ] as const;
 
 const trustHighlights = [
-  {
-    title: "Engineered solutions",
-    text: "Built around real applications",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Innovation backed",
-    text: "Research-led product development",
-    icon: FlaskConical,
-  },
-  {
-    title: "Expert support",
-    text: "Technical guidance when needed",
-    icon: Headphones,
-  },
-  {
-    title: "Cross-industry delivery",
-    text: "Solutions for demanding sectors",
-    icon: Building2,
-  },
+  { title: "Application first", text: "Context before product selection", icon: ShieldCheck },
+  { title: "Research led", text: "Innovation backed by technical work", icon: FlaskConical },
+  { title: "Expert reviewed", text: "Guidance when decisions matter", icon: Headphones },
+  { title: "Industry ready", text: "Solutions for demanding environments", icon: Building2 },
 ] as const;
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative isolate overflow-hidden border-t border-blue-100 bg-white text-slate-600 shadow-[0_-22px_70px_rgba(30,64,175,0.08)]">
+    <footer
+      className="relative isolate overflow-hidden border-t border-cyan-200/20"
+      style={{
+        background:
+          "radial-gradient(circle at 12% 8%,rgba(34,211,238,0.18),transparent 24rem),radial-gradient(circle at 88% 20%,rgba(37,99,235,0.24),transparent 28rem),linear-gradient(145deg,#020817 0%,#061a31 44%,#082f49 72%,#0b4a6f 100%)",
+        color: "#ffffff",
+      }}
+    >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-20"
-        style={{
-          background:
-            "radial-gradient(circle at 8% 12%, rgba(14,165,233,0.12), transparent 24rem), radial-gradient(circle at 92% 16%, rgba(37,99,235,0.10), transparent 25rem), linear-gradient(180deg,#ffffff 0%,#f8fbff 58%,#eef6ff 100%)",
-        }}
+        className="pointer-events-none absolute -left-32 top-24 h-80 w-80 rounded-full border border-cyan-200/15 motion-safe:animate-[spin_32s_linear_infinite]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute right-0 top-0 -z-10 h-72 w-[42rem] opacity-50"
+        className="pointer-events-none absolute -right-28 -top-24 h-96 w-96 rounded-full border border-blue-300/15 motion-safe:animate-[spin_38s_linear_infinite_reverse]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-25"
         style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(37,99,235,0.18) 1px, transparent 0)",
-          backgroundSize: "20px 20px",
-          maskImage: "linear-gradient(135deg, transparent 4%, black 56%, transparent 100%)",
+          backgroundImage: "radial-gradient(circle at 1px 1px,rgba(186,230,253,0.32) 1px,transparent 0)",
+          backgroundSize: "28px 28px",
+          maskImage: "linear-gradient(180deg,black 0%,transparent 68%)",
         }}
       />
 
-      <Container className="py-10 sm:py-14">
-        <section
-          className="relative overflow-hidden rounded-[1.35rem] border border-blue-300/30 px-6 py-7 shadow-[0_22px_70px_rgba(30,64,175,0.18)] sm:px-8 lg:flex lg:items-center lg:justify-between lg:gap-10"
-          style={{
-            background: "linear-gradient(120deg,#082f73 0%,#1455d9 55%,#0ea5e9 125%)",
-            color: "#ffffff",
-          }}
-        >
-          <div
-            aria-hidden="true"
-            className="absolute -right-20 -top-28 h-72 w-72 rounded-full border border-white/20"
-          />
-          <div
-            aria-hidden="true"
-            className="absolute -bottom-32 right-40 h-72 w-72 rounded-full bg-cyan-200/15 blur-3xl"
-          />
-          <div className="relative max-w-2xl">
-            <p className="text-xs font-black uppercase tracking-[0.2em]" style={{ color: "#bae6fd" }}>
-              Start with the application
-            </p>
-            <h2 className="mt-3 text-2xl font-black tracking-[-0.03em] sm:text-3xl" style={{ color: "#ffffff" }}>
-              Need the right polyurethane or specialty-chemical pathway?
-            </h2>
-            <p className="mt-3 max-w-xl text-sm leading-6 sm:text-base" style={{ color: "#dbeafe" }}>
-              Share the substrate, environment, process and performance target. Our team will help structure the next technical step.
-            </p>
-          </div>
-          <div className="relative mt-6 flex shrink-0 flex-wrap gap-3 lg:mt-0 lg:justify-end">
-            <Link
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-white px-5 font-black text-blue-800 shadow-lg transition duration-300 hover:-translate-y-0.5 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-              href="/contact?type=Consultation%20request"
-            >
-              Discuss a requirement
-              <ArrowRight aria-hidden="true" className="h-4 w-4" />
-            </Link>
-            <Link
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/35 bg-white/10 px-5 font-bold backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-              href="/products"
-              style={{ color: "#ffffff" }}
-            >
-              Explore products
-            </Link>
-          </div>
-        </section>
+      <svg
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[34rem] w-full opacity-35"
+        preserveAspectRatio="none"
+        viewBox="0 0 1600 540"
+      >
+        <defs>
+          <linearGradient id="footer-network-line" x1="0" x2="1">
+            <stop offset="0" stopColor="#22d3ee" stopOpacity="0" />
+            <stop offset="0.45" stopColor="#67e8f9" stopOpacity="0.65" />
+            <stop offset="1" stopColor="#60a5fa" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#footer-network-line)" strokeWidth="1.5">
+          <path d="M-40 390 C250 210 440 510 720 275 S1190 70 1640 250" />
+          <path d="M-60 450 C270 275 470 575 800 330 S1280 160 1660 340" />
+          <path d="M210 35 L360 150 L530 75 L700 205 L920 95 L1115 215 L1375 75" />
+        </g>
+        <g fill="#67e8f9">
+          <circle cx="210" cy="35" r="5" />
+          <circle cx="360" cy="150" r="7" />
+          <circle cx="530" cy="75" r="5" />
+          <circle cx="700" cy="205" r="8" />
+          <circle cx="920" cy="95" r="6" />
+          <circle cx="1115" cy="215" r="8" />
+          <circle cx="1375" cy="75" r="5" />
+        </g>
+      </svg>
 
-        <div className="mt-8 grid gap-6 xl:grid-cols-[1.05fr_2.45fr] xl:items-stretch">
-          <section className="rounded-[1.25rem] border border-blue-200/80 bg-white/88 p-6 shadow-[0_18px_55px_rgba(30,64,175,0.10)] backdrop-blur-md sm:p-7">
+      <Container className="relative py-12 sm:py-16 lg:py-20">
+        <section className="grid gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+          <div>
             <Link
-              className="group inline-flex items-center rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+              className="group inline-flex rounded-2xl border border-white/15 bg-white/95 px-4 py-3 shadow-[0_16px_50px_rgba(14,165,233,0.18)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_22px_65px_rgba(14,165,233,0.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
               href="/"
             >
-              <BrandLogo />
+              <BrandLogo className="h-12 w-[12rem] sm:h-14 sm:w-[14rem]" />
             </Link>
-            <p className="mt-6 max-w-md text-sm leading-7 text-slate-600">
-              Urechem is a technical polyurethane and specialty-chemical solutions partner for application problem-solving, formulation development, implementation support, quality validation and supply.
+
+            <div className="mt-9 inline-flex items-center gap-2 rounded-full border border-cyan-200/25 bg-cyan-200/10 px-4 py-2 text-xs font-black uppercase tracking-[0.2em] backdrop-blur-md">
+              <Sparkles aria-hidden="true" className="h-4 w-4" style={{ color: "#67e8f9" }} />
+              <span style={{ color: "#cffafe" }}>Urechem technical network</span>
+            </div>
+
+            <h2
+              className="mt-6 max-w-4xl text-balance text-4xl font-black leading-[0.96] tracking-[-0.055em] sm:text-6xl lg:text-7xl"
+              style={{ color: "#ffffff" }}
+            >
+              The next solution starts with the
+              <span
+                className="block bg-clip-text text-transparent"
+                style={{ backgroundImage: "linear-gradient(90deg,#67e8f9,#60a5fa 48%,#c4b5fd)" }}
+              >
+                right chemistry.
+              </span>
+            </h2>
+
+            <p className="mt-6 max-w-2xl text-base leading-8 sm:text-lg" style={{ color: "#cbd5e1" }}>
+              From real-world application challenges to validated polyurethane and specialty-chemical pathways, Urechem helps structure the technical next step.
             </p>
 
-            <div className="mt-6 grid gap-3">
-              {footerActions.map((action) => {
-                const ActionIcon = action.icon;
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl px-6 font-black shadow-[0_18px_45px_rgba(14,165,233,0.28)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(14,165,233,0.42)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                href="/contact?type=Consultation%20request"
+                style={{ background: "linear-gradient(105deg,#67e8f9,#38bdf8)", color: "#082f49" }}
+              >
+                <Mail aria-hidden="true" className="h-5 w-5" />
+                Start a technical enquiry
+                <ArrowRight aria-hidden="true" className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+              <Link
+                className="group inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-white/20 bg-white/8 px-6 font-bold backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-cyan-200/50 hover:bg-white/14 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-200"
+                href="/ask-urechem-ai"
+                style={{ color: "#ffffff" }}
+              >
+                <BrainCircuit aria-hidden="true" className="h-5 w-5" style={{ color: "#67e8f9" }} />
+                Ask Urechem AI
+              </Link>
+            </div>
+          </div>
+
+          <div
+            className="relative min-h-[440px] overflow-hidden rounded-[2rem] border border-cyan-100/20 p-6 shadow-[0_30px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:p-8"
+            style={{ background: "linear-gradient(145deg,rgba(255,255,255,0.10),rgba(255,255,255,0.035))" }}
+          >
+            <div
+              aria-hidden="true"
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 48%,rgba(34,211,238,0.22),transparent 25%),radial-gradient(circle at 82% 12%,rgba(96,165,250,0.18),transparent 24%)",
+              }}
+            />
+
+            <div className="relative flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em]" style={{ color: "#67e8f9" }}>
+                  Choose your route
+                </p>
+                <h3 className="mt-2 text-2xl font-black" style={{ color: "#ffffff" }}>
+                  One challenge. Multiple technical pathways.
+                </h3>
+              </div>
+              <span className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-cyan-200/25 bg-cyan-200/10 sm:flex">
+                <FlaskConical aria-hidden="true" className="h-6 w-6" style={{ color: "#67e8f9" }} />
+              </span>
+            </div>
+
+            <div className="relative mt-7 hidden h-[300px] lg:block">
+              <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full border border-dashed border-cyan-200/25 motion-safe:animate-[spin_26s_linear_infinite]" />
+              <div className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-300/20 motion-safe:animate-[spin_18s_linear_infinite_reverse]" />
+              <div
+                className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-cyan-100/35 text-center shadow-[0_0_55px_rgba(34,211,238,0.24)]"
+                style={{ background: "linear-gradient(145deg,rgba(103,232,249,0.23),rgba(37,99,235,0.26))" }}
+              >
+                <Sparkles aria-hidden="true" className="h-7 w-7" style={{ color: "#a5f3fc" }} />
+                <span className="mt-2 text-sm font-black tracking-[0.14em]" style={{ color: "#ffffff" }}>
+                  URECHEM
+                </span>
+                <span className="mt-1 text-[0.65rem] font-bold uppercase tracking-[0.12em]" style={{ color: "#bae6fd" }}>
+                  technical core
+                </span>
+              </div>
+
+              {orbitLinks.map((item) => {
+                const OrbitIcon = item.icon;
                 return (
                   <Link
-                    className={`group flex min-h-12 items-center gap-3 rounded-xl border px-4 font-bold transition duration-300 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 ${
-                      action.primary
-                        ? "border-blue-700 shadow-[0_12px_28px_rgba(29,78,216,0.22)]"
-                        : "border-blue-200 bg-white hover:border-blue-400 hover:bg-blue-50"
-                    }`}
-                    href={action.href}
-                    key={action.label}
-                    style={
-                      action.primary
-                        ? { background: "linear-gradient(105deg,#1d4ed8,#075fd7)", color: "#ffffff" }
-                        : { color: "#172554" }
-                    }
+                    className={`group absolute ${item.position} w-40 rounded-2xl border border-white/15 bg-slate-950/55 p-4 shadow-[0_16px_38px_rgba(0,0,0,0.24)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:border-cyan-200/45 hover:bg-slate-900/75`}
+                    href={item.href}
+                    key={item.label}
                   >
-                    <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                      style={{
-                        background: action.primary ? "rgba(255,255,255,0.16)" : "#eff6ff",
-                        color: action.primary ? "#ffffff" : "#1d4ed8",
-                      }}
-                    >
-                      <ActionIcon aria-hidden="true" className="h-4.5 w-4.5" />
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-200/10 ring-1 ring-cyan-200/20">
+                      <OrbitIcon aria-hidden="true" className="h-5 w-5" style={{ color: "#67e8f9" }} />
                     </span>
-                    <span className="flex-1">{action.label}</span>
-                    <ArrowRight
-                      aria-hidden="true"
-                      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                    />
+                    <p className="mt-3 text-sm font-black" style={{ color: "#ffffff" }}>{item.label}</p>
+                    <p className="mt-1 text-xs leading-5" style={{ color: "#94a3b8" }}>{item.text}</p>
+                    <ArrowRight aria-hidden="true" className="mt-3 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" style={{ color: "#67e8f9" }} />
                   </Link>
                 );
               })}
             </div>
 
-            <div className="mt-6 flex items-center gap-3 rounded-xl border border-blue-100 bg-blue-50/75 p-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-700 shadow-lg" style={{ color: "#ffffff" }}>
-                <ShieldCheck aria-hidden="true" className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="text-sm font-black text-blue-950">Technical clarity before selection</p>
-                <p className="mt-1 text-xs leading-5 text-slate-600">Application context first. Product pathway second.</p>
-              </div>
-            </div>
-          </section>
-
-          <section className="rounded-[1.25rem] border border-blue-200/80 bg-white/88 p-5 shadow-[0_18px_55px_rgba(30,64,175,0.10)] backdrop-blur-md sm:p-7">
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {footerGroups.map((group) => {
-                const GroupIcon = footerGroupIcons[group.title] ?? Boxes;
+            <div className="relative mt-6 grid gap-3 sm:grid-cols-2 lg:hidden">
+              {orbitLinks.map((item) => {
+                const OrbitIcon = item.icon;
                 return (
-                  <div
-                    className="group rounded-2xl border border-transparent p-4 transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:bg-blue-50/65 hover:shadow-[0_16px_38px_rgba(30,64,175,0.10)]"
-                    key={group.title}
+                  <Link
+                    className="group rounded-2xl border border-white/15 bg-slate-950/45 p-4 backdrop-blur-xl transition duration-300 hover:border-cyan-200/45 hover:bg-slate-900/70"
+                    href={item.href}
+                    key={item.label}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700 ring-1 ring-blue-100 transition duration-300 group-hover:bg-blue-700 group-hover:text-white group-hover:shadow-lg">
-                        <GroupIcon aria-hidden="true" className="h-5 w-5" />
-                      </span>
-                      <h2 className="text-sm font-black text-blue-950">{group.title}</h2>
-                    </div>
-                    <div className="mt-4 h-0.5 w-9 rounded-full bg-blue-600 transition-all duration-300 group-hover:w-16" />
-                    <ul className="mt-5 grid gap-3">
-                      {group.links.map((link) => (
-                        <li key={link.href}>
-                          <Link
-                            className="group/link flex items-start gap-2 text-sm leading-6 text-slate-600 transition hover:text-blue-800 focus-visible:rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
-                            href={link.href}
-                          >
-                            <ArrowRight
-                              aria-hidden="true"
-                              className="mt-1.5 h-3.5 w-3.5 shrink-0 text-blue-500 transition-transform duration-300 group-hover/link:translate-x-0.5"
-                            />
-                            <span>{link.label}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                    <OrbitIcon aria-hidden="true" className="h-5 w-5" style={{ color: "#67e8f9" }} />
+                    <p className="mt-3 font-black" style={{ color: "#ffffff" }}>{item.label}</p>
+                    <p className="mt-1 text-xs leading-5" style={{ color: "#94a3b8" }}>{item.text}</p>
+                  </Link>
                 );
               })}
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
 
-        <section className="mt-6 grid overflow-hidden rounded-[1.15rem] border border-blue-200 bg-[linear-gradient(100deg,#f8fbff,#eaf4ff)] shadow-[0_16px_45px_rgba(30,64,175,0.08)] sm:grid-cols-2 xl:grid-cols-4">
+        <section
+          className="mt-12 overflow-hidden rounded-[2rem] border border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.24)] backdrop-blur-xl"
+          style={{ background: "rgba(2,8,23,0.52)" }}
+        >
+          <div className="flex flex-col gap-4 border-b border-white/10 px-6 py-6 sm:px-8 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.2em]" style={{ color: "#67e8f9" }}>Explore Urechem</p>
+              <h3 className="mt-2 text-2xl font-black sm:text-3xl" style={{ color: "#ffffff" }}>Everything important, one step away.</h3>
+            </div>
+            <p className="max-w-xl text-sm leading-6" style={{ color: "#94a3b8" }}>
+              Browse product families, application routes, technical resources and company information without losing the context of your original challenge.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4">
+            {footerGroups.map((group, index) => {
+              const GroupIcon = footerGroupIcons[group.title] ?? Boxes;
+              return (
+                <div
+                  className={`group relative p-6 transition duration-300 hover:bg-white/[0.045] sm:p-7 ${index > 0 ? "border-t border-white/10 sm:[&:nth-child(even)]:border-l xl:border-l xl:border-t-0" : ""}`}
+                  key={group.title}
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-200/20 bg-cyan-200/10 transition duration-300 group-hover:scale-105 group-hover:bg-cyan-200/15">
+                      <GroupIcon aria-hidden="true" className="h-5 w-5" style={{ color: "#67e8f9" }} />
+                    </span>
+                    <span className="text-4xl font-black tracking-[-0.05em]" style={{ color: "rgba(103,232,249,0.16)" }}>
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <h4 className="mt-5 text-lg font-black" style={{ color: "#ffffff" }}>{group.title}</h4>
+                  <div className="mt-3 h-px w-full bg-gradient-to-r from-cyan-300/70 via-blue-400/25 to-transparent" />
+                  <ul className="mt-5 grid gap-3">
+                    {group.links.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          className="group/link flex items-start gap-2 text-sm leading-6 transition duration-300 hover:translate-x-1"
+                          href={link.href}
+                          style={{ color: "#cbd5e1" }}
+                        >
+                          <ArrowRight aria-hidden="true" className="mt-1.5 h-3.5 w-3.5 shrink-0" style={{ color: "#38bdf8" }} />
+                          <span className="group-hover/link:text-cyan-100">{link.label}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-6 grid overflow-hidden rounded-[1.5rem] border border-white/10 sm:grid-cols-2 xl:grid-cols-4" style={{ background: "rgba(255,255,255,0.055)" }}>
           {trustHighlights.map((item, index) => {
             const HighlightIcon = item.icon;
             return (
               <div
-                className={`flex items-center gap-4 px-5 py-5 ${index > 0 ? "border-t border-blue-200 sm:border-t-0 sm:[&:nth-child(odd)]:border-l xl:border-l" : ""}`}
+                className={`flex items-center gap-4 px-5 py-5 transition duration-300 hover:bg-white/[0.045] ${index > 0 ? "border-t border-white/10 sm:[&:nth-child(even)]:border-l xl:border-l xl:border-t-0" : ""}`}
                 key={item.title}
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-blue-700 shadow-[0_8px_20px_rgba(30,64,175,0.10)] ring-1 ring-blue-100">
-                  <HighlightIcon aria-hidden="true" className="h-5 w-5" />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-200/20 bg-cyan-200/10">
+                  <HighlightIcon aria-hidden="true" className="h-5 w-5" style={{ color: "#67e8f9" }} />
                 </span>
                 <div>
-                  <p className="text-sm font-black text-blue-950">{item.title}</p>
-                  <p className="mt-1 text-xs leading-5 text-slate-600">{item.text}</p>
+                  <p className="text-sm font-black" style={{ color: "#ffffff" }}>{item.title}</p>
+                  <p className="mt-1 text-xs leading-5" style={{ color: "#94a3b8" }}>{item.text}</p>
                 </div>
               </div>
             );
           })}
         </section>
-      </Container>
 
-      <div style={{ background: "linear-gradient(100deg,#082f73,#0f4ed0 62%,#0369a1)", color: "#ffffff" }}>
-        <Container className="flex flex-col gap-4 py-5 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <p style={{ color: "#dbeafe" }}>&copy; {year} Urechem Chemicals. All rights reserved.</p>
+        <div className="mt-8 flex flex-col gap-5 border-t border-white/10 pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+          <p style={{ color: "#94a3b8" }}>&copy; {year} Urechem Chemicals. All rights reserved.</p>
           <nav aria-label="Legal links" className="flex flex-wrap gap-x-6 gap-y-2">
             {legalLinks.map((link) => (
               <Link
-                className="transition hover:opacity-75 focus-visible:rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                className="transition duration-300 hover:text-cyan-200"
                 href={link.href}
                 key={link.href}
-                style={{ color: "#ffffff" }}
+                style={{ color: "#cbd5e1" }}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
-        </Container>
-      </div>
+        </div>
+      </Container>
     </footer>
   );
 }
