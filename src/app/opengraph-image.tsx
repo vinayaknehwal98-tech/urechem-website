@@ -70,7 +70,7 @@ export default function Image() {
             The pinnacle of polyurethane solutions
           </div>
           <div style={{ color: "#cbd5e1", fontSize: 28, lineHeight: 1.45, marginTop: 30 }}>
-            Spray foam · MDI · Polyols · Waterproofing · Grouting · Polyurea · TPU
+            Spray foam · MDI · Polyols · Flexible systems · Waterproofing · Polyurea · TPU
           </div>
           <div style={{ alignItems: "center", display: "flex", marginTop: 42 }}>
             <div style={{ background: "#67e8f9", height: 5, width: 180 }} />
