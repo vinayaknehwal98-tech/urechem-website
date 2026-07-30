@@ -20,9 +20,8 @@ export const primaryNavigation: NavigationItem[] = [
 
 export const productFamilyLinks: NavigationItem[] = [
   { label: "Complete product range", href: "/products/complete-range" },
-  { label: "Injection grouting systems", href: "/products/injection-grouting-systems" },
   { label: "TPU material pathways", href: "/products/tpu-materials" },
-  { label: "UreShield waterproofing and polyurea", href: "/products/ureshield-waterproofing-grouting-systems" },
+  { label: "UreShield waterproofing and polyurea", href: "/products/ureshield-waterproofing-polyurea-systems" },
   { label: "Uretherm spray-foam systems", href: "/products/uretherm-spray-foam-systems" },
   { label: "ChemNate MDI range", href: "/products/chemnate-mdi-range" },
   { label: "KlayOl polyol and PPG ranges", href: "/products/klayol-polyol-range" },
