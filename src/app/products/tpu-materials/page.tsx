@@ -4,6 +4,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 import { tpuAdvantages, tpuPathways, tpuSourceNote } from "@/data/tpu-materials";
+import { getProductBackground } from "@/data/product-backgrounds";
 
 export const metadata = {
   title: "Thermoplastic Polyurethane Materials",
@@ -12,18 +13,44 @@ export const metadata = {
 };
 
 export default function Page() {
+  const background = getProductBackground("tpu-materials");
+
   return (
     <>
-      <section className="relative overflow-hidden border-b border-cyan-200/15 bg-[linear-gradient(135deg,#03101e,#09263e_55%,#075985)] py-18 sm:py-24">
-        <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.32)_1px,transparent_0)] [background-size:26px_26px]" />
-        <Container className="relative z-10">
-          <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+      <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden border-b border-blue-100 py-16 sm:py-20 lg:py-24">
+        <div
+          aria-hidden="true"
+          className="application-background-motion absolute inset-0 -z-30 bg-cover"
+          style={{
+            backgroundImage: `url(${background.src})`,
+            backgroundPosition: background.position,
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-20"
+          style={{
+            background:
+              "linear-gradient(90deg,rgba(248,251,255,0.98) 0%,rgba(248,251,255,0.93) 38%,rgba(239,246,255,0.72) 61%,rgba(3,20,38,0.37) 82%,rgba(3,20,38,0.54) 100%)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(circle at 78% 36%,rgba(14,165,233,0.21),transparent 26rem),radial-gradient(circle at 15% 86%,rgba(37,99,235,0.11),transparent 24rem)",
+          }}
+        />
+
+        <Container className="relative w-full">
+          <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center xl:gap-16">
             <div>
               <SectionLabel>Thermoplastic polyurethane</SectionLabel>
-              <h1 className="mt-6 max-w-5xl text-balance text-5xl font-black leading-[0.98] tracking-[-0.045em] text-white sm:text-6xl lg:text-7xl">
+              <h1 className="mt-6 max-w-5xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
                 TPU material pathways
               </h1>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-200">
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-700">
                 A controlled selection route across polyester-based, polyether-based and polycaprolactone-based TPU where strength, flexibility, wear, chemical exposure, temperature and processing all shape the final grade decision.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
@@ -36,7 +63,10 @@ export default function Page() {
                 </ButtonLink>
               </div>
             </div>
-            <TpuMaterialVisual />
+
+            <div className="relative mx-auto w-full max-w-[620px] rounded-[2rem] border border-white/40 bg-white/18 p-5 shadow-[0_28px_90px_rgba(2,18,36,0.28)] backdrop-blur-[3px] sm:p-7">
+              <TpuMaterialVisual />
+            </div>
           </div>
         </Container>
       </section>
