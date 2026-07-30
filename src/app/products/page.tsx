@@ -1,46 +1,86 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { ProductFinder } from "@/components/catalog/product-finder";
-import { AnimatedImage } from "@/components/media/animated-image";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
+import { getProductBackground } from "@/data/product-backgrounds";
 
 export const metadata = { title: "Products" };
 
 export default function Page() {
+  const background = getProductBackground("catalog");
+
   return (
-    <Container className="py-16 sm:py-20">
-      <SectionLabel>Product catalog</SectionLabel>
-      <h1 className="mt-5 max-w-4xl text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl">Structured product-family discovery</h1>
-      <p className="mt-4 max-w-3xl text-slate-300">Browse the combined Urechem product range with clear boundaries around specifications, documents and application suitability.</p>
+    <>
+      <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden border-b border-blue-100 py-16 sm:py-20 lg:py-24">
+        <div
+          aria-hidden="true"
+          className="application-background-motion absolute inset-0 -z-30 bg-cover"
+          style={{
+            backgroundImage: `url(${background.src})`,
+            backgroundPosition: background.position,
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-20"
+          style={{
+            background:
+              "linear-gradient(90deg,rgba(248,251,255,0.98) 0%,rgba(248,251,255,0.94) 38%,rgba(239,246,255,0.74) 62%,rgba(3,20,38,0.36) 82%,rgba(3,20,38,0.54) 100%)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(circle at 78% 34%,rgba(14,165,233,0.20),transparent 27rem),radial-gradient(circle at 15% 86%,rgba(37,99,235,0.11),transparent 24rem)",
+          }}
+        />
 
-      <AnimatedImage
-        alt="Materials laboratory team working with product samples and test equipment"
-        className="mt-10 h-72 sm:h-80"
-        imageClassName="object-center"
-        sizes="100vw"
-        src="https://images.unsplash.com/photo-1764835711461-117d67799a7d?auto=format&fit=crop&fm=jpg&q=82&w=1900"
-      />
+        <Container className="relative w-full">
+          <div className="max-w-4xl">
+            <SectionLabel>Product catalog</SectionLabel>
+            <h1 className="mt-6 max-w-4xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
+              Structured product-family discovery
+            </h1>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-700">
+              Browse the combined Urechem product range with clear boundaries around specifications, documents and application suitability.
+            </p>
 
-      <article className="mt-6 grid gap-6 overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/20 bg-[linear-gradient(135deg,rgba(37,99,235,0.2),rgba(34,211,238,0.08),rgba(255,255,255,0.04))] p-6 shadow-[var(--shadow-soft)] sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
-        <div>
-          <ShieldCheck aria-hidden="true" className="h-7 w-7 text-cyan-200" />
-          <p className="mt-4 text-sm font-black uppercase tracking-[0.16em] text-cyan-100">Combined technical range</p>
-          <h2 className="mt-2 text-3xl font-black text-white">Explore the complete Urechem product universe</h2>
-          <p className="mt-3 max-w-3xl leading-7 text-slate-300">Review spray foam, MDI, polyols, PPG, flexible systems, PU membranes, polyurea, TPU and formulation-support pathways compiled from the full supplied reference set.</p>
-        </div>
-        <div className="flex flex-wrap gap-3 lg:max-w-xs lg:justify-end">
-          <ButtonLink href="/products/complete-range" size="lg">
-            View complete range
-            <ArrowRight aria-hidden="true" className="h-4 w-4" />
-          </ButtonLink>
-          <ButtonLink href="/products/ureshield-waterproofing-polyurea-systems" size="lg" variant="secondary">
-            Explore UreShield
-          </ButtonLink>
-        </div>
-      </article>
+            <article className="mt-7 max-w-3xl rounded-2xl border border-blue-200/80 bg-white/78 p-5 shadow-[0_16px_45px_rgba(30,64,175,0.12)] backdrop-blur-md sm:p-6">
+              <ShieldCheck aria-hidden="true" className="h-7 w-7 text-blue-700" />
+              <p className="mt-4 text-sm font-black uppercase tracking-[0.16em] text-blue-700">Combined technical range</p>
+              <h2 className="mt-2 text-2xl font-black text-blue-950 sm:text-3xl">Explore the complete Urechem product universe</h2>
+              <p className="mt-3 leading-7 text-slate-700">
+                Review spray foam, MDI, polyols, PPG, flexible systems, PU membranes, polyurea, TPU and formulation-support pathways compiled from the full supplied reference set.
+              </p>
+            </article>
 
-      <div className="mt-10"><ProductFinder /></div>
-    </Container>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <ButtonLink href="/products/complete-range" size="lg">
+                View complete range
+                <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              </ButtonLink>
+              <ButtonLink href="/products/ureshield-waterproofing-polyurea-systems" size="lg" variant="secondary">
+                Explore UreShield
+              </ButtonLink>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-[linear-gradient(180deg,#f8fbff,#eaf4ff)] py-16 sm:py-20">
+        <Container>
+          <div className="max-w-4xl">
+            <SectionLabel>Find the right route</SectionLabel>
+            <h2 className="mt-5 text-4xl font-black tracking-[-0.04em] text-blue-950 sm:text-5xl">
+              Start with the application, performance target and document need
+            </h2>
+          </div>
+          <div className="mt-10"><ProductFinder /></div>
+        </Container>
+      </section>
+    </>
   );
 }
