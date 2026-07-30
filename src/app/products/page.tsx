@@ -27,14 +27,14 @@ export default function Page() {
           <ShieldCheck aria-hidden="true" className="h-7 w-7 text-cyan-200" />
           <p className="mt-4 text-sm font-black uppercase tracking-[0.16em] text-cyan-100">Combined technical range</p>
           <h2 className="mt-2 text-3xl font-black text-white">Explore the complete Urechem product universe</h2>
-          <p className="mt-3 max-w-3xl leading-7 text-slate-300">Review spray foam, MDI, polyols, PPG, flexible systems, PU membranes, injection grouts, polyurea, TPU and formulation-support pathways compiled from the full supplied reference set.</p>
+          <p className="mt-3 max-w-3xl leading-7 text-slate-300">Review spray foam, MDI, polyols, PPG, flexible systems, PU membranes, polyurea, TPU and formulation-support pathways compiled from the full supplied reference set.</p>
         </div>
         <div className="flex flex-wrap gap-3 lg:max-w-xs lg:justify-end">
           <ButtonLink href="/products/complete-range" size="lg">
             View complete range
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </ButtonLink>
-          <ButtonLink href="/products/ureshield-waterproofing-grouting-systems" size="lg" variant="secondary">
+          <ButtonLink href="/products/ureshield-waterproofing-polyurea-systems" size="lg" variant="secondary">
             Explore UreShield
           </ButtonLink>
         </div>
