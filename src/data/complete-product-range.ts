@@ -74,18 +74,7 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Roofs, terraces and car decks", "Basements, tunnels and foundations", "Industrial and commercial structures"],
     representativeProducts: ["UreShield 1K PU-M", "UreShield 2K PU-M"],
     reviewNote: "Substrate preparation, primer, topcoat and exposure requirements must be reviewed per project.",
-    href: "/products/ureshield-waterproofing-grouting-systems",
-  },
-  {
-    slug: "ureshield-injection-grouting",
-    name: "Urechem injection and grouting systems",
-    category: "Ground support and water control",
-    summary:
-      "Low-viscosity polyurethane and polyurea-silicate injection pathways for leak sealing, void filling, soil and rock consolidation, slab lifting and structural reinforcement.",
-    applications: ["Tunnels, mines and underground works", "Concrete cracks, joints and cavities", "Dams, foundations and water-retaining structures"],
-    representativeProducts: ["Reference profiles 2421, 2410, 2435, 2430, 2455 MV, 2406 HS and 2405 SJ"],
-    reviewNote: "Reference codes preserve source traceability; official public Urechem grade names and design values remain controlled.",
-    href: "/products/injection-grouting-systems",
+    href: "/products/ureshield-waterproofing-polyurea-systems",
   },
   {
     slug: "ureshield-polyurea",
@@ -96,18 +85,7 @@ export const completeProductRange: CompleteProductRangeItem[] = [
     applications: ["Bridge decks, parking decks and roofs", "Industrial floors and manufacturing facilities", "Concrete waterproofing and moulded parts"],
     representativeProducts: ["UreShield HPU-101", "UreShield PPU-102", "UreShield HPU-101 Cold", "UreShield HPU-101 Cold SL"],
     reviewNote: "Hot-spray grades require specialised two-component equipment and trained application teams.",
-    href: "/products/ureshield-waterproofing-grouting-systems",
-  },
-  {
-    slug: "eco-grouting-systems",
-    name: "Environment-conscious grouting pathways",
-    category: "Specialist grouting",
-    summary:
-      "Source-backed pathways for solvent-free, phthalate-free, controlled-expansion and lower-exotherm grouting enquiries where project conditions demand a tailored response.",
-    applications: ["Water cut-off", "Void filling and waterproofing", "Crack and joint sealing"],
-    representativeProducts: ["Reference 2410 Earth-1", "Reference 2425 Earth-2"],
-    reviewNote: "Environmental and regulatory claims are withheld until Urechem supplies current supporting evidence.",
-    href: "/products/injection-grouting-systems",
+    href: "/products/ureshield-waterproofing-polyurea-systems",
   },
   {
     slug: "tpu-materials",
