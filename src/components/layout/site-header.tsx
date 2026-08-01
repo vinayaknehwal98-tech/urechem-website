@@ -21,7 +21,7 @@ export function SiteHeader() {
         <DesktopNavigation />
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <ButtonLink className="hidden xl:inline-flex" href="/contact?type=Consultation%20request" size="sm">
+          <ButtonLink className="hidden xl:inline-flex" href="/consultant" size="sm">
             <MessageSquareText aria-hidden="true" className="h-4 w-4" />
             Consultant
           </ButtonLink>

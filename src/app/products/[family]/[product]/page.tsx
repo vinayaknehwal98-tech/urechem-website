@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ family: strin
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <ButtonLink href={`/contact?type=TDS%20request&product=${encodeURIComponent(item.name)}`}>Ask for TDS</ButtonLink>
-              <ButtonLink href={`/contact?type=Consultation%20request&product=${encodeURIComponent(item.name)}`} variant="secondary">
+              <ButtonLink href={`/consultant?product=${encodeURIComponent(item.name)}`} variant="secondary">
                 Request product review
               </ButtonLink>
               <ButtonLink

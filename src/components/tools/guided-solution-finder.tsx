@@ -175,7 +175,7 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
 
               <Link
                 className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-5 font-semibold text-navy-950 transition hover:bg-white"
-                href={`/contact?type=Consultation%20request&context=${encodeURIComponent(submittedValue)}`}
+                href={`/consultant?context=${encodeURIComponent(submittedValue)}`}
               >
                 Send this challenge for expert review
                 <ArrowRight aria-hidden="true" className="size-4" />

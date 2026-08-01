@@ -17,6 +17,7 @@ export function LeadCaptureFlyer() {
   const forcePreviewRef = useRef(false);
   const isExcludedPath =
     pathname === "/contact" ||
+    pathname === "/consultant" ||
     pathname.startsWith("/privacy") ||
     pathname.startsWith("/terms") ||
     pathname.startsWith("/legal");
@@ -118,14 +119,13 @@ export function LeadCaptureFlyer() {
 
     const formData = new FormData(event.currentTarget);
     const params = new URLSearchParams({
-      type: "Consultation request",
       name: String(formData.get("name") ?? ""),
       email: String(formData.get("email") ?? ""),
       mobile: String(formData.get("mobile") ?? ""),
     });
 
     rememberDismissal();
-    window.location.assign(`/contact?${params.toString()}`);
+    window.location.assign(`/consultant?${params.toString()}`);
   };
 
   if (!isOpen || isExcludedPath) return null;

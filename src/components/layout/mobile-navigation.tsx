@@ -118,7 +118,7 @@ export function MobileNavigation() {
             </div>
 
             <div className="mt-6 grid gap-3 border-t border-blue-100 pt-5">
-              <ButtonLink className="w-full" href="/contact?type=Consultation%20request" onClick={() => setIsOpen(false)}>
+              <ButtonLink className="w-full" href="/consultant" onClick={() => setIsOpen(false)}>
                 <MessageSquareText aria-hidden="true" className="h-4 w-4" />
                 Talk to a consultant
               </ButtonLink>

@@ -268,7 +268,7 @@ export function UrechemAiAssistant() {
                       <div className="mt-4 flex flex-wrap gap-3">
                         <Link
                           className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-4 text-sm font-semibold text-navy-950 transition hover:bg-white"
-                          href={`/contact?type=Consultation%20request&context=${encodeURIComponent(question)}`}
+                          href={`/consultant?context=${encodeURIComponent(question)}`}
                         >
                           Ask an expert
                           <ArrowRight aria-hidden="true" className="size-4" />

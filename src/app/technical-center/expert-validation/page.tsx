@@ -37,7 +37,7 @@ export default function Page() {
             Build review brief
             <ArrowRight aria-hidden="true" className="size-4" />
           </ButtonLink>
-          <ButtonLink href="/contact?type=Consultation%20request" variant="secondary">
+          <ButtonLink href="/consultant" variant="secondary">
             Request expert review
           </ButtonLink>
         </div>

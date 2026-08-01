@@ -21,6 +21,10 @@ const enquiryTypes = [
 
 type EnquiryType = (typeof enquiryTypes)[number];
 
+type ContactEnquiryFormProps = {
+  fixedType?: EnquiryType;
+};
+
 const documentRequestTypes: EnquiryType[] = [
   "TDS request",
   "SDS request",
@@ -45,12 +49,13 @@ const enquiryProductOptions = [
   ...tpuPathways.map((pathway) => pathway.name),
 ];
 
-export function ContactEnquiryForm() {
+export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) {
   const searchParams = useSearchParams();
+  const isConsultation = fixedType === "Consultation request";
   const [isPrepared, setIsPrepared] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
   const [form, setForm] = useState(() => ({
-    type: normaliseEnquiryType(searchParams.get("type")),
+    type: fixedType ?? normaliseEnquiryType(searchParams.get("type")),
     name: searchParams.get("name") ?? "",
     email: searchParams.get("email") ?? "",
     mobile: searchParams.get("mobile") ?? "",
@@ -119,17 +124,25 @@ export function ContactEnquiryForm() {
   return (
     <form className="mt-8 grid gap-5 rounded-[var(--radius-lg)] border border-blue-200 bg-white p-6 shadow-[0_18px_55px_rgba(30,64,175,0.09)] sm:p-8" onSubmit={handleSubmit}>
       <div className="grid gap-5 md:grid-cols-2">
-        <label className="grid gap-2 font-bold text-blue-950">
-          Enquiry type
-          <select
-            className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
-            name="type"
-            value={form.type}
-            onChange={(event) => setForm((current) => ({ ...current, type: normaliseEnquiryType(event.target.value) }))}
-          >
-            {enquiryTypes.map((type) => <option key={type}>{type}</option>)}
-          </select>
-        </label>
+        {fixedType ? (
+          <div className="grid content-center gap-1 rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-4 py-3 text-blue-950">
+            <span className="text-xs font-black uppercase tracking-[0.14em] text-blue-600">Request type</span>
+            <strong>{isConsultation ? "Technical consultation" : fixedType}</strong>
+            <input name="type" type="hidden" value={fixedType} />
+          </div>
+        ) : (
+          <label className="grid gap-2 font-bold text-blue-950">
+            Enquiry type
+            <select
+              className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+              name="type"
+              value={form.type}
+              onChange={(event) => setForm((current) => ({ ...current, type: normaliseEnquiryType(event.target.value) }))}
+            >
+              {enquiryTypes.map((type) => <option key={type}>{type}</option>)}
+            </select>
+          </label>
+        )}
 
         <label className="grid gap-2 font-bold text-blue-950">
           Name
@@ -192,12 +205,16 @@ export function ContactEnquiryForm() {
       </label>
 
       <label className="grid gap-2 font-bold text-blue-950">
-        Technical context
+        {isConsultation ? "Project or technical challenge" : "Technical context"}
         <textarea
           aria-describedby="technical-context-help"
           className="min-h-36 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 p-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
           name="context"
-          placeholder="Describe the application, substrate, environment, performance goal and project constraints."
+          placeholder={
+            isConsultation
+              ? "Describe the application, material, operating environment, performance goal and support you need."
+              : "Describe the application, substrate, environment, performance goal and project constraints."
+          }
           required
           value={form.context}
           onChange={(event) => setForm((current) => ({ ...current, context: event.target.value }))}
@@ -207,8 +224,8 @@ export function ContactEnquiryForm() {
         </span>
       </label>
 
-      <button className="inline-flex h-12 items-center justify-center rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-6 font-bold text-white transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600" type="submit">
-        Prepare enquiry
+      <button className="inline-flex h-12 items-center justify-center rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-6 font-bold text-[color:#fff] transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600" type="submit">
+        {isConsultation ? "Prepare consultation request" : "Prepare enquiry"}
       </button>
 
       {isPrepared ? (
@@ -228,7 +245,7 @@ export function ContactEnquiryForm() {
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {enquiryEmail ? (
               <a
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-4 text-sm font-bold text-white transition hover:bg-blue-800"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-4 text-sm font-bold text-[color:#fff] transition hover:bg-blue-800"
                 href={`mailto:${enquiryEmail}?subject=${encodeURIComponent(`Urechem ${form.type}: ${form.product || form.name}`)}&body=${encodeURIComponent(enquiryBrief)}`}
               >
                 <Mail aria-hidden="true" className="size-4" />

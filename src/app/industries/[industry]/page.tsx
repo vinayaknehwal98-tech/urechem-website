@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: Promise<{ industry: str
       <p className="mt-4 max-w-3xl text-slate-300">{item.summary}</p>
       <div className="mt-6"><ValidationNote /></div>
       <div className="mt-8">
-        <ButtonLink href={`/contact?type=Consultation%20request&context=${encodeURIComponent(`Industry review: ${item.name}`)}`}>
+        <ButtonLink href={`/consultant?context=${encodeURIComponent(`Industry review: ${item.name}`)}`}>
           Discuss this industry pathway
         </ButtonLink>
       </div>

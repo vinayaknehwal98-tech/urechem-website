@@ -37,7 +37,7 @@ export default function Page() {
                 A controlled selection route across polyester-based, polyether-based and polycaprolactone-based TPU where strength, flexibility, wear, chemical exposure, temperature and processing all shape the final grade decision.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink href="/contact?type=Consultation%20request&product=TPU%20materials" size="lg">
+                <ButtonLink href="/consultant?product=TPU%20materials" size="lg">
                   Discuss a TPU requirement
                   <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </ButtonLink>

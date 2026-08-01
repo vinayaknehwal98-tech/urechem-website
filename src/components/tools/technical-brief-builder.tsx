@@ -89,7 +89,7 @@ export function TechnicalBriefBuilder() {
               </Button>
               <Link
                 className="inline-flex min-h-11 items-center justify-center rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-5 text-sm font-semibold text-navy-950 transition hover:bg-white"
-                href={`/contact?type=Consultation%20request&context=${encodeURIComponent(brief)}`}
+                href={`/consultant?context=${encodeURIComponent(brief)}`}
               >
                 Continue to enquiry
               </Link>

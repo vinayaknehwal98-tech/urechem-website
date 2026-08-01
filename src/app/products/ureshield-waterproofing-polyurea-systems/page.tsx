@@ -45,7 +45,7 @@ export default function Page() {
                 Polyurethane membranes and polyurea coatings for waterproofing and durable surface protection across construction and industrial applications.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink href="/contact?type=Consultation%20request&product=UreShield" size="lg">
+                <ButtonLink href="/consultant?product=UreShield" size="lg">
                   Discuss a UreShield requirement
                   <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </ButtonLink>
@@ -133,7 +133,7 @@ export default function Page() {
               <p className="text-sm font-bold uppercase tracking-[0.16em] text-blue-700">Technical validation required</p>
               <h2 className="mt-2 text-2xl font-black text-blue-950">Discuss the substrate, exposure, installation method and required performance.</h2>
             </div>
-            <ButtonLink className="mt-5 sm:mt-0" href="/contact?type=Consultation%20request" size="lg">
+            <ButtonLink className="mt-5 sm:mt-0" href="/consultant" size="lg">
               Talk to a consultant
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </ButtonLink>

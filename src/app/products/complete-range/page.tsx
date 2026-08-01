@@ -37,7 +37,7 @@ export default function Page() {
                   Use the product finder
                   <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </ButtonLink>
-                <ButtonLink href="/contact?type=Consultation%20request" size="lg" variant="secondary">
+                <ButtonLink href="/consultant" size="lg" variant="secondary">
                   Discuss a requirement
                 </ButtonLink>
               </div>

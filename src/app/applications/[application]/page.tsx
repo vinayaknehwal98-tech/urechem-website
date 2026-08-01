@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ application: 
 
         <div className="transparent-media-copy mt-6"><ValidationNote /></div>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <ButtonLink href={`/contact?type=Consultation%20request&context=${encodeURIComponent(`Application review: ${item.name}`)}`}>Discuss this application</ButtonLink>
+          <ButtonLink href={`/consultant?context=${encodeURIComponent(`Application review: ${item.name}`)}`}>Discuss this application</ButtonLink>
           <ButtonLink href="/innovation-rd" variant="secondary">Innovation & R&D route</ButtonLink>
         </div>
 

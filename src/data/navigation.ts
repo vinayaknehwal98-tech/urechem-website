@@ -31,7 +31,7 @@ export const productFamilyLinks: NavigationItem[] = [
 export const applicationLinks: NavigationItem[] = [
   { label: "Product discovery", href: "/applications" },
   { label: "Technical challenge intake", href: "/ai-solution-finder" },
-  { label: "Consultation request", href: "/contact?type=Consultation%20request" },
+  { label: "Consultation request", href: "/consultant" },
   { label: "Industry pathways", href: "/industries" },
   { label: "Product comparison", href: "/products/compare" },
 ];
@@ -46,7 +46,7 @@ export const technicalCenterLinks: NavigationItem[] = [
 export const companyLinks: NavigationItem[] = [
   { label: "About Urechem Chemicals", href: "/about" },
   { label: "Innovation & R&D", href: "/innovation-rd" },
-  { label: "Talk to a consultant", href: "/contact?type=Consultation%20request" },
+  { label: "Talk to a consultant", href: "/consultant" },
   { label: "Contact", href: "/contact" },
   { label: "Ask Urechem AI", href: "/ask-urechem-ai" },
 ];

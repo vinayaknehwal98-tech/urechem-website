@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ family: strin
             </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={`/contact?type=Consultation%20request&product=${encodeURIComponent(productFamily.name)}`}>
+              <ButtonLink href={`/consultant?product=${encodeURIComponent(productFamily.name)}`}>
                 Start a technical enquiry
               </ButtonLink>
               <ButtonLink href="/products/compare" variant="secondary">

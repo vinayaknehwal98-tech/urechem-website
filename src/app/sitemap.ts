@@ -19,6 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/innovation-rd",
     "/about",
     "/contact",
+    "/consultant",
     "/ai-solution-finder",
     "/ask-urechem-ai",
     "/technical-brief-builder",

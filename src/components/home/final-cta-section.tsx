@@ -22,7 +22,7 @@ export function FinalCtaSection() {
               Build My Technical Brief
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </ButtonLink>
-            <ButtonLink href="/contact" size="lg" variant="secondary">
+            <ButtonLink href="/consultant" size="lg" variant="secondary">
               Speak to an Expert
             </ButtonLink>
           </div>

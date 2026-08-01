@@ -227,7 +227,7 @@ export default function Page() {
                 one technical partnership.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/contact" size="lg">
+                <ButtonLink href="/consultant" size="lg">
                   Discuss a Project
                   <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </ButtonLink>
@@ -495,15 +495,15 @@ export default function Page() {
             <div className="absolute -right-2 top-8 h-32 w-32 rounded-full border border-turquoise-300/10" />
             <div className="relative max-w-3xl">
               <SectionLabel>Start a conversation</SectionLabel>
-              <h2 className="mt-5 text-3xl font-black tracking-[-0.035em] text-white sm:text-4xl">
+              <h2 className="mt-5 text-3xl font-black tracking-[-0.035em] text-[color:#f8fbff] sm:text-4xl">
                 Bring us the challenge. We&apos;ll help structure the technical path.
               </h2>
-              <p className="mt-5 text-lg leading-8 text-slate-300">
+              <p className="mt-5 text-lg leading-8 text-[color:#cbd5e1]">
                 Share the application, material, operating environment and performance goal with Urechem&apos;s
                 technical team.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/contact" size="lg">
+                <ButtonLink href="/consultant" size="lg">
                   Speak to an Expert
                   <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </ButtonLink>

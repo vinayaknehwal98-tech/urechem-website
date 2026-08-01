@@ -57,7 +57,7 @@ export function SiteFooter() {
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
               className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 font-black shadow-[0_14px_34px_rgba(0,0,0,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_42px_rgba(0,0,0,0.28)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-              href="/contact?type=Consultation%20request"
+              href="/consultant"
               style={{ background: "#f4b942", color: "#071a2d" }}
             >
               <Mail aria-hidden="true" className="h-4.5 w-4.5" />
