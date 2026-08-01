@@ -92,6 +92,13 @@ export function ProductUniverseSection() {
                 </button>
                 {isOpen ? (
                   <div className="px-4 pb-4" id={panelId}>
+                    <AnimatedImage
+                      alt={family.image.alt}
+                      className="mb-4 h-36 shadow-[var(--shadow-soft)]"
+                      imageClassName={family.image.position}
+                      sizes="100vw"
+                      src={family.image.src}
+                    />
                     <p className="text-sm leading-6 text-slate-700">{family.description}</p>
                     {family.products.length > 0 ? (
                       <div className="mt-4 flex flex-wrap gap-2">
@@ -120,12 +127,23 @@ export function ProductUniverseSection() {
         </div>
 
         <aside className="hidden overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-[linear-gradient(145deg,#ffffff,#eef6ff)] shadow-[var(--shadow-deep)] lg:block">
-          <AnimatedImage
-            alt="A curated range of polyurethane foams, coated panels, resin samples and laboratory materials"
-            className="h-48 rounded-none border-0 border-b border-blue-100 shadow-none"
-            sizes="40vw"
-            src="/images/product-material-universe.webp"
-          />
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              animate={{ opacity: 1, scale: 1 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 1.025 }}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.985 }}
+              key={`${activeFamily.name}-image`}
+              transition={{ duration: shouldReduceMotion ? 0.01 : 0.34, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <AnimatedImage
+                alt={activeFamily.image.alt}
+                className="h-48 rounded-none border-0 border-b border-blue-100 shadow-none"
+                imageClassName={activeFamily.image.position}
+                sizes="40vw"
+                src={activeFamily.image.src}
+              />
+            </motion.div>
+          </AnimatePresence>
           <AnimatePresence initial={false} mode="wait">
             <motion.div
               animate={{ opacity: 1, y: 0 }}

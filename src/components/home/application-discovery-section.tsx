@@ -18,13 +18,6 @@ export function ApplicationDiscoverySection() {
       intro="Move from desired result to relevant product-family pathways without treating preliminary guidance as final engineering approval."
       title="Explore chemistry through the result you need."
     >
-      <AnimatedImage
-        alt="An application engineer and technical chemist reviewing polyurethane materials at an industrial construction site"
-        className="mb-8 h-72 sm:h-80"
-        imageClassName="object-[center_44%]"
-        sizes="100vw"
-        src="/images/application-engineering.webp"
-      />
       <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {applicationCategories.map((application, index) => (
           <motion.div
@@ -36,10 +29,17 @@ export function ApplicationDiscoverySection() {
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
           >
             <Link
-              className="group relative flex h-full min-h-72 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-sky-300 hover:bg-sky-50/60 hover:shadow-[0_20px_55px_rgba(30,64,175,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+              className="group relative flex h-full min-h-[26rem] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-sky-300 hover:bg-sky-50/60 hover:shadow-[0_20px_55px_rgba(30,64,175,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
               href={application.href}
             >
-              <div className="absolute right-4 top-4 z-10 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 font-mono text-xs font-semibold text-blue-700">
+              <AnimatedImage
+                alt={application.image.alt}
+                className="h-36 rounded-none border-0 border-b border-blue-100 shadow-none sm:h-40"
+                imageClassName={application.image.position}
+                sizes="(min-width: 1280px) 25vw, (min-width: 640px) 50vw, 100vw"
+                src={application.image.src}
+              />
+              <div className="absolute right-4 top-4 z-10 rounded-full border border-white/70 bg-white/90 px-2.5 py-1 font-mono text-xs font-semibold text-blue-700 shadow-sm backdrop-blur-sm">
                 {String(index + 1).padStart(2, "0")}
               </div>
               <div className="relative flex flex-1 flex-col p-5 pb-16">
