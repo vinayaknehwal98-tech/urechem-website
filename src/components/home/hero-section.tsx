@@ -112,9 +112,12 @@ export function HeroSection() {
       </div>
 
       <Container className="flex flex-col justify-start pb-14 pt-9 sm:pb-16 sm:pt-12 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-16">
-        <div className="transparent-media-copy relative z-10 w-full max-w-3xl md:-translate-y-8">
+        <div className="hero-copy transparent-media-copy relative z-10 w-full max-w-3xl md:-translate-y-8">
           <p className="text-xs font-black uppercase tracking-[0.21em] text-blue-700 sm:text-sm sm:tracking-[0.24em]" data-hero-intro>
-            URECHEM CHEMICALS
+            <span className="inline-flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-9 bg-cyan-300" />
+              URECHEM CHEMICALS
+            </span>
           </p>
           <h1
             className="mt-3 max-w-[20rem] text-[clamp(2.15rem,9vw,2.55rem)] font-black leading-[0.97] tracking-[-0.038em] text-blue-950 sm:mt-4 sm:max-w-3xl sm:text-[clamp(2.55rem,3.25vw,3.5rem)] sm:leading-[0.98] sm:tracking-[-0.04em]"
@@ -124,11 +127,8 @@ export function HeroSection() {
             <span className="hero-highlight">better polyurethane solutions.</span>
           </h1>
           <p className="mt-4 max-w-[22rem] text-lg font-black leading-tight text-sky-700 sm:mt-5 sm:max-w-none sm:text-[1.35rem]" data-hero-intro>
-            <span className="inline-flex items-center gap-2.5">
-              <span
-                aria-hidden="true"
-                className="h-1 w-8 rounded-full bg-[linear-gradient(90deg,#38bdf8,#5eead4)] shadow-[0_0_16px_rgba(34,211,238,0.78)]"
-              />
+            <span className="hero-tagline inline-flex items-center gap-2.5">
+              <span aria-hidden="true" className="h-2 w-2 rounded-sm bg-cyan-300" />
               We deliver what we promise.
             </span>
           </p>
