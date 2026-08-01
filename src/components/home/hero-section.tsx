@@ -19,15 +19,29 @@ const introContainer = {
   hidden: {},
   visible: {
     transition: {
-      delayChildren: 0.06,
-      staggerChildren: 0.09,
+      delayChildren: 0.08,
+      staggerChildren: 0.11,
     },
   },
 };
 
 const introItem = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.62, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const titleReveal = {
+  hidden: { opacity: 0, y: 24, filter: "blur(7px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.82, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 export function HeroSection() {
@@ -35,6 +49,38 @@ export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoIsPlaying, setVideoIsPlaying] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    let cancelled = false;
+    let introObserver: MutationObserver | null = null;
+
+    const revealHero = () => {
+      if (!cancelled) setHeroReady(true);
+    };
+
+    if (html.hasAttribute("data-urechem-intro-active")) {
+      introObserver = new MutationObserver(() => {
+        if (!html.hasAttribute("data-urechem-intro-active")) {
+          introObserver?.disconnect();
+          window.requestAnimationFrame(revealHero);
+        }
+      });
+
+      introObserver.observe(html, {
+        attributes: true,
+        attributeFilter: ["data-urechem-intro-active"],
+      });
+    } else {
+      window.requestAnimationFrame(revealHero);
+    }
+
+    return () => {
+      cancelled = true;
+      introObserver?.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -120,22 +166,18 @@ export function HeroSection() {
 
       <Container className="flex min-h-[38rem] items-center py-16 sm:min-h-[42rem] md:min-h-[calc(100dvh-4.5rem)] md:py-24">
         <motion.div
-          animate="visible"
+          animate={shouldReduceMotion || heroReady ? "visible" : "hidden"}
           className="relative z-10 max-w-2xl"
           initial={shouldReduceMotion ? false : "hidden"}
           variants={introContainer}
         >
-          <motion.div
-            className="mb-5 flex items-center gap-3"
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            variants={introItem}
-          >
+          <motion.div className="mb-5 flex items-center gap-3" variants={introItem}>
             <motion.span
-              animate={shouldReduceMotion ? undefined : { scaleX: 1, opacity: 1 }}
+              animate={shouldReduceMotion || heroReady ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
               aria-hidden="true"
               className="h-px w-8 origin-left bg-cyan-300"
               initial={shouldReduceMotion ? false : { scaleX: 0, opacity: 0 }}
-              transition={{ delay: 0.16, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: heroReady ? 0.12 : 0, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
             />
             <p className="hero-eyebrow text-[0.7rem] font-semibold uppercase tracking-[0.3em] sm:text-xs">
               URECHEM CHEMICALS
@@ -144,49 +186,24 @@ export function HeroSection() {
 
           <motion.h1
             className="hero-white hero-title max-w-[20rem] text-[clamp(2.35rem,8.5vw,3rem)] font-semibold leading-[1.02] tracking-[-0.035em] sm:max-w-2xl sm:text-[clamp(3.25rem,4.6vw,4.5rem)] sm:leading-[0.98]"
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            variants={introItem}
+            variants={titleReveal}
           >
             <span className="block">Intelligent chemistry for</span>
-            <motion.span
-              animate={
-                shouldReduceMotion
-                  ? undefined
-                  : {
-                      y: [0, -2, 0],
-                      opacity: [1, 0.94, 1],
-                      textShadow: [
-                        "0 0 0 rgba(165,243,252,0)",
-                        "0 6px 24px rgba(165,243,252,0.18)",
-                        "0 0 0 rgba(165,243,252,0)",
-                      ],
-                    }
-              }
-              className="hero-focus block"
-              initial={false}
-              transition={{ delay: 1.1, duration: 5.6, ease: "easeInOut", repeat: Infinity }}
-            >
-              better polyurethane solutions.
-            </motion.span>
+            <span className="hero-focus relative block">better polyurethane solutions.</span>
           </motion.h1>
 
-          <motion.p
-            className="hero-tagline mt-6 text-base font-semibold sm:text-lg"
-            transition={{ duration: 0.52, ease: [0.22, 1, 0.36, 1] }}
-            variants={introItem}
-          >
+          <motion.p className="hero-tagline mt-6 text-base font-semibold sm:text-lg" variants={introItem}>
             We deliver what we promise.
           </motion.p>
 
           <motion.p
             className="hero-description mt-3 max-w-lg text-sm leading-6 sm:text-base sm:leading-7"
-            transition={{ duration: 0.52, ease: [0.22, 1, 0.36, 1] }}
             variants={introItem}
           >
             Advanced polyurethane systems, specialty chemicals and technical support for real-world applications.
           </motion.p>
 
-          <div className="hero-process mt-10 grid max-w-xl grid-cols-3 border-y border-white/25">
+          <motion.div className="hero-process mt-10 grid max-w-xl grid-cols-3 border-y border-white/25" variants={introItem}>
             {processSteps.map((step, index) => (
               <div
                 className={`py-4 ${index > 0 ? "border-l border-white/20 pl-5 sm:pl-6" : "pr-4"}`}
@@ -200,7 +217,7 @@ export function HeroSection() {
                 </span>
               </div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
       </Container>
 
@@ -220,7 +237,38 @@ export function HeroSection() {
         }
 
         .minimal-hero .hero-focus {
-          color: #e6fbff !important;
+          background: linear-gradient(
+            105deg,
+            #dffaff 0%,
+            #dffaff 34%,
+            #67e8f9 47%,
+            #ffffff 53%,
+            #67e8f9 59%,
+            #dffaff 72%,
+            #dffaff 100%
+          );
+          background-position: 120% 50%;
+          background-size: 260% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent !important;
+          -webkit-text-fill-color: transparent;
+          animation: hero-text-sheen 5.8s ease-in-out 1.1s infinite;
+        }
+
+        .minimal-hero .hero-focus::after {
+          position: absolute;
+          bottom: -0.08em;
+          left: 0;
+          width: 4.5rem;
+          height: 2px;
+          border-radius: 999px;
+          background: #67e8f9;
+          content: "";
+          opacity: 0.72;
+          transform: scaleX(0.55);
+          transform-origin: left;
+          animation: hero-accent-breathe 3.8s ease-in-out 1.5s infinite;
         }
 
         .minimal-hero .hero-description {
@@ -229,6 +277,42 @@ export function HeroSection() {
 
         .minimal-hero .hero-step-label {
           color: rgba(255, 255, 255, 0.94) !important;
+        }
+
+        @keyframes hero-text-sheen {
+          0%,
+          18% {
+            background-position: 120% 50%;
+          }
+
+          48%,
+          100% {
+            background-position: -120% 50%;
+          }
+        }
+
+        @keyframes hero-accent-breathe {
+          0%,
+          100% {
+            opacity: 0.45;
+            transform: scaleX(0.55);
+          }
+
+          50% {
+            opacity: 0.95;
+            transform: scaleX(1);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .minimal-hero .hero-focus,
+          .minimal-hero .hero-focus::after {
+            animation: none !important;
+          }
+
+          .minimal-hero .hero-focus::after {
+            transform: scaleX(1);
+          }
         }
       `}</style>
     </section>
