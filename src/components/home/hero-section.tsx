@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Container } from "@/components/ui/container";
 
 const HERO_VIDEO_FULL_HD =
@@ -14,8 +14,9 @@ const HERO_POSTER =
   "https://images.pexels.com/videos/9339478/pexels-photo-9339478.jpeg?auto=compress&fit=crop&w=2200";
 
 const processSteps = ["Formulate", "Validate", "Deliver"];
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
-const introContainer = {
+const introContainer: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -25,22 +26,22 @@ const introContainer = {
   },
 };
 
-const introItem = {
+const introItem: Variants = {
   hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.62, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.62, ease: EASE_OUT },
   },
 };
 
-const titleReveal = {
+const titleReveal: Variants = {
   hidden: { opacity: 0, y: 24, filter: "blur(7px)" },
   visible: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.82, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.82, ease: EASE_OUT },
   },
 };
 
@@ -177,7 +178,7 @@ export function HeroSection() {
               aria-hidden="true"
               className="h-px w-8 origin-left bg-cyan-300"
               initial={shouldReduceMotion ? false : { scaleX: 0, opacity: 0 }}
-              transition={{ delay: heroReady ? 0.12 : 0, duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: heroReady ? 0.12 : 0, duration: 0.75, ease: EASE_OUT }}
             />
             <p className="hero-eyebrow text-[0.7rem] font-semibold uppercase tracking-[0.3em] sm:text-xs">
               URECHEM CHEMICALS
