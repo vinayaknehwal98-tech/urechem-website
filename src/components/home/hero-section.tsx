@@ -13,6 +13,12 @@ const HERO_VIDEO_HD =
 const HERO_POSTER =
   "https://images.pexels.com/videos/9339478/pexels-photo-9339478.jpeg?auto=compress&fit=crop&w=2200";
 
+const capabilities = [
+  "Polyurethane systems",
+  "Specialty chemicals",
+  "Technical support",
+];
+
 const introContainer = {
   hidden: {},
   visible: {
@@ -115,8 +121,12 @@ export function HeroSection() {
         aria-hidden="true"
         className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,15,28,0.64)_0%,rgba(2,15,28,0.4)_38%,rgba(2,15,28,0.08)_70%,transparent_100%)]"
       />
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 -z-10 h-52 bg-gradient-to-t from-slate-950/35 to-transparent"
+      />
 
-      <Container className="flex min-h-[34rem] items-center py-16 sm:min-h-[40rem] md:min-h-[calc(100dvh-4.5rem)] md:py-24">
+      <Container className="flex min-h-[38rem] items-center pb-40 pt-16 sm:min-h-[42rem] md:min-h-[calc(100dvh-4.5rem)] md:pb-36 md:pt-24">
         <motion.div
           animate="visible"
           className="relative z-10 max-w-2xl"
@@ -160,18 +170,50 @@ export function HeroSection() {
         </motion.div>
       </Container>
 
+      <motion.div
+        animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+        className="absolute inset-x-0 bottom-0 z-10 border-t border-white/20 bg-slate-950/10 backdrop-blur-[2px]"
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+        transition={{ delay: 0.45, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <Container className="grid grid-cols-1 divide-y divide-white/15 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {capabilities.map((capability, index) => (
+            <div
+              className="group flex items-center gap-4 py-4 sm:px-5 sm:py-5 first:sm:pl-0 last:sm:pr-0"
+              key={capability}
+            >
+              <span className="hero-index text-[0.65rem] font-semibold tracking-[0.22em]">
+                0{index + 1}
+              </span>
+              <span className="hero-capability text-sm font-medium tracking-wide sm:text-[0.92rem]">
+                {capability}
+              </span>
+              <span
+                aria-hidden="true"
+                className="ml-auto h-px w-5 origin-right bg-cyan-300/70 transition-transform duration-300 group-hover:scale-x-150"
+              />
+            </div>
+          ))}
+        </Container>
+      </motion.div>
+
       <style jsx global>{`
         .minimal-hero .hero-white {
           color: #ffffff !important;
         }
 
         .minimal-hero .hero-eyebrow,
-        .minimal-hero .hero-tagline {
+        .minimal-hero .hero-tagline,
+        .minimal-hero .hero-index {
           color: #a5f3fc !important;
         }
 
         .minimal-hero .hero-description {
           color: rgba(255, 255, 255, 0.78) !important;
+        }
+
+        .minimal-hero .hero-capability {
+          color: rgba(255, 255, 255, 0.92) !important;
         }
       `}</style>
     </section>
