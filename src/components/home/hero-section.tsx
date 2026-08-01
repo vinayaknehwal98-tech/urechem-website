@@ -119,7 +119,7 @@ export function HeroSection() {
       <Container className="flex flex-col justify-start pb-14 pt-9 sm:pb-16 sm:pt-12 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-16">
         <div className="relative z-10 w-full max-w-3xl md:-translate-y-8">
           <p className="text-xs font-black uppercase tracking-[0.21em] text-blue-700 sm:text-sm sm:tracking-[0.24em]" data-hero-intro>
-            URECHEM CHEMICAL
+            URECHEM CHEMICALS
           </p>
           <h1
             className="mt-3 max-w-[20rem] text-[clamp(2.15rem,9vw,2.55rem)] font-black leading-[0.97] tracking-[-0.038em] text-blue-950 sm:mt-4 sm:max-w-3xl sm:text-[clamp(2.55rem,3.25vw,3.5rem)] sm:leading-[0.98] sm:tracking-[-0.04em]"

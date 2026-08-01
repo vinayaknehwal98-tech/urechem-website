@@ -415,7 +415,7 @@ export function SiteOpeningAnimation() {
         <OpeningDroplet />
       </div>
 
-      <span className="sr-only" role="status">Loading Urechem Chemical</span>
+      <span className="sr-only" role="status">Loading Urechem Chemicals</span>
       {showSkip ? (
         <button className="urechem-opening__skip" onClick={skip} type="button">
           Skip intro
