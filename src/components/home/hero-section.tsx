@@ -120,10 +120,17 @@ export function HeroSection() {
             className="mt-3 max-w-[20rem] text-[clamp(2.15rem,9vw,2.55rem)] font-black leading-[0.97] tracking-[-0.038em] text-blue-950 sm:mt-4 sm:max-w-3xl sm:text-[clamp(2.55rem,3.25vw,3.5rem)] sm:leading-[0.98] sm:tracking-[-0.04em]"
             data-hero-intro
           >
-            Intelligent chemistry for better polyurethane solutions.
+            <span className="block">Intelligent chemistry for</span>
+            <span className="hero-highlight">better polyurethane solutions.</span>
           </h1>
-          <p className="mt-3 max-w-[22rem] text-lg font-black leading-tight text-sky-700 sm:mt-4 sm:max-w-none sm:text-[1.35rem]" data-hero-intro>
-            We deliver what we promise.
+          <p className="mt-4 max-w-[22rem] text-lg font-black leading-tight text-sky-700 sm:mt-5 sm:max-w-none sm:text-[1.35rem]" data-hero-intro>
+            <span className="inline-flex items-center gap-2.5">
+              <span
+                aria-hidden="true"
+                className="h-1 w-8 rounded-full bg-[linear-gradient(90deg,#38bdf8,#5eead4)] shadow-[0_0_16px_rgba(34,211,238,0.78)]"
+              />
+              We deliver what we promise.
+            </span>
           </p>
           <p className="mt-2.5 max-w-lg text-base leading-7 text-slate-700 sm:mt-3 sm:text-base sm:leading-7" data-hero-intro>
             Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
