@@ -29,38 +29,21 @@ export default async function Page({ params }: { params: Promise<{ family: strin
       <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden border-b border-blue-100 py-16 sm:py-20 lg:py-24">
         <div
           aria-hidden="true"
-          className="application-background-motion absolute inset-0 -z-30 bg-cover"
+          className="absolute inset-0 -z-30 bg-cover"
           style={{
             backgroundImage: `url(${background.src})`,
             backgroundPosition: background.position,
           }}
         />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-20"
-          style={{
-            background:
-              "linear-gradient(90deg,rgba(248,251,255,0.98) 0%,rgba(248,251,255,0.94) 40%,rgba(239,246,255,0.72) 66%,rgba(3,20,38,0.38) 84%,rgba(3,20,38,0.54) 100%)",
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(circle at 80% 34%,rgba(14,165,233,0.18),transparent 25rem),radial-gradient(circle at 15% 88%,rgba(37,99,235,0.10),transparent 24rem)",
-          }}
-        />
-
         <Container className="relative w-full">
-          <div className="max-w-4xl">
+          <div className="transparent-media-copy max-w-4xl">
             <SectionLabel>{productFamily.name}</SectionLabel>
             <h1 className="mt-6 max-w-4xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
               {item.name}
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-700">{item.description}</p>
 
-            <div className="mt-6 max-w-3xl rounded-2xl border border-blue-200/80 bg-white/78 p-4 shadow-[0_14px_40px_rgba(30,64,175,0.10)] backdrop-blur-md">
+            <div className="mt-6 max-w-3xl rounded-2xl border border-white/70 bg-transparent p-4 shadow-[0_14px_40px_rgba(2,18,36,0.16)]">
               <ValidationNote />
             </div>
 

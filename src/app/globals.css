@@ -199,32 +199,6 @@ main aside {
   }
 }
 
-@keyframes foam-background-zoom {
-  0% {
-    transform: scale(1.04) translate3d(0, 0, 0);
-  }
-
-  100% {
-    transform: scale(1.17) translate3d(-1.5%, -1%, 0);
-  }
-}
-
-@keyframes application-background-motion {
-  0% {
-    opacity: 0.82;
-    transform: scale(1.025) translate3d(0, 0, 0);
-  }
-
-  14% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1.14) translate3d(-1.25%, -0.8%, 0);
-  }
-}
-
 .logo-drop-in {
   animation: logo-drop-in 1.05s cubic-bezier(0.2, 0.9, 0.24, 1.18) both;
   transform-origin: center bottom;
@@ -243,16 +217,15 @@ main aside {
   animation: logo-tagline-reveal 500ms cubic-bezier(0.22, 1, 0.36, 1) 620ms both;
 }
 
-.foam-background-zoom {
-  animation: foam-background-zoom 14s ease-in-out infinite alternate;
-  transform-origin: center;
-  will-change: transform;
+.transparent-media-copy :is(h1, h2, h3, p, li) {
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.98),
+    0 0 10px rgba(255, 255, 255, 0.92),
+    0 0 24px rgba(255, 255, 255, 0.72);
 }
 
-.application-background-motion {
-  animation: application-background-motion 16s ease-in-out infinite alternate;
-  transform-origin: center;
-  will-change: opacity, transform;
+.transparent-media-copy svg {
+  filter: drop-shadow(0 1px 3px rgba(255, 255, 255, 0.96));
 }
 
 @media (prefers-reduced-motion: reduce) {

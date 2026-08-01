@@ -20,32 +20,15 @@ export default function Page() {
       <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden border-b border-blue-100 py-16 sm:py-20 lg:py-24">
         <div
           aria-hidden="true"
-          className="application-background-motion absolute inset-0 -z-30 bg-cover"
+          className="absolute inset-0 -z-30 bg-cover"
           style={{
             backgroundImage: `url(${background.src})`,
             backgroundPosition: background.position,
           }}
         />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-20"
-          style={{
-            background:
-              "linear-gradient(90deg,rgba(248,251,255,0.98) 0%,rgba(248,251,255,0.93) 38%,rgba(239,246,255,0.72) 61%,rgba(3,20,38,0.37) 82%,rgba(3,20,38,0.54) 100%)",
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(circle at 78% 36%,rgba(14,165,233,0.21),transparent 26rem),radial-gradient(circle at 15% 86%,rgba(37,99,235,0.11),transparent 24rem)",
-          }}
-        />
-
         <Container className="relative w-full">
           <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center xl:gap-16">
-            <div>
+            <div className="transparent-media-copy">
               <SectionLabel>Thermoplastic polyurethane</SectionLabel>
               <h1 className="mt-6 max-w-5xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
                 TPU material pathways
@@ -64,7 +47,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[620px] rounded-[2rem] border border-white/40 bg-white/18 p-5 shadow-[0_28px_90px_rgba(2,18,36,0.28)] backdrop-blur-[3px] sm:p-7">
+            <div className="relative mx-auto w-full max-w-[620px] rounded-[2rem] border border-white/70 bg-transparent p-5 shadow-[0_28px_90px_rgba(2,18,36,0.28)] sm:p-7">
               <TpuMaterialVisual />
             </div>
           </div>

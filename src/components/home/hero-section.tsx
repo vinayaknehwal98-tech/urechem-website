@@ -4,9 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import { Beaker, Boxes, ShieldCheck } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/container";
-import { MolecularBackground } from "@/components/visuals/molecular-background";
 
-const HERO_VIDEO =
+const HERO_VIDEO_FULL_HD =
+  "https://videos.pexels.com/video-files/9339478/9339478-hd_1920_1080_24fps.mp4";
+
+const HERO_VIDEO_HD =
   "https://videos.pexels.com/video-files/9339478/9339478-hd_1280_720_24fps.mp4";
 
 const HERO_POSTER =
@@ -90,7 +92,7 @@ export function HeroSection() {
         style={{ backgroundImage: `url(${HERO_POSTER})` }}
       >
         <video
-          className={`h-full w-full object-cover object-[70%_center] [backface-visibility:hidden] [filter:saturate(.84)_brightness(1.02)_contrast(.94)] [transform:translateZ(0)] transition-opacity duration-700 ease-out md:object-center ${
+          className={`h-full w-full object-cover object-[70%_center] [backface-visibility:hidden] [transform:translateZ(0)] transition-opacity duration-700 ease-out md:object-center ${
             videoIsPlaying && !videoFailed && !shouldReduceMotion ? "opacity-100" : "opacity-0"
           }`}
           disablePictureInPicture
@@ -104,20 +106,13 @@ export function HeroSection() {
           ref={videoRef}
           tabIndex={-1}
         >
-          <source src={HERO_VIDEO} type="video/mp4" />
+          <source media="(min-width: 1024px)" src={HERO_VIDEO_FULL_HD} type="video/mp4" />
+          <source src={HERO_VIDEO_HD} type="video/mp4" />
         </video>
       </div>
 
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(255,255,255,0.90)_0%,rgba(255,255,255,0.78)_48%,rgba(248,251,255,0.52)_72%,rgba(239,246,255,0.24)_100%)] md:bg-[linear-gradient(90deg,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.78)_34%,rgba(255,255,255,0.58)_52%,rgba(239,246,255,0.26)_73%,rgba(239,246,255,0.06)_100%)]" />
-      <div className="absolute inset-0 -z-20 hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0.01)_62%,rgba(255,255,255,0.34)_100%)] md:block" />
-      <div className="hidden md:block">
-        <MolecularBackground />
-      </div>
-      <div className="absolute inset-0 -z-10 opacity-[0.04] [background-image:radial-gradient(circle_at_1px_1px,rgba(37,99,235,0.20)_1px,transparent_0)] [background-size:26px_26px] md:opacity-[0.08]" />
-      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-white/45 via-white/10 to-transparent md:h-40" />
-
       <Container className="flex flex-col justify-start pb-14 pt-9 sm:pb-16 sm:pt-12 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-16">
-        <div className="relative z-10 w-full max-w-3xl md:-translate-y-8">
+        <div className="transparent-media-copy relative z-10 w-full max-w-3xl md:-translate-y-8">
           <p className="text-xs font-black uppercase tracking-[0.21em] text-blue-700 sm:text-sm sm:tracking-[0.24em]" data-hero-intro>
             URECHEM CHEMICALS
           </p>
@@ -137,10 +132,10 @@ export function HeroSection() {
       </Container>
 
       <Container className="relative z-10 hidden pb-10 md:block">
-        <div className="grid gap-3 border-t border-blue-200/70 pt-6 md:grid-cols-3">
+        <div className="grid gap-3 border-t border-white/70 pt-6 md:grid-cols-3">
           {proofPoints.map((item, index) => (
             <motion.article
-              className="rounded-[var(--radius-md)] border border-blue-100 bg-white/90 p-4 shadow-[var(--shadow-soft)] backdrop-blur-md"
+              className="transparent-media-copy rounded-[var(--radius-md)] border border-white/70 bg-transparent p-4 shadow-[0_10px_32px_rgba(2,18,36,0.16)]"
               initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
               key={item.label}
               transition={{ delay: index * 0.08, duration: 0.58, ease: [0.22, 1, 0.36, 1] }}

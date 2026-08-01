@@ -68,43 +68,23 @@ export default async function Page({ params }: { params: Promise<{ application: 
         <>
           <div
             aria-hidden="true"
-            className="application-background-motion absolute inset-0 -z-30 bg-cover"
+            className="absolute inset-0 -z-30 bg-cover"
             style={{
               backgroundImage: `url(${background.src})`,
               backgroundPosition: background.position,
             }}
           />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -z-20"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(255,255,255,0.94) 0%, rgba(255,255,255,0.82) 44%, rgba(245,250,255,0.58) 72%, rgba(238,247,255,0.46) 100%)",
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -z-20"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 82% 22%, rgba(14,165,233,0.19), transparent 28%), radial-gradient(circle at 16% 84%, rgba(37,99,235,0.13), transparent 31%)",
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-0 bottom-0 -z-20 h-80 bg-gradient-to-t from-white/95 via-white/55 to-transparent"
-          />
         </>
       ) : null}
 
       <Container className="relative z-10 py-16 sm:py-20">
-        <div className="max-w-4xl">
+        <div className="transparent-media-copy max-w-4xl">
           <SectionLabel>Catalog intelligence</SectionLabel>
           <h1 className="mt-5 text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl">{item.name}</h1>
           <p className="mt-4 max-w-3xl text-slate-300">{item.summary}</p>
         </div>
 
-        <div className="mt-6"><ValidationNote /></div>
+        <div className="transparent-media-copy mt-6"><ValidationNote /></div>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <ButtonLink href={`/contact?type=Consultation%20request&context=${encodeURIComponent(`Application review: ${item.name}`)}`}>Discuss this application</ButtonLink>
           <ButtonLink href="/innovation-rd" variant="secondary">Innovation & R&D route</ButtonLink>
@@ -112,15 +92,13 @@ export default async function Page({ params }: { params: Promise<{ application: 
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           <section
-            className="rounded-[var(--radius-lg)] border border-blue-200/70 p-5 shadow-[var(--shadow-soft)] backdrop-blur-md"
-            style={{ background: "rgba(255,255,255,0.76)" }}
+            className="transparent-media-copy rounded-[var(--radius-lg)] border border-white/70 bg-transparent p-5 shadow-[var(--shadow-soft)]"
           >
             <h2 className="font-semibold">Common inputs</h2>
             <ul className="mt-3 space-y-2 text-sm text-slate-300">{item.needs.map((need) => <li key={need}>• {need}</li>)}</ul>
           </section>
           <section
-            className="rounded-[var(--radius-lg)] border border-blue-200/70 p-5 shadow-[var(--shadow-soft)] backdrop-blur-md md:col-span-2"
-            style={{ background: "rgba(255,255,255,0.76)" }}
+            className="transparent-media-copy rounded-[var(--radius-lg)] border border-white/70 bg-transparent p-5 shadow-[var(--shadow-soft)] md:col-span-2"
           >
             {item.familySlugs.length > 0 ? (<>
               <h2 className="font-semibold">Relevant families</h2>

@@ -19,29 +19,12 @@ export default function Page() {
       <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden border-b border-blue-100 py-16 sm:py-20 lg:py-24">
         <div
           aria-hidden="true"
-          className="foam-background-zoom absolute inset-0 -z-30 bg-cover bg-center"
+          className="absolute inset-0 -z-30 bg-cover bg-center"
           style={{ backgroundImage: `url(${PU_FOAM_BACKGROUND})` }}
         />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-20"
-          style={{
-            background:
-              "linear-gradient(90deg,rgba(248,251,255,0.98) 0%,rgba(248,251,255,0.94) 34%,rgba(239,246,255,0.74) 53%,rgba(3,20,38,0.34) 75%,rgba(3,20,38,0.52) 100%)",
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 opacity-60"
-          style={{
-            background:
-              "radial-gradient(circle at 76% 46%,rgba(14,165,233,0.22),transparent 23rem),radial-gradient(circle at 18% 86%,rgba(37,99,235,0.10),transparent 24rem)",
-          }}
-        />
-
         <Container className="relative w-full">
           <div className="grid gap-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-center xl:gap-16">
-            <div className="max-w-3xl">
+            <div className="transparent-media-copy max-w-3xl">
               <SectionLabel>Combined technical range</SectionLabel>
               <h1 className="mt-6 max-w-4xl text-balance text-5xl font-black leading-[0.94] tracking-[-0.055em] text-slate-950 sm:text-6xl lg:text-7xl">
                 The complete Urechem product universe
@@ -63,7 +46,7 @@ export default function Page() {
             <div className="relative mx-auto flex w-full max-w-[700px] items-center justify-center py-4 lg:py-0">
               <div
                 aria-hidden="true"
-                className="absolute left-1/2 top-1/2 h-[88%] w-[88%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-100/20 bg-slate-950/25 shadow-[0_30px_100px_rgba(2,18,36,0.30)] backdrop-blur-[2px]"
+                className="absolute left-1/2 top-1/2 h-[88%] w-[88%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-100/50 bg-transparent shadow-[0_30px_100px_rgba(2,18,36,0.30)]"
               />
               <div
                 aria-hidden="true"
@@ -72,7 +55,7 @@ export default function Page() {
 
               <div className="relative z-10 w-full">
                 <div className="flex justify-center">
-                  <span className="rounded-full border border-white/55 bg-white/88 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sky-800 shadow-lg backdrop-blur-md">
+                  <span className="rounded-full border border-white/70 bg-transparent px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-sky-800 shadow-lg">
                     PU chemistry pathways
                   </span>
                 </div>
