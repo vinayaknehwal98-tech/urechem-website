@@ -130,18 +130,44 @@ export function HeroSection() {
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             variants={introItem}
           >
-            <span aria-hidden="true" className="h-px w-8 bg-cyan-300" />
+            <motion.span
+              animate={shouldReduceMotion ? undefined : { scaleX: 1, opacity: 1 }}
+              aria-hidden="true"
+              className="h-px w-8 origin-left bg-cyan-300"
+              initial={shouldReduceMotion ? false : { scaleX: 0, opacity: 0 }}
+              transition={{ delay: 0.16, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            />
             <p className="hero-eyebrow text-[0.7rem] font-semibold uppercase tracking-[0.3em] sm:text-xs">
               URECHEM CHEMICALS
             </p>
           </motion.div>
 
           <motion.h1
-            className="hero-white max-w-[20rem] text-[clamp(2.35rem,8.5vw,3rem)] font-semibold leading-[1.02] tracking-[-0.035em] sm:max-w-2xl sm:text-[clamp(3.25rem,4.6vw,4.5rem)] sm:leading-[0.98]"
+            className="hero-white hero-title max-w-[20rem] text-[clamp(2.35rem,8.5vw,3rem)] font-semibold leading-[1.02] tracking-[-0.035em] sm:max-w-2xl sm:text-[clamp(3.25rem,4.6vw,4.5rem)] sm:leading-[0.98]"
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             variants={introItem}
           >
-            Intelligent chemistry for better polyurethane solutions.
+            <span className="block">Intelligent chemistry for</span>
+            <motion.span
+              animate={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      y: [0, -2, 0],
+                      opacity: [1, 0.94, 1],
+                      textShadow: [
+                        "0 0 0 rgba(165,243,252,0)",
+                        "0 6px 24px rgba(165,243,252,0.18)",
+                        "0 0 0 rgba(165,243,252,0)",
+                      ],
+                    }
+              }
+              className="hero-focus block"
+              initial={false}
+              transition={{ delay: 1.1, duration: 5.6, ease: "easeInOut", repeat: Infinity }}
+            >
+              better polyurethane solutions.
+            </motion.span>
           </motion.h1>
 
           <motion.p
@@ -187,6 +213,14 @@ export function HeroSection() {
         .minimal-hero .hero-tagline,
         .minimal-hero .hero-step-number {
           color: #a5f3fc !important;
+        }
+
+        .minimal-hero .hero-title {
+          text-shadow: 0 3px 18px rgba(2, 15, 28, 0.26);
+        }
+
+        .minimal-hero .hero-focus {
+          color: #e6fbff !important;
         }
 
         .minimal-hero .hero-description {
