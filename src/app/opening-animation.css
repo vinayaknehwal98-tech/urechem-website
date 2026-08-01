@@ -66,10 +66,6 @@
   width: 100%;
 }
 
-.urechem-opening__skip {
-  display: none !important;
-}
-
 html[data-urechem-intro-active="true"] [data-urechem-logo-mark],
 html[data-urechem-intro-active="true"] [data-urechem-logo-name],
 html[data-urechem-intro-active="true"] [data-urechem-logo-tagline] {

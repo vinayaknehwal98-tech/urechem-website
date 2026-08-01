@@ -63,7 +63,7 @@ export function AnimatedImage({
         aria-hidden="true"
         animate={shouldReduceMotion ? undefined : { x: ["-140%", "360%"] }}
         className="absolute inset-y-0 left-0 w-1/4 -skew-x-12 bg-gradient-to-r from-transparent via-white/16 to-transparent"
-        transition={{ delay: 1.2, duration: 8, ease: "easeInOut", repeat: Infinity, repeatDelay: 3 }}
+        transition={{ delay: 0.8, duration: 1.8, ease: "easeInOut" }}
       />
     </motion.figure>
   );

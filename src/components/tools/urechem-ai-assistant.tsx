@@ -13,6 +13,12 @@ const starterQuestions = [
   "How can I request a TDS for a product?",
 ];
 
+const greetingPattern = /^(?:(?:hi|hello|hey|namaste)(?:\s+(?:there|team))?|good\s+(?:morning|afternoon|evening))[\s!,.?]*$/i;
+
+function isGreeting(value: string) {
+  return greetingPattern.test(value.trim());
+}
+
 type DocumentIntent = "TDS" | "SDS" | "COA" | "Compliance" | "Processing guide";
 
 function getDocumentIntent(value: string): DocumentIntent | null {
@@ -39,12 +45,25 @@ export function UrechemAiAssistant() {
     [question],
   );
   const documentIntent = useMemo(() => getDocumentIntent(question), [question]);
+  const greeting = Boolean(question && isGreeting(question));
+  const needsClarification = Boolean(
+    question &&
+      analysis &&
+      !greeting &&
+      !documentIntent &&
+      !analysis.ureshieldMatch &&
+      analysis.pathways.length === 0,
+  );
 
   useEffect(() => {
     if (!request) return;
 
     const frame = window.requestAnimationFrame(() => {
-      answerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const shouldScroll = window.matchMedia("(max-width: 1023px)").matches;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (shouldScroll) {
+        answerRef.current?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "nearest" });
+      }
       answerRef.current?.focus({ preventScroll: true });
     });
 
@@ -154,91 +173,117 @@ export function UrechemAiAssistant() {
                   <Sparkles aria-hidden="true" className="size-4" />
                 </span>
                 <div className="min-w-0 flex-1 rounded-2xl rounded-tl-sm border border-white/10 bg-white/[0.055] p-4">
-                  <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-cyan-100">Preliminary catalog answer</p>
+                  <p className="font-mono text-xs font-semibold uppercase tracking-[0.14em] text-cyan-100">
+                    {greeting ? "Urechem assistant" : needsClarification ? "More detail needed" : "Preliminary catalog answer"}
+                  </p>
 
-                  {documentIntent ? (
-                    <div className="mt-4 rounded-[var(--radius-sm)] border border-amber-300/25 bg-amber-300/8 p-4">
-                      <div className="flex items-start gap-3">
-                        <FileSearch aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-amber-200" />
-                        <div>
-                          <h2 className="font-semibold text-white">Request the current {documentIntent}</h2>
+                  {greeting ? (
+                    <div className="mt-4">
+                      <h2 className="text-lg font-semibold text-white">Hi! How can I help?</h2>
+                      <p className="mt-2 text-sm leading-6 text-slate-300">
+                        Tell me the application, material, site condition or technical document you need. I&apos;ll help you find the relevant Urechem pathway without guessing a product route.
+                      </p>
+                    </div>
+                  ) : needsClarification ? (
+                    <div className="mt-4">
+                      <h2 className="text-lg font-semibold text-white">I need a little more technical detail.</h2>
+                      <p className="mt-2 text-sm leading-6 text-slate-300">
+                        I could not identify a reliable catalog match from that message, so I have not generated a recommendation.
+                      </p>
+                      <ul className="mt-3 grid gap-2 text-sm leading-6 text-slate-300 sm:grid-cols-2">
+                        <li>• Application or component</li>
+                        <li>• Material or substrate</li>
+                        <li>• Operating environment</li>
+                        <li>• Required performance result</li>
+                      </ul>
+                    </div>
+                  ) : (
+                    <>
+                      {documentIntent ? (
+                        <div className="mt-4 rounded-[var(--radius-sm)] border border-amber-300/25 bg-amber-300/8 p-4">
+                          <div className="flex items-start gap-3">
+                            <FileSearch aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-amber-200" />
+                            <div>
+                              <h2 className="font-semibold text-white">Request the current {documentIntent}</h2>
+                              <p className="mt-2 text-sm leading-6 text-slate-300">
+                                Document availability is confirmed by Urechem for the selected product. Use the document request library to prepare a focused request.
+                              </p>
+                              <Link
+                                className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-amber-100"
+                                href={`/technical-center/documents?type=${encodeURIComponent(documentIntent)}`}
+                              >
+                                Open document requests
+                                <ArrowRight aria-hidden="true" className="size-4" />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {analysis.ureshieldMatch ? (
+                        <div className="mt-4 rounded-[var(--radius-sm)] border border-blue-300/25 bg-blue-400/10 p-4">
+                          <h2 className="font-semibold text-white">Start with the UreShield pathway</h2>
                           <p className="mt-2 text-sm leading-6 text-slate-300">
-                            Document availability is confirmed by Urechem for the selected product. Use the document request library to prepare a focused request.
+                            Your question contains water-control, membrane, leakage, grouting or polyurea signals. Substrate, water pressure and application method still require technical review.
                           </p>
                           <Link
-                            className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-amber-100"
-                            href={`/technical-center/documents?type=${encodeURIComponent(documentIntent)}`}
+                            className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-cyan-100"
+                            href="/products/ureshield-waterproofing-polyurea-systems"
                           >
-                            Open document requests
+                            Explore UreShield
                             <ArrowRight aria-hidden="true" className="size-4" />
                           </Link>
                         </div>
+                      ) : null}
+
+                      <div className="mt-4 grid gap-3">
+                        {analysis.pathways.map((pathway, pathwayIndex) => (
+                          <article className="rounded-[var(--radius-sm)] border border-white/10 bg-navy-950/45 p-4" key={pathway.applicationSlug}>
+                            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+                              {pathwayIndex === 0 ? "Best starting route" : "Related route"}
+                            </p>
+                            <h2 className="mt-2 text-lg font-semibold text-white">{pathway.applicationName}</h2>
+                            <p className="mt-2 text-sm leading-6 text-slate-300">{pathway.reason}</p>
+                            {pathway.familyNames.length ? (
+                              <p className="mt-2 text-xs leading-5 text-slate-400">
+                                Relevant families: {pathway.familyNames.join(", ")}
+                              </p>
+                            ) : null}
+                            <Link
+                              className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-cyan-100"
+                              href={pathway.applicationHref}
+                            >
+                              Review this pathway
+                              <ArrowRight aria-hidden="true" className="size-4" />
+                            </Link>
+                          </article>
+                        ))}
                       </div>
-                    </div>
-                  ) : null}
 
-                  {analysis.ureshieldMatch ? (
-                    <div className="mt-4 rounded-[var(--radius-sm)] border border-blue-300/25 bg-blue-400/10 p-4">
-                      <h2 className="font-semibold text-white">Start with the UreShield pathway</h2>
-                      <p className="mt-2 text-sm leading-6 text-slate-300">
-                        Your question contains water-control, membrane, leakage, grouting or polyurea signals. Substrate, water pressure and application method still require technical review.
-                      </p>
-                      <Link
-                        className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-cyan-100"
-                        href="/products/ureshield-waterproofing-polyurea-systems"
-                      >
-                        Explore UreShield
-                        <ArrowRight aria-hidden="true" className="size-4" />
-                      </Link>
-                    </div>
-                  ) : null}
+                      <div className="mt-4 flex items-start gap-2 border-t border-white/10 pt-4 text-xs leading-5 text-slate-400">
+                        <ShieldCheck aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-turquoise-300" />
+                        Final product selection, specifications and engineering decisions require review by qualified Urechem stakeholders.
+                      </div>
 
-                  <div className="mt-4 grid gap-3">
-                    {analysis.pathways.map((pathway, pathwayIndex) => (
-                      <article className="rounded-[var(--radius-sm)] border border-white/10 bg-navy-950/45 p-4" key={pathway.applicationSlug}>
-                        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
-                          {pathwayIndex === 0 ? "Best starting route" : "Related route"}
-                        </p>
-                        <h2 className="mt-2 text-lg font-semibold text-white">{pathway.applicationName}</h2>
-                        <p className="mt-2 text-sm leading-6 text-slate-300">{pathway.reason}</p>
-                        {pathway.familyNames.length ? (
-                          <p className="mt-2 text-xs leading-5 text-slate-400">
-                            Relevant families: {pathway.familyNames.join(", ")}
-                          </p>
-                        ) : null}
+                      <div className="mt-4 flex flex-wrap gap-3">
                         <Link
-                          className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-cyan-100"
-                          href={pathway.applicationHref}
+                          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-4 text-sm font-semibold text-navy-950 transition hover:bg-white"
+                          href={`/contact?type=Consultation%20request&context=${encodeURIComponent(question)}`}
                         >
-                          Review this pathway
+                          Ask an expert
                           <ArrowRight aria-hidden="true" className="size-4" />
                         </Link>
-                      </article>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 flex items-start gap-2 border-t border-white/10 pt-4 text-xs leading-5 text-slate-400">
-                    <ShieldCheck aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-turquoise-300" />
-                    Final product selection, specifications and engineering decisions require review by qualified Urechem stakeholders.
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-3">
-                    <Link
-                      className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-4 text-sm font-semibold text-navy-950 transition hover:bg-white"
-                      href={`/contact?type=Consultation%20request&context=${encodeURIComponent(question)}`}
-                    >
-                      Ask an expert
-                      <ArrowRight aria-hidden="true" className="size-4" />
-                    </Link>
-                    <button
-                      className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-white/15 px-4 text-sm font-semibold text-slate-200 transition hover:border-cyan-200/60 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200"
-                      onClick={resetAssistant}
-                      type="button"
-                    >
-                      <RotateCcw aria-hidden="true" className="size-4" />
-                      Ask another question
-                    </button>
-                  </div>
+                        <button
+                          className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-white/15 px-4 text-sm font-semibold text-slate-200 transition hover:border-cyan-200/60 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200"
+                          onClick={resetAssistant}
+                          type="button"
+                        >
+                          <RotateCcw aria-hidden="true" className="size-4" />
+                          Ask another question
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </section>

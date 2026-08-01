@@ -7,7 +7,7 @@ import { Container } from "@/components/ui/container";
 import { MolecularBackground } from "@/components/visuals/molecular-background";
 
 const HERO_VIDEO =
-  "https://videos.pexels.com/video-files/9339478/9339478-uhd_3840_2160_24fps.mp4";
+  "https://videos.pexels.com/video-files/9339478/9339478-hd_1280_720_24fps.mp4";
 
 const HERO_POSTER =
   "https://images.pexels.com/videos/9339478/pexels-photo-9339478.jpeg?auto=compress&fit=crop&w=2200";
@@ -100,7 +100,7 @@ export function HeroSection() {
           onPlaying={() => setVideoIsPlaying(true)}
           playsInline
           poster={HERO_POSTER}
-          preload="metadata"
+          preload="none"
           ref={videoRef}
           tabIndex={-1}
         >

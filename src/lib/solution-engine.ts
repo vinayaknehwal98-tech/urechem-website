@@ -90,14 +90,9 @@ export function analyzeTechnicalChallenge(value: string): GuidedAnalysis {
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
 
-  const selected =
-    ranked.length > 0
-      ? ranked
-      : [{ rule: signalRules.find((rule) => rule.applicationSlug === "custom-formulation")!, score: 1 }];
-
   return {
     ureshieldMatch,
-    pathways: selected.map(({ rule, score }) => {
+    pathways: ranked.map(({ rule, score }) => {
       const application = applications.find((item) => item.slug === rule.applicationSlug)!;
       const families = application.familySlugs
         .map((slug) => productFamilies.find((family) => family.slug === slug))

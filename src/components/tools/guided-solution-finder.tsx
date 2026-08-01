@@ -24,12 +24,19 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
     () => (submittedValue ? analyzeTechnicalChallenge(submittedValue) : null),
     [submittedValue],
   );
+  const hasTechnicalMatch = Boolean(
+    analysis && (analysis.ureshieldMatch || analysis.pathways.length > 0),
+  );
 
   useEffect(() => {
     if (!submission) return;
 
     const frame = window.requestAnimationFrame(() => {
-      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const shouldScroll = window.matchMedia("(max-width: 1023px)").matches;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (shouldScroll) {
+        resultRef.current?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "nearest" });
+      }
       resultRef.current?.focus({ preventScroll: true });
     });
 
@@ -106,67 +113,79 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
           <div className="flex items-start gap-3">
             <ShieldCheck aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-turquoise-300" />
             <div>
-              <h2 className="text-xl font-semibold text-white">Preliminary pathway analysis</h2>
+              <h2 className="text-xl font-semibold text-white">
+                {hasTechnicalMatch ? "Preliminary pathway analysis" : "Add a little more technical detail"}
+              </h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-                {analysis.pathways.length} relevant {analysis.pathways.length === 1 ? "pathway" : "pathways"} found from the published catalog. These are not final product selection or engineering approval.
+                {hasTechnicalMatch
+                  ? `${analysis.pathways.length} relevant ${analysis.pathways.length === 1 ? "pathway" : "pathways"} found from the published catalog. These are not final product selection or engineering approval.`
+                  : "I could not identify a reliable catalog pathway from that message, so no product route has been guessed."}
               </p>
             </div>
           </div>
 
-          {analysis.ureshieldMatch ? (
-            <article className="mt-5 rounded-[var(--radius-md)] border border-blue-300/30 bg-blue-400/10 p-4">
-              <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-cyan-100">Water control signal</p>
-              <h3 className="mt-2 text-lg font-semibold text-white">Review the UreShield pathway</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-300">
-                The brief mentions waterproofing, leakage, injection, grouting, membrane or polyurea requirements.
-              </p>
+          {hasTechnicalMatch ? (
+            <>
+              {analysis.ureshieldMatch ? (
+                <article className="mt-5 rounded-[var(--radius-md)] border border-blue-300/30 bg-blue-400/10 p-4">
+                  <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-cyan-100">Water control signal</p>
+                  <h3 className="mt-2 text-lg font-semibold text-white">Review the UreShield pathway</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">
+                    The brief mentions waterproofing, leakage, injection, grouting, membrane or polyurea requirements.
+                  </p>
+                  <Link
+                    className="mt-4 inline-flex items-center gap-2 font-semibold text-cyan-100 underline decoration-cyan-300/40 underline-offset-4"
+                    href="/products/ureshield-waterproofing-polyurea-systems"
+                  >
+                    Open UreShield
+                    <ArrowRight aria-hidden="true" className="size-4" />
+                  </Link>
+                </article>
+              ) : null}
+
+              <div className="mt-5 grid gap-4 lg:grid-cols-3">
+                {analysis.pathways.map((pathway) => (
+                  <article className="rounded-[var(--radius-md)] border border-white/10 bg-white/[0.045] p-4" key={pathway.applicationSlug}>
+                    <Beaker aria-hidden="true" className="size-5 text-cyan-200" />
+                    <h3 className="mt-4 text-lg font-semibold text-white">{pathway.applicationName}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">{pathway.reason}</p>
+                    {pathway.familyNames.length ? (
+                      <div className="mt-3 flex flex-wrap gap-2" aria-label="Relevant product families">
+                        {pathway.familyNames.map((familyName, index) => (
+                          <Link
+                            className="rounded-full border border-cyan-200/20 bg-cyan-300/8 px-2.5 py-1 text-xs font-semibold text-cyan-100 transition hover:border-cyan-200/60 hover:bg-cyan-300/14"
+                            href={pathway.familyHrefs[index]}
+                            key={pathway.familyHrefs[index]}
+                          >
+                            {familyName}
+                          </Link>
+                        ))}
+                      </div>
+                    ) : null}
+                    <Link
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan-100"
+                      href={pathway.applicationHref}
+                    >
+                      Explore pathway
+                      <ArrowRight aria-hidden="true" className="size-4" />
+                    </Link>
+                  </article>
+                ))}
+              </div>
+
               <Link
-                className="mt-4 inline-flex items-center gap-2 font-semibold text-cyan-100 underline decoration-cyan-300/40 underline-offset-4"
-                href="/products/ureshield-waterproofing-polyurea-systems"
+                className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-5 font-semibold text-navy-950 transition hover:bg-white"
+                href={`/contact?type=Consultation%20request&context=${encodeURIComponent(submittedValue)}`}
               >
-                Open UreShield
+                Send this challenge for expert review
                 <ArrowRight aria-hidden="true" className="size-4" />
               </Link>
-            </article>
-          ) : null}
-
-          <div className="mt-5 grid gap-4 lg:grid-cols-3">
-            {analysis.pathways.map((pathway) => (
-              <article className="rounded-[var(--radius-md)] border border-white/10 bg-white/[0.045] p-4" key={pathway.applicationSlug}>
-                <Beaker aria-hidden="true" className="size-5 text-cyan-200" />
-                <h3 className="mt-4 text-lg font-semibold text-white">{pathway.applicationName}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{pathway.reason}</p>
-                {pathway.familyNames.length ? (
-                  <div className="mt-3 flex flex-wrap gap-2" aria-label="Relevant product families">
-                    {pathway.familyNames.map((familyName, index) => (
-                      <Link
-                        className="rounded-full border border-cyan-200/20 bg-cyan-300/8 px-2.5 py-1 text-xs font-semibold text-cyan-100 transition hover:border-cyan-200/60 hover:bg-cyan-300/14"
-                        href={pathway.familyHrefs[index]}
-                        key={pathway.familyHrefs[index]}
-                      >
-                        {familyName}
-                      </Link>
-                    ))}
-                  </div>
-                ) : null}
-                <Link
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan-100"
-                  href={pathway.applicationHref}
-                >
-                  Explore pathway
-                  <ArrowRight aria-hidden="true" className="size-4" />
-                </Link>
-              </article>
-            ))}
-          </div>
-
-          <Link
-            className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-5 font-semibold text-navy-950 transition hover:bg-white"
-            href={`/contact?type=Consultation%20request&context=${encodeURIComponent(submittedValue)}`}
-          >
-            Send this challenge for expert review
-            <ArrowRight aria-hidden="true" className="size-4" />
-          </Link>
+            </>
+          ) : (
+            <div className="mt-5 rounded-[var(--radius-md)] border border-blue-200/70 bg-blue-50/80 p-4 text-sm leading-6 text-slate-700">
+              Include the application, substrate or material, operating environment and the result you need. For example: “Closed-cell insulation for a concrete roof exposed to heat and moisture.”
+            </div>
+          )}
         </section>
       ) : null}
     </div>

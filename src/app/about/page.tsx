@@ -303,11 +303,11 @@ export default function Page() {
         <Container className="relative">
           <div className="grid items-stretch gap-8 lg:grid-cols-[1.05fr_0.95fr]">
             <AnimatedImage
-              alt="A materials specialist recording results during polyurethane performance testing"
+              alt="Polyurethane and specialty material samples prepared for technical review"
               className="min-h-[30rem]"
               imageClassName="object-[50%_center]"
               sizes="(min-width: 1024px) 54vw, 100vw"
-              src="/images/advanced-rd-testing.webp"
+              src="/images/product-sample-library.webp"
             />
             <Reveal className="flex flex-col justify-center rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.045] p-7 shadow-[var(--shadow-soft)] sm:p-10">
               <div className="grid h-12 w-12 place-items-center rounded-[var(--radius-md)] border border-cyan-200/18 bg-cyan-300/10 text-cyan-100">

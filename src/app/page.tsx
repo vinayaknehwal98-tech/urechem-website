@@ -7,12 +7,10 @@ import { ProofExpertiseSection } from "@/components/home/proof-expertise-section
 import { TechnicalCenterPreviewSection } from "@/components/home/technical-center-preview-section";
 import { UreShieldSection } from "@/components/home/ureshield-section";
 import { WorkflowSection } from "@/components/home/workflow-section";
-import { SiteOpeningAnimation } from "@/components/layout/site-opening-animation";
 
 export default function Home() {
   return (
     <>
-      <SiteOpeningAnimation />
       <HeroSection />
       <PathwaysSection />
       <ProductUniverseSection />
