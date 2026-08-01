@@ -32,6 +32,11 @@ const proofPoints = [
   },
 ];
 
+const introItem = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0 },
+};
+
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -92,7 +97,7 @@ export function HeroSection() {
         style={{ backgroundImage: `url(${HERO_POSTER})` }}
       >
         <video
-          className={`h-full w-full object-cover object-[70%_center] [backface-visibility:hidden] [transform:translateZ(0)] transition-opacity duration-700 ease-out md:object-center ${
+          className={`hero-video-drift h-full w-full object-cover object-[70%_center] [backface-visibility:hidden] [transform:translateZ(0)] transition-opacity duration-700 ease-out md:object-center ${
             videoIsPlaying && !videoFailed && !shouldReduceMotion ? "opacity-100" : "opacity-0"
           }`}
           disablePictureInPicture
@@ -111,48 +116,79 @@ export function HeroSection() {
         </video>
       </div>
 
+      <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,18,36,0.72)_0%,rgba(2,18,36,0.54)_38%,rgba(2,18,36,0.16)_68%,transparent_88%)]" />
+      <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(2,18,36,0.08)_0%,transparent_48%,rgba(2,18,36,0.38)_100%)]" />
+      <div aria-hidden="true" className="hero-sheen absolute -inset-y-1/2 left-[-22%] -z-10 w-[18%] rotate-[18deg] bg-gradient-to-r from-transparent via-cyan-200/10 to-transparent blur-2xl" />
+
+      <div aria-hidden="true" className="pointer-events-none absolute right-[7%] top-[18%] -z-10 hidden h-48 w-48 rounded-full border border-cyan-200/15 lg:block">
+        <span className="hero-orbit absolute inset-4 rounded-full border border-white/10" />
+        <span className="hero-orbit-dot absolute left-1/2 top-0 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-cyan-300/70 shadow-[0_0_24px_rgba(103,232,249,0.75)]" />
+      </div>
+
       <Container className="flex flex-col justify-start pb-14 pt-9 sm:pb-16 sm:pt-12 md:min-h-[calc(100dvh-4.5rem)] md:justify-center md:py-16">
-        <div className="hero-copy transparent-media-copy relative z-10 w-full max-w-3xl md:-translate-y-8">
-          <p className="text-xs font-black uppercase tracking-[0.21em] text-blue-700 sm:text-sm sm:tracking-[0.24em]" data-hero-intro>
+        <motion.div
+          animate="visible"
+          className="hero-copy-shadow relative z-10 w-full max-w-4xl md:-translate-y-6"
+          initial={shouldReduceMotion ? false : "hidden"}
+          transition={{ delayChildren: 0.08, staggerChildren: 0.11 }}
+        >
+          <motion.p
+            className="text-xs font-black uppercase tracking-[0.22em] text-cyan-100 sm:text-sm sm:tracking-[0.26em]"
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            variants={introItem}
+          >
             <span className="inline-flex items-center gap-3">
-              <span aria-hidden="true" className="h-px w-9 bg-cyan-300" />
+              <span aria-hidden="true" className="hero-label-line h-px w-10 origin-left bg-gradient-to-r from-cyan-300 to-turquoise-300" />
               URECHEM CHEMICALS
             </span>
-          </p>
-          <h1
-            className="mt-3 max-w-[20rem] text-[clamp(2.15rem,9vw,2.55rem)] font-black leading-[0.97] tracking-[-0.038em] text-blue-950 sm:mt-4 sm:max-w-3xl sm:text-[clamp(2.55rem,3.25vw,3.5rem)] sm:leading-[0.98] sm:tracking-[-0.04em]"
-            data-hero-intro
+          </motion.p>
+
+          <motion.h1
+            className="mt-4 max-w-[22rem] text-[clamp(2.35rem,9vw,2.9rem)] font-black leading-[0.96] tracking-[-0.045em] text-white sm:max-w-4xl sm:text-[clamp(3.4rem,5.2vw,5.25rem)] sm:leading-[0.94]"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            variants={introItem}
           >
             <span className="block">Intelligent chemistry for</span>
-            <span className="hero-highlight">better polyurethane solutions.</span>
-          </h1>
-          <p className="mt-4 max-w-[22rem] text-lg font-black leading-tight text-sky-700 sm:mt-5 sm:max-w-none sm:text-[1.35rem]" data-hero-intro>
-            <span className="hero-tagline inline-flex items-center gap-2.5">
-              <span aria-hidden="true" className="h-2 w-2 rounded-sm bg-cyan-300" />
+            <span className="hero-gradient-text relative mt-1 inline-block pb-1">better polyurethane</span>
+            <span className="block">solutions.</span>
+          </motion.h1>
+
+          <motion.p
+            className="mt-5 max-w-[24rem] text-lg font-black leading-tight text-white sm:mt-6 sm:max-w-none sm:text-[1.45rem]"
+            transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+            variants={introItem}
+          >
+            <span className="inline-flex items-center gap-3">
+              <span aria-hidden="true" className="hero-pulse-dot h-2.5 w-2.5 rounded-full bg-cyan-300" />
               We deliver what we promise.
             </span>
-          </p>
-          <p className="mt-2.5 max-w-lg text-base leading-7 text-slate-700 sm:mt-3 sm:text-base sm:leading-7" data-hero-intro>
+          </motion.p>
+
+          <motion.p
+            className="mt-3 max-w-xl text-base font-medium leading-7 text-white/88 sm:text-lg sm:leading-8"
+            transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+            variants={introItem}
+          >
             Advanced polyurethane systems, specialty chemicals and technical support engineered around real-world applications.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
       </Container>
 
       <Container className="relative z-10 hidden pb-10 md:block">
-        <div className="grid gap-3 border-t border-white/70 pt-6 md:grid-cols-3">
+        <div className="grid gap-3 border-t border-white/25 pt-6 md:grid-cols-3">
           {proofPoints.map((item, index) => (
             <motion.article
-              className="transparent-media-copy rounded-[var(--radius-md)] border border-white/70 bg-transparent p-4 shadow-[0_10px_32px_rgba(2,18,36,0.16)]"
+              className="rounded-[var(--radius-md)] border border-white/20 bg-slate-950/10 p-4 text-white backdrop-blur-[2px] shadow-[0_10px_32px_rgba(2,18,36,0.12)]"
               initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
               key={item.label}
-              transition={{ delay: index * 0.08, duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 0.36 + index * 0.08, duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ amount: 0.25, once: true }}
-              whileHover={shouldReduceMotion ? undefined : { borderColor: "rgba(14,165,233,0.4)", y: -5 }}
+              whileHover={shouldReduceMotion ? undefined : { borderColor: "rgba(103,232,249,0.5)", y: -5 }}
               whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             >
-              <item.icon aria-hidden="true" className="h-5 w-5 text-sky-600" />
-              <h2 className="mt-3 text-sm font-bold text-blue-950">{item.label}</h2>
-              <p className="mt-2 text-sm font-medium leading-6 text-slate-600">{item.text}</p>
+              <item.icon aria-hidden="true" className="h-5 w-5 text-cyan-200" />
+              <h2 className="mt-3 text-sm font-bold text-white">{item.label}</h2>
+              <p className="mt-2 text-sm font-medium leading-6 text-white/72">{item.text}</p>
             </motion.article>
           ))}
         </div>
