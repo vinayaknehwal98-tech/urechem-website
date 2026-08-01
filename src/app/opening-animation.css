@@ -25,10 +25,24 @@
 }
 
 .urechem-opening__splash {
+  height: 5rem;
+  left: 50%;
   opacity: 0;
+  position: absolute;
+  top: 50%;
   transform: scale(0.18);
-  transform-box: view-box;
   transform-origin: 50% 50%;
+  visibility: hidden;
+  width: clamp(8rem, 10vw, 10rem);
+  will-change: opacity, transform;
+  z-index: 5;
+}
+
+.urechem-opening__splash-svg {
+  display: block;
+  height: 100%;
+  overflow: visible;
+  width: 100%;
 }
 
 .urechem-opening__trail {
@@ -79,6 +93,7 @@ html[data-urechem-intro-active="true"] [data-hero-intro] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .urechem-opening__splash,
   .urechem-opening__trail,
   .urechem-opening__liquid,
   .urechem-opening__droplet {

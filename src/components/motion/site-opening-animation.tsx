@@ -79,7 +79,7 @@ export function SiteOpeningAnimation() {
   const revealRef = useRef<SVGCircleElement>(null);
   const liquidRef = useRef<SVGCircleElement>(null);
   const rippleRef = useRef<SVGCircleElement>(null);
-  const splashRef = useRef<SVGGElement>(null);
+  const splashRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<ReturnType<typeof gsap.timeline> | null>(null);
   const completedRef = useRef(false);
   const startedRef = useRef(false);
@@ -218,7 +218,13 @@ export function SiteOpeningAnimation() {
         gsap.set(reveal, { attr: { r: 0 } });
         gsap.set(liquid, { attr: { r: 4 }, opacity: 0 });
         gsap.set(ripple, { attr: { r: 8 }, opacity: 0 });
-        gsap.set(splash, { opacity: 0, scale: 0.18, transformOrigin: "50% 50%" });
+        gsap.set(splash, {
+          autoAlpha: 0,
+          scale: 0.18,
+          transformOrigin: "50% 50%",
+          xPercent: -50,
+          yPercent: -50,
+        });
         if (logoTargets.length) gsap.set(logoTargets, { opacity: 0, visibility: "visible" });
         if (heroElements.length) gsap.set(heroElements, { opacity: 0, y: 26 });
 
@@ -241,8 +247,8 @@ export function SiteOpeningAnimation() {
         .to(trail, { duration: 0.16, ease: "power1.in", opacity: 0, scaleY: 0.4 }, 0.78)
         .to(droplet, { duration: 0.09, ease: "power2.out", scaleX: 1.3, scaleY: 0.7, y: 4 }, 0.96)
         .to(droplet, { duration: 0.18, ease: "back.out(2)", scaleX: 0.96, scaleY: 1.04, y: -3 }, 1.05)
-        .to(splash, { duration: 0.24, ease: "power2.out", opacity: 0.78, scale: 1 }, 0.98)
-        .to(splash, { duration: 0.4, ease: "power1.out", opacity: 0, scale: 1.32 }, 1.2)
+        .to(splash, { autoAlpha: 0.78, duration: 0.24, ease: "power2.out", scale: 1 }, 0.98)
+        .to(splash, { autoAlpha: 0, duration: 0.4, ease: "power1.out", scale: 1.32 }, 1.2)
         .to(ripple, { attr: { r: 84 }, duration: 0.58, ease: "power2.out", opacity: 0.42, strokeWidth: 1 }, 1.01)
         .to(ripple, { attr: { r: 142 }, duration: 0.46, ease: "power1.out", opacity: 0 }, 1.46)
         .to(liquid, { attr: { r: maximumRadius * 0.98 }, duration: 1.12, ease: "power3.inOut", opacity: 0.2 }, 1.12)
@@ -355,14 +361,17 @@ export function SiteOpeningAnimation() {
           stroke="#38bdf8"
           strokeWidth="6"
         />
-        <g className="urechem-opening__splash" ref={splashRef}>
-          <ellipse cx="50%" cy="50%" fill="#0ea5e9" opacity="0.42" rx="44" ry="7" />
-          <circle cx="47.4%" cy="48.2%" fill="#2563eb" r="4.5" />
-          <circle cx="52.8%" cy="47.9%" fill="#22d3ee" r="4" />
-          <circle cx="45.6%" cy="50.6%" fill="#0ea5e9" r="3" />
-          <circle cx="54.4%" cy="50.4%" fill="#2563eb" r="2.6" />
-        </g>
       </svg>
+
+      <div aria-hidden="true" className="urechem-opening__splash" ref={splashRef}>
+        <svg className="urechem-opening__splash-svg" focusable="false" viewBox="0 0 120 60">
+          <ellipse cx="60" cy="32" fill="#0ea5e9" opacity="0.42" rx="44" ry="7" />
+          <circle cx="34" cy="14" fill="#2563eb" r="4.5" />
+          <circle cx="86" cy="12" fill="#22d3ee" r="4" />
+          <circle cx="22" cy="34" fill="#0ea5e9" r="3" />
+          <circle cx="98" cy="33" fill="#2563eb" r="2.6" />
+        </svg>
+      </div>
 
       <div aria-hidden="true" className="urechem-opening__trail" ref={trailRef} />
       <div aria-hidden="true" className="urechem-opening__droplet" ref={dropletRef}>
