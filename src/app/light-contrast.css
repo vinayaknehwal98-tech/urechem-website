@@ -85,3 +85,17 @@ body [aria-disabled="true"],
 body :disabled {
   color: #64748b;
 }
+
+/* Full-background heroes stay transparent, so their copy needs image-safe contrast. */
+body .transparent-media-copy :is(h1, h2, h3, p, li, strong) {
+  color: #f8fbff !important;
+}
+
+body .transparent-media-copy svg {
+  color: #38bdf8 !important;
+}
+
+body .transparent-media-copy p[class~="inline-flex"] {
+  background-color: transparent !important;
+  border-color: rgba(248, 251, 255, 0.74) !important;
+}

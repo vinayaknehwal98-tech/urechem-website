@@ -144,8 +144,8 @@ export function HeroSection() {
               whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             >
               <item.icon aria-hidden="true" className="h-5 w-5 text-sky-600" />
-              <h2 className="mt-3 text-sm font-semibold text-blue-950">{item.label}</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p>
+              <h2 className="mt-3 text-sm font-bold text-blue-950">{item.label}</h2>
+              <p className="mt-2 text-sm font-medium leading-6 text-slate-600">{item.text}</p>
             </motion.article>
           ))}
         </div>
