@@ -342,11 +342,20 @@ export const productFamilies: ProductFamily[] = [
     industries: ["automotive", "furniture-bedding"],
     validation: "confirmed-name",
     documents: docs(),
-    products: ["VE4105 A/B", "Flex 8305 A/B"].map((name) =>
+    products: [
+      {
+        name: "VE4105 A/B",
+        description: "VE4105 A/B is a part of Moulded Memory System for Cushioning applications.",
+      },
+      {
+        name: "Flex 8305 A/B",
+        description: "Flex 8305 A/B is a part of Moulded HR System for Automotive Car and bus Seats application.",
+      },
+    ].map(({ name, description }) =>
       product(
         "flexible-systems",
         name,
-        `${name} is part of the Flexible Systems range for application-specific technical review.`,
+        description,
         ["flexible-moulded-foam", "automotive-seating", "furniture-bedding"],
         {
           "Product role": "Flexible polyurethane system",
