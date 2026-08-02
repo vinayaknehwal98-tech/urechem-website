@@ -65,11 +65,11 @@ export default async function Page({ params }: { params: Promise<{ application: 
 
           {detail ? (
             <div className="mt-8 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-              <section className="rounded-2xl border border-white/35 bg-slate-950/35 p-5 text-white shadow-xl backdrop-blur-sm">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">Typical uses</p>
+              <section className="hero-review-panel rounded-2xl border border-white/35 bg-slate-950/55 p-5 shadow-xl backdrop-blur-md">
+                <p className="hero-review-label text-xs font-bold uppercase tracking-[0.2em]">Typical uses</p>
                 <div className="mt-4 grid gap-2 sm:grid-cols-2">
                   {detail.useCases.slice(0, 6).map((value) => (
-                    <div className="flex items-start gap-2 rounded-lg bg-white/10 px-3 py-2.5 text-sm leading-5" key={value}>
+                    <div className="hero-review-item flex items-start gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-2.5 text-sm leading-5" key={value}>
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyan-300" />
                       <span>{value}</span>
                     </div>
@@ -77,15 +77,15 @@ export default async function Page({ params }: { params: Promise<{ application: 
                 </div>
               </section>
 
-              <section className="rounded-2xl border border-white/35 bg-slate-950/35 p-5 text-white shadow-xl backdrop-blur-sm">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">Key review points</p>
+              <section className="hero-review-panel rounded-2xl border border-white/35 bg-slate-950/55 p-5 shadow-xl backdrop-blur-md">
+                <p className="hero-review-label text-xs font-bold uppercase tracking-[0.2em]">Key review points</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {detail.requirements.slice(0, 6).map((value) => (
-                    <span className="rounded-full border border-white/25 bg-white/10 px-3 py-2 text-sm" key={value}>{value}</span>
+                    <span className="hero-review-chip rounded-full border border-white/25 bg-white/95 px-3 py-2 text-sm" key={value}>{value}</span>
                   ))}
                 </div>
                 <div className="mt-5 border-t border-white/20 pt-4">
-                  <p className="text-sm font-semibold">Relevant families</p>
+                  <p className="hero-review-heading text-sm font-extrabold">Relevant families</p>
                   <div className="mt-3"><FamilyLinks slugs={item.familySlugs} /></div>
                 </div>
               </section>
@@ -159,8 +159,8 @@ export default async function Page({ params }: { params: Promise<{ application: 
                 </div>
                 <div className="grid gap-4">
                   {detail.workflow.map(([number, title, description]) => (
-                    <article className="group flex gap-5 rounded-2xl border border-slate-200 bg-white p-5 transition duration-300 hover:translate-x-1 hover:border-blue-200 hover:shadow-lg" key={number}>
-                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-950 text-sm font-black text-white transition group-hover:bg-blue-700">{number}</span>
+                    <article className="group flex items-center gap-5 rounded-2xl border border-slate-200 bg-white p-5 transition duration-300 hover:translate-x-1 hover:border-blue-200 hover:shadow-lg" key={number}>
+                      <span className="workflow-number flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-700 text-base font-black shadow-md transition group-hover:bg-blue-800">{number}</span>
                       <div><h3 className="text-lg font-extrabold text-slate-950">{title}</h3><p className="mt-1 text-sm leading-6 text-slate-600">{description}</p></div>
                     </article>
                   ))}
@@ -178,7 +178,21 @@ export default async function Page({ params }: { params: Promise<{ application: 
         </>
       ) : null}
 
-      <style>{`@keyframes application-hero-drift{0%,100%{transform:scale(1.03) translate3d(0,0,0)}50%{transform:scale(1.07) translate3d(-.6%,-.4%,0)}}.application-hero-bg{animation:application-hero-drift 18s ease-in-out infinite}@media(prefers-reduced-motion:reduce){.application-hero-bg{animation:none}}`}</style>
+      <style>{`
+        @keyframes application-hero-drift {
+          0%, 100% { transform: scale(1.03) translate3d(0, 0, 0); }
+          50% { transform: scale(1.07) translate3d(-.6%, -.4%, 0); }
+        }
+        .application-hero-bg { animation: application-hero-drift 18s ease-in-out infinite; }
+        .hero-review-panel .hero-review-label { color: #67e8f9 !important; }
+        .hero-review-panel .hero-review-item { color: #ffffff !important; }
+        .hero-review-panel .hero-review-chip { color: #0f172a !important; }
+        .hero-review-panel .hero-review-heading { color: #ffffff !important; }
+        .workflow-number { color: #ffffff !important; }
+        @media (prefers-reduced-motion: reduce) {
+          .application-hero-bg { animation: none; }
+        }
+      `}</style>
     </div>
   );
 }
