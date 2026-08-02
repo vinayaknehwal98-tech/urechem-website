@@ -21,11 +21,10 @@ async function preloadOpeningAssets() {
         image.addEventListener("error", () => resolve(), { once: true });
       });
     }
-
     try {
       await image.decode();
     } catch {
-      // A loaded image may reject decode in some browsers; loading is sufficient.
+      // Loading is sufficient when decoding is unavailable.
     }
   });
 
@@ -86,11 +85,7 @@ export function SiteOpeningAnimation() {
 
     html.removeAttribute("data-urechem-intro-active");
     restoreOverflowRef.current();
-
-    if (revealTargets.length) {
-      gsap.set(revealTargets, { clearProps: "opacity,transform,visibility" });
-    }
-
+    if (revealTargets.length) gsap.set(revealTargets, { clearProps: "opacity,transform,visibility" });
     setIsVisible(false);
   }, []);
 
@@ -138,7 +133,6 @@ export function SiteOpeningAnimation() {
         const fullAnimation = explicitForce || (!reducedMotion && !automatedReview && !explicitSkip && !alreadyPlayed);
 
         if (fullAnimation) sessionStorage.setItem(SESSION_KEY, "true");
-
         await preloadOpeningAssets();
         if (cancelled) return;
 
@@ -179,28 +173,56 @@ export function SiteOpeningAnimation() {
 
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
-        const maximumRadius = Math.hypot(viewportWidth, viewportHeight) * 0.58;
+        const impactX = viewportWidth / 2;
+        const impactY = viewportHeight / 2;
+        const maximumRadius = Math.max(
+          Math.hypot(impactX, impactY),
+          Math.hypot(viewportWidth - impactX, impactY),
+          Math.hypot(impactX, viewportHeight - impactY),
+          Math.hypot(viewportWidth - impactX, viewportHeight - impactY),
+        ) * 1.08;
+
         const targetRect = logoMark?.getBoundingClientRect();
         const dropletSize = Math.max(60, Math.min(92, viewportWidth * 0.07));
         const targetDropletWidth = targetRect ? targetRect.width * 0.52 : dropletSize * 0.48;
         const targetScale = Math.max(0.28, targetDropletWidth / dropletSize);
-        const targetX = targetRect ? targetRect.left + targetRect.width / 2 - viewportWidth / 2 : 0;
-        const targetY = targetRect ? targetRect.top + targetRect.height * 0.54 - viewportHeight / 2 : -viewportHeight * 0.42;
+        const targetX = targetRect ? targetRect.left + targetRect.width / 2 - impactX : 0;
+        const targetY = targetRect ? targetRect.top + targetRect.height * 0.54 - impactY : -viewportHeight * 0.42;
+
+        // The droplet element is centered. Its lower tip must land on the impact point,
+        // so the centre stops roughly half a rendered droplet above the ripple origin.
+        const dropletTipOffset = Math.max(28, droplet.getBoundingClientRect().height * 0.46);
+        const impactDropY = -dropletTipOffset;
+        const splashBaselinePercent = -61.25; // SVG crown is at y=49 in an 80-high viewBox.
 
         gsap.set(overlay, { opacity: 1 });
         gsap.set(droplet, {
           opacity: 1,
           scaleX: 0.72,
           scaleY: 1.3,
-          transformOrigin: "50% 70%",
-          x: 0,
+          transformOrigin: "50% 92%",
+          x: impactX - viewportWidth / 2,
           y: -viewportHeight * 0.62,
         });
-        gsap.set(trail, { opacity: 0, scaleY: 0.2, transformOrigin: "50% 100%" });
-        gsap.set(reveal, { attr: { r: 0 } });
-        gsap.set(liquid, { attr: { r: 4 }, opacity: 0 });
-        gsap.set(ripple, { attr: { r: 8 }, opacity: 0 });
-        gsap.set(splash, { autoAlpha: 1, xPercent: -50, yPercent: -50 });
+        gsap.set(trail, {
+          opacity: 0,
+          scaleY: 0.2,
+          transformOrigin: "50% 100%",
+          left: impactX,
+          top: impactY,
+          xPercent: -50,
+          yPercent: -100,
+        });
+        gsap.set(reveal, { attr: { cx: impactX, cy: impactY, r: 0 } });
+        gsap.set(liquid, { attr: { cx: impactX, cy: impactY, r: 4 }, opacity: 0 });
+        gsap.set(ripple, { attr: { cx: impactX, cy: impactY, r: 8 }, opacity: 0 });
+        gsap.set(splash, {
+          autoAlpha: 1,
+          left: impactX,
+          top: impactY,
+          xPercent: -50,
+          yPercent: splashBaselinePercent,
+        });
         if (splashCrown) gsap.set(splashCrown, { opacity: 0, scaleX: 0.15, scaleY: 0.2, transformOrigin: "50% 50%" });
         gsap.set(splashParticles, { opacity: 0, scale: 0.25, x: 0, y: 0, transformOrigin: "50% 50%" });
         if (logoTargets.length) gsap.set(logoTargets, { opacity: 0, visibility: "visible" });
@@ -208,15 +230,15 @@ export function SiteOpeningAnimation() {
 
         const repelX = (target: HTMLElement) => {
           const rect = target.getBoundingClientRect();
-          const dx = rect.left + rect.width / 2 - viewportWidth / 2;
-          const dy = rect.top + rect.height / 2 - viewportHeight / 2;
+          const dx = rect.left + rect.width / 2 - impactX;
+          const dy = rect.top + rect.height / 2 - impactY;
           const length = Math.hypot(dx, dy) || 1;
           return (dx / length) * Math.min(42, viewportWidth * 0.035);
         };
         const repelY = (target: HTMLElement) => {
           const rect = target.getBoundingClientRect();
-          const dx = rect.left + rect.width / 2 - viewportWidth / 2;
-          const dy = rect.top + rect.height / 2 - viewportHeight / 2;
+          const dx = rect.left + rect.width / 2 - impactX;
+          const dy = rect.top + rect.height / 2 - impactY;
           const length = Math.hypot(dx, dy) || 1;
           return (dy / length) * Math.min(42, viewportWidth * 0.035);
         };
@@ -226,15 +248,15 @@ export function SiteOpeningAnimation() {
 
         timeline
           .to(trail, { duration: 0.18, ease: "power1.out", opacity: 0.35, scaleY: 1 }, 0.16)
-          .to(droplet, { duration: 0.82, ease: "power3.in", scaleX: 0.9, scaleY: 1.14, y: 0 }, 0.14)
+          .to(droplet, { duration: 0.82, ease: "power3.in", scaleX: 0.9, scaleY: 1.14, y: impactDropY }, 0.14)
           .to(trail, { duration: 0.14, ease: "power1.in", opacity: 0, scaleY: 0.35 }, 0.82)
-          .to(droplet, { duration: 0.075, ease: "power3.out", scaleX: 1.58, scaleY: 0.48, y: 8 }, 0.96)
-          .to(droplet, { duration: 0.09, ease: "power2.out", scaleX: 1.05, scaleY: 0.78, y: 3 }, 1.035)
-          .to(droplet, { duration: 0.11, ease: "power1.out", opacity: 0, scaleX: 1.75, scaleY: 0.2, y: 9 }, 1.09);
+          .to(droplet, { duration: 0.075, ease: "power3.out", scaleX: 1.58, scaleY: 0.48, y: impactDropY + dropletTipOffset * 0.2 }, 0.96)
+          .to(droplet, { duration: 0.09, ease: "power2.out", scaleX: 1.05, scaleY: 0.78, y: impactDropY - 2 }, 1.035)
+          .to(droplet, { duration: 0.11, ease: "power1.out", opacity: 0, scaleX: 1.75, scaleY: 0.2, y: impactDropY + 4 }, 1.09);
 
         if (splashCrown) {
           timeline
-            .to(splashCrown, { duration: 0.12, ease: "power3.out", opacity: 0.76, scaleX: 1, scaleY: 1 }, 0.985)
+            .to(splashCrown, { duration: 0.12, ease: "power3.out", opacity: 0.8, scaleX: 1, scaleY: 1 }, 0.985)
             .to(splashCrown, { duration: 0.38, ease: "power2.out", opacity: 0, scaleX: 1.42, scaleY: 0.5 }, 1.12);
         }
 
@@ -274,7 +296,7 @@ export function SiteOpeningAnimation() {
 
         timeline
           .to(liquid, { attr: { r: maximumRadius * 0.98 }, duration: 1.08, ease: "power3.inOut", opacity: 0.2 }, 1.13)
-          .to(reveal, { attr: { r: maximumRadius * 1.08 }, duration: 1.16, ease: "power3.inOut" }, 1.13)
+          .to(reveal, { attr: { r: maximumRadius }, duration: 1.16, ease: "power3.inOut" }, 1.13)
           .to(liquid, { duration: 0.52, ease: "power2.out", opacity: 0 }, 1.86)
           .to(cover, { duration: 0.2, opacity: 0 }, 2.16)
           .to(droplet, {
@@ -332,12 +354,12 @@ export function SiteOpeningAnimation() {
           </filter>
           <mask id="urechem-site-reveal">
             <rect fill="white" height="100%" width="100%" />
-            <circle cx="50%" cy="50%" fill="black" filter="url(#urechem-liquid-edge)" r="0" ref={revealRef} />
+            <circle cx="0" cy="0" fill="black" filter="url(#urechem-liquid-edge)" r="0" ref={revealRef} />
           </mask>
         </defs>
         <rect fill="#ffffff" height="100%" mask="url(#urechem-site-reveal)" ref={coverRef} width="100%" />
-        <circle cx="50%" cy="50%" fill="url(#urechem-liquid-blue)" filter="url(#urechem-liquid-edge)" opacity="0" r="4" ref={liquidRef} />
-        <circle cx="50%" cy="50%" fill="none" opacity="0" r="8" ref={rippleRef} stroke="#38bdf8" strokeWidth="6" />
+        <circle cx="0" cy="0" fill="url(#urechem-liquid-blue)" filter="url(#urechem-liquid-edge)" opacity="0" r="4" ref={liquidRef} />
+        <circle cx="0" cy="0" fill="none" opacity="0" r="8" ref={rippleRef} stroke="#38bdf8" strokeWidth="6" />
       </svg>
 
       <div aria-hidden="true" className="urechem-opening__splash" ref={splashRef}>
