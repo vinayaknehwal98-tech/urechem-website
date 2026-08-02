@@ -143,6 +143,17 @@ export function HeroSection() {
       </Container>
 
       <style jsx global>{`
+        html {
+          scrollbar-width: none !important;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+
         .minimal-hero .hero-title {
           color: #ffffff !important;
           text-shadow: 0 3px 18px rgba(2, 15, 28, 0.26);
