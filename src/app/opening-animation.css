@@ -25,17 +25,43 @@
 }
 
 .urechem-opening__splash {
-  height: 5rem;
+  height: clamp(10rem, 18vw, 16rem);
   left: 50%;
   opacity: 0;
   position: absolute;
   top: 50%;
-  transform: scale(0.18);
+  transform: translate(-50%, -50%) scale(0.18);
   transform-origin: 50% 50%;
   visibility: hidden;
-  width: clamp(8rem, 10vw, 10rem);
+  width: clamp(18rem, 30vw, 28rem);
   will-change: opacity, transform;
-  z-index: 5;
+  z-index: 7;
+  filter: drop-shadow(0 16px 26px rgba(14, 165, 233, 0.42));
+}
+
+.urechem-opening__splash::before,
+.urechem-opening__splash::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  border-radius: 999px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.urechem-opening__splash::before {
+  width: 42%;
+  height: 12%;
+  background: radial-gradient(ellipse at center, rgba(186, 230, 253, 0.96) 0%, rgba(14, 165, 233, 0.78) 42%, rgba(14, 165, 233, 0) 74%);
+  filter: blur(1.5px);
+}
+
+.urechem-opening__splash::after {
+  width: 58%;
+  height: 18%;
+  border: 3px solid rgba(125, 211, 252, 0.72);
+  box-shadow: 0 0 28px rgba(14, 165, 233, 0.4);
 }
 
 .urechem-opening__splash-svg {
@@ -43,34 +69,35 @@
   height: 100%;
   overflow: visible;
   width: 100%;
+  transform: scale(1.35);
 }
 
 .urechem-opening__trail {
-  background: linear-gradient(180deg, rgba(37, 99, 235, 0), rgba(14, 165, 233, 0.22) 60%, rgba(34, 211, 238, 0.03));
-  filter: blur(5px);
-  height: min(24vh, 13rem);
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0), rgba(14, 165, 233, 0.28) 58%, rgba(34, 211, 238, 0.08));
+  filter: blur(4px);
+  height: min(28vh, 16rem);
   left: 50%;
   opacity: 0;
   pointer-events: none;
   position: absolute;
-  top: calc(50% - min(24vh, 13rem));
+  top: calc(50% - min(28vh, 16rem));
   transform: translateX(-50%);
-  width: clamp(1rem, 2vw, 1.8rem);
+  width: clamp(1.2rem, 2.2vw, 2rem);
   z-index: 5;
 }
 
 .urechem-opening__droplet {
   backface-visibility: hidden;
-  filter: drop-shadow(0 14px 20px rgba(14, 165, 233, 0.18));
-  height: clamp(3.75rem, 7vw, 5.75rem);
+  filter: drop-shadow(0 18px 24px rgba(14, 165, 233, 0.34));
+  height: clamp(4.5rem, 8vw, 6.75rem);
   left: 50%;
   opacity: 0;
   position: absolute;
   top: 50%;
   transform: translate(-50%, calc(-50% - 70vh));
-  width: clamp(3.75rem, 7vw, 5.75rem);
+  width: clamp(4.5rem, 8vw, 6.75rem);
   will-change: transform, opacity;
-  z-index: 6;
+  z-index: 8;
 }
 
 .urechem-opening__droplet-svg {
