@@ -15,7 +15,11 @@ type AnimatedImageProps = {
 };
 
 const revealEase = [0.16, 1, 0.3, 1] as const;
-const imageViewport = { amount: 0.05, margin: "0px 0px 16% 0px", once: true } as const;
+const imageViewport = {
+  amount: 0.01,
+  margin: "0px 0px 28% 0px",
+  once: true,
+} as const;
 
 export function AnimatedImage({
   alt,
@@ -34,23 +38,43 @@ export function AnimatedImage({
         "group relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white shadow-[var(--shadow-deep)]",
         className,
       )}
-      initial={shouldReduceMotion ? false : { opacity: 0.18, x: 62, y: 20, scale: 0.95 }}
-      transition={{ duration: 0.92, ease: revealEase }}
+      initial={
+        shouldReduceMotion
+          ? false
+          : {
+              opacity: 0.28,
+              x: -74,
+              y: 34,
+              scale: 0.94,
+              filter: "blur(10px) saturate(0.78)",
+            }
+      }
+      transition={{ duration: 1.08, ease: revealEase }}
       viewport={imageViewport}
-      whileHover={shouldReduceMotion ? undefined : { scale: 1.008, y: -2 }}
-      whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0, y: 0, scale: 1 }}
+      whileHover={shouldReduceMotion ? undefined : { scale: 1.012, y: -4 }}
+      whileInView={
+        shouldReduceMotion
+          ? undefined
+          : {
+              opacity: 1,
+              x: 0,
+              y: 0,
+              scale: 1,
+              filter: "blur(0px) saturate(1)",
+            }
+      }
     >
       <motion.div
-        className="absolute inset-0"
-        initial={shouldReduceMotion ? false : { scale: 1.1 }}
-        transition={{ duration: 1.2, ease: revealEase }}
+        className="absolute -inset-y-8 inset-x-0"
+        initial={shouldReduceMotion ? false : { scale: 1.12 }}
+        transition={{ duration: 1.45, ease: revealEase }}
         viewport={imageViewport}
         whileInView={shouldReduceMotion ? undefined : { scale: 1 }}
       >
         <Image
           alt={alt}
           className={cn(
-            "object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]",
+            "object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.055]",
             imageClassName,
           )}
           fill
@@ -60,24 +84,29 @@ export function AnimatedImage({
         />
       </motion.div>
 
-      <div className={cn("absolute inset-0 bg-gradient-to-t from-blue-950/26 via-transparent to-white/[0.06]", overlayClassName)} />
-
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -inset-y-3 left-0 z-20 w-[54%] -skew-x-12 bg-gradient-to-r from-blue-950 via-blue-600 to-cyan-200 shadow-[0_0_44px_rgba(37,99,235,0.3)]"
-        initial={shouldReduceMotion ? false : { x: "-130%", opacity: 0.96 }}
-        transition={{ delay: 0.03, duration: 0.94, ease: revealEase }}
-        viewport={imageViewport}
-        whileInView={shouldReduceMotion ? undefined : { x: "235%", opacity: 0 }}
+      <div
+        className={cn(
+          "absolute inset-0 bg-gradient-to-t from-blue-950/30 via-transparent to-white/[0.08]",
+          overlayClassName,
+        )}
       />
 
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 z-30 w-[16%] -skew-x-12 bg-gradient-to-r from-transparent via-white/55 to-transparent"
-        initial={shouldReduceMotion ? false : { x: "-180%", opacity: 0 }}
-        transition={{ delay: 0.22, duration: 0.82, ease: revealEase }}
+        className="pointer-events-none absolute -inset-y-4 left-0 z-20 w-[58%] -skew-x-12 bg-gradient-to-r from-blue-950 via-blue-600 to-cyan-300 shadow-[0_0_60px_rgba(37,99,235,0.38)]"
+        initial={shouldReduceMotion ? false : { x: "-125%", opacity: 0.96 }}
+        transition={{ delay: 0.04, duration: 1.22, ease: revealEase }}
         viewport={imageViewport}
-        whileInView={shouldReduceMotion ? undefined : { x: "640%", opacity: [0, 1, 0] }}
+        whileInView={shouldReduceMotion ? undefined : { x: "225%", opacity: 0.18 }}
+      />
+
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 z-30 w-1/5 -skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+        initial={shouldReduceMotion ? false : { x: "-180%", opacity: 0 }}
+        transition={{ delay: 0.3, duration: 1.05, ease: "easeInOut" }}
+        viewport={imageViewport}
+        whileInView={shouldReduceMotion ? undefined : { x: "520%", opacity: [0, 1, 0] }}
       />
     </motion.figure>
   );
