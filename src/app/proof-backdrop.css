@@ -1,27 +1,41 @@
-/* Keep the supplied proof graphic readable while preserving its gentle motion. */
+/* Keep the supplied proof graphic clearly visible while preserving its gentle motion. */
 #proof-expertise [data-no-site-motion] {
-  opacity: 0.68 !important;
-  filter: blur(0.35px) !important;
+  top: -1.5rem !important;
+  right: -3% !important;
+  width: 64% !important;
+  max-width: none !important;
+  overflow: visible !important;
+  opacity: 0.9 !important;
+  filter: none !important;
 }
 
 #proof-expertise [data-no-site-motion] > img {
-  opacity: 0.96;
-  filter: contrast(1.04) saturate(1.06);
-  mix-blend-mode: multiply;
+  opacity: 1 !important;
+  filter: contrast(1.16) saturate(1.14) brightness(0.96) !important;
+  mix-blend-mode: normal !important;
+  filter-origin: center;
 }
 
+/* Remove the whitening veil that previously washed out the supplied graphic. */
 #proof-expertise [data-no-site-motion] > div:last-child {
-  background: linear-gradient(
-    to left,
-    rgba(255, 255, 255, 0.01),
-    rgba(255, 255, 255, 0.05) 48%,
-    rgba(255, 255, 255, 0.24)
-  ) !important;
+  display: none !important;
+}
+
+@media (max-width: 1023px) {
+  #proof-expertise [data-no-site-motion] {
+    top: 1rem !important;
+    right: -8% !important;
+    width: 78% !important;
+    opacity: 0.72 !important;
+  }
 }
 
 @media (max-width: 767px) {
   #proof-expertise [data-no-site-motion] {
-    opacity: 0.54 !important;
+    top: 3.5rem !important;
+    right: -24% !important;
+    width: 118% !important;
+    opacity: 0.42 !important;
     filter: none !important;
   }
 }
