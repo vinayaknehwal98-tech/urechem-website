@@ -17,49 +17,9 @@ type HomeSectionProps = {
 const revealEase = [0.16, 1, 0.3, 1] as const;
 const sectionViewport = {
   amount: 0.01,
-  margin: "0px 0px 30% 0px",
+  margin: "0px 0px 32% 0px",
   once: true,
 } as const;
-
-const headerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.06,
-    },
-  },
-};
-
-const labelVariants = {
-  hidden: { opacity: 0.35, x: -46, filter: "blur(7px)" },
-  visible: {
-    opacity: 1,
-    x: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.82, ease: revealEase },
-  },
-};
-
-const titleVariants = {
-  hidden: { opacity: 0.28, y: 82, rotateX: 9, filter: "blur(8px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    filter: "blur(0px)",
-    transition: { duration: 1.02, ease: revealEase },
-  },
-};
-
-const introVariants = {
-  hidden: { opacity: 0.35, y: 38, filter: "blur(6px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.9, ease: revealEase },
-  },
-};
 
 export function HomeSection({ eyebrow, title, intro, children, className, id }: HomeSectionProps) {
   const shouldReduceMotion = useReducedMotion();
@@ -82,32 +42,43 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
       />
 
       <Container className="relative z-10">
+        {/* Keep the whole heading block on one observer/transform. The earlier
+            nested title variant could remain translated after the label had
+            already appeared, which looked like a large empty gap. */}
         <motion.div
           className="mb-8 max-w-3xl"
-          initial={shouldReduceMotion ? false : "hidden"}
-          variants={headerVariants}
+          initial={
+            shouldReduceMotion
+              ? false
+              : {
+                  opacity: 0.28,
+                  y: 62,
+                  scale: 0.982,
+                  filter: "blur(8px)",
+                }
+          }
+          transition={{ duration: 1.02, ease: revealEase }}
           viewport={sectionViewport}
-          whileInView={shouldReduceMotion ? undefined : "visible"}
+          whileInView={
+            shouldReduceMotion
+              ? undefined
+              : {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  filter: "blur(0px)",
+                }
+          }
         >
-          <motion.div variants={labelVariants}>
-            <SectionLabel>{eyebrow}</SectionLabel>
-          </motion.div>
-
-          <motion.h2
-            className="mt-5 text-balance text-4xl font-black leading-tight text-blue-950 sm:text-5xl"
-            style={{ transformPerspective: 1000, transformOrigin: "left bottom" }}
-            variants={titleVariants}
+          <SectionLabel>{eyebrow}</SectionLabel>
+          <h2
+            className="mt-5 text-balance text-4xl font-black leading-tight sm:text-5xl"
+            style={{ color: "#172554", WebkitTextFillColor: "#172554" }}
           >
             {title}
-          </motion.h2>
-
+          </h2>
           {intro ? (
-            <motion.p
-              className="mt-4 text-lg leading-8 text-slate-600"
-              variants={introVariants}
-            >
-              {intro}
-            </motion.p>
+            <p className="mt-4 text-lg leading-8 text-slate-600">{intro}</p>
           ) : null}
         </motion.div>
 
@@ -115,14 +86,24 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
           initial={
             shouldReduceMotion
               ? false
-              : { opacity: 0.42, y: 72, scale: 0.985, filter: "blur(9px)" }
+              : {
+                  opacity: 0.42,
+                  y: 72,
+                  scale: 0.985,
+                  filter: "blur(9px)",
+                }
           }
           transition={{ delay: 0.12, duration: 1.02, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
               ? undefined
-              : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+              : {
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  filter: "blur(0px)",
+                }
           }
         >
           {children}
