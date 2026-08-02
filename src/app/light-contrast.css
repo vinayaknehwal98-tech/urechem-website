@@ -100,7 +100,6 @@ body .transparent-media-copy p[class~="inline-flex"] {
   border-color: rgba(248, 251, 255, 0.74) !important;
 }
 
-/* Premium editorial emphasis for the homepage promise without muting the full-screen video. */
 body .transparent-media-copy.hero-copy :is(h1, p) {
   text-shadow:
     0 2px 2px rgba(2, 18, 36, 0.94),
@@ -130,7 +129,6 @@ body .transparent-media-copy .hero-tagline {
     0 4px 14px rgba(2, 18, 36, 0.72);
 }
 
-/* Preserve high contrast inside intentional dark CTA bands. */
 body main section.bg-slate-950 h2,
 body main section.bg-slate-950 h3,
 body main section.bg-slate-950 strong {
@@ -145,24 +143,31 @@ body main section.bg-slate-950 p[class*="text-cyan"] {
   color: #67e8f9 !important;
 }
 
-/* Application hero review cards: keep light pills readable on dark media. */
-body .hero-review-panel .hero-review-item {
-  background: rgba(255, 255, 255, 0.94) !important;
-  border-color: rgba(255, 255, 255, 0.72) !important;
+/* Application hero review cards. */
+body main .hero-review-panel .hero-review-item {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(203, 213, 225, 0.95) !important;
   color: #0f172a !important;
   box-shadow: 0 8px 24px rgba(2, 18, 36, 0.14);
+  text-shadow: none !important;
 }
 
-body .hero-review-panel .hero-review-item span {
+body main .hero-review-panel .hero-review-item > span {
   color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
 }
 
-body .hero-review-panel .hero-review-item svg {
+body main .hero-review-panel .hero-review-item > svg {
   color: #0284c7 !important;
+  stroke: #0284c7 !important;
 }
 
-body .hero-review-panel .hero-review-chip {
-  background: rgba(255, 255, 255, 0.94) !important;
-  border-color: rgba(255, 255, 255, 0.72) !important;
+body main .hero-review-panel .hero-review-chip {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(203, 213, 225, 0.95) !important;
   color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  text-shadow: none !important;
 }
