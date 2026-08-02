@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ProofWaterBackdrop } from "@/components/home/proof-water-backdrop";
 import { LeadCaptureFlyer } from "@/components/layout/lead-capture-flyer";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -70,7 +69,6 @@ export default function RootLayout({
         <SiteOpeningAnimation />
         <SiteHeader />
         <LeadCaptureFlyer />
-        <ProofWaterBackdrop />
         <SitewideScrollMotion>{children}</SitewideScrollMotion>
         <SiteFooter />
       </body>
