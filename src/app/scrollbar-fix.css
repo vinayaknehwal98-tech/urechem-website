@@ -1,0 +1,15 @@
+/* Keep the page scrollable while removing the Windows/Chrome scrollbar gutter. */
+@media (pointer: fine) {
+  html,
+  body {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+  }
+}
