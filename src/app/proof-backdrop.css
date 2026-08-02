@@ -1,21 +1,33 @@
-/* Static background treatment for the Proof & Expertise section. */
+/* Static background treatment for the Proof & Expertise section.
+   The graphic is pulled upward from the content grid so it fills the empty
+   upper-right area beside the heading instead of sitting behind the cards. */
 #proof-expertise [data-no-site-motion] {
-  top: -1rem !important;
-  right: -4% !important;
-  width: 66% !important;
+  top: -19rem !important;
+  right: -1% !important;
+  width: 58% !important;
+  height: 18rem !important;
   max-width: none !important;
-  overflow: visible !important;
-  opacity: 0.52 !important;
-  filter: blur(3px) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0.58 !important;
+  filter: blur(1.1px) !important;
   transform: none !important;
   transition: none !important;
   animation: none !important;
   will-change: auto !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
 }
 
 #proof-expertise [data-no-site-motion] > img {
-  opacity: 1 !important;
-  filter: contrast(1.03) saturate(1.02) !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 18% !important;
+  opacity: 0.9 !important;
+  filter: contrast(1.07) saturate(1.06) brightness(1.02) !important;
   mix-blend-mode: multiply !important;
   transform: none !important;
   transition: none !important;
@@ -63,11 +75,12 @@
 
 @media (max-width: 1023px) {
   #proof-expertise [data-no-site-motion] {
-    top: 1rem !important;
-    right: -8% !important;
-    width: 80% !important;
-    opacity: 0.4 !important;
-    filter: blur(3px) !important;
+    top: -16rem !important;
+    right: -5% !important;
+    width: 64% !important;
+    height: 15rem !important;
+    opacity: 0.48 !important;
+    filter: blur(1.35px) !important;
   }
 
   #product-universe::before {
@@ -81,11 +94,16 @@
 
 @media (max-width: 767px) {
   #proof-expertise [data-no-site-motion] {
-    top: 4rem !important;
-    right: -26% !important;
-    width: 120% !important;
-    opacity: 0.28 !important;
-    filter: blur(2.5px) !important;
+    top: -11.5rem !important;
+    right: -28% !important;
+    width: 118% !important;
+    height: 10rem !important;
+    opacity: 0.24 !important;
+    filter: blur(1.5px) !important;
+  }
+
+  #proof-expertise [data-no-site-motion] > img {
+    object-position: center 14% !important;
   }
 
   #product-universe::before {
