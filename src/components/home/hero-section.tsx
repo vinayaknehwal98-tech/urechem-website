@@ -72,7 +72,7 @@ export function HeroSection() {
   }, [shouldReduceMotion, videoFailed]);
 
   return (
-    <section className="minimal-hero relative isolate overflow-hidden border-b border-blue-100 bg-slate-100 md:min-h-[calc(100dvh-4.5rem)]">
+    <section className="minimal-hero relative isolate -mt-16 overflow-hidden border-b border-blue-100 bg-slate-100 pt-16 md:mt-0 md:min-h-[calc(100dvh-4.5rem)] md:pt-0">
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-30 overflow-hidden bg-slate-100 bg-cover bg-[70%_center] md:bg-center"
@@ -143,6 +143,14 @@ export function HeroSection() {
       </Container>
 
       <style jsx global>{`
+        @media (max-width: 767px) {
+          body:has(.minimal-hero) > header {
+            background: transparent !important;
+            border-bottom-color: transparent !important;
+            box-shadow: none !important;
+          }
+        }
+
         .minimal-hero .hero-title {
           color: #ffffff !important;
           text-shadow: 0 3px 18px rgba(2, 15, 28, 0.26);
