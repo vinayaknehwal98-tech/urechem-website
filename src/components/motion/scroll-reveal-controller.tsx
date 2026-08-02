@@ -35,7 +35,7 @@ function assignReveal(element: HTMLElement, direction: RevealDirection, delay = 
   if (shouldIgnore(element)) return;
 
   element.setAttribute(REVEAL_ATTRIBUTE, direction);
-  element.style.setProperty("--reveal-delay", `${Math.min(delay, 520)}ms`);
+  element.style.setProperty("--reveal-delay", `${Math.min(delay, 620)}ms`);
 }
 
 function getDirectChildren(element: Element) {
@@ -82,9 +82,9 @@ function prepareSection(section: HTMLElement, sectionIndex: number) {
     children.forEach((child, index) => {
       if (isSplitLayout) {
         if (containsVisual(child)) {
-          assignReveal(child, index === 0 ? "image-left" : "image-right", index * 110);
+          assignReveal(child, index === 0 ? "image-left" : "image-right", index * 130);
         } else {
-          assignReveal(child, index === 0 ? "left" : "right", index * 90);
+          assignReveal(child, index === 0 ? "left" : "right", index * 110);
         }
         return;
       }
@@ -92,48 +92,48 @@ function prepareSection(section: HTMLElement, sectionIndex: number) {
       assignReveal(
         child,
         containsVisual(child) ? imageDirection(child, sectionIndex) : "card",
-        index * 85,
+        index * 105,
       );
     });
   });
 
   section.querySelectorAll<HTMLElement>("figure, picture").forEach((visual, index) => {
-    assignReveal(visual, imageDirection(visual, sectionIndex), index * 90);
+    assignReveal(visual, imageDirection(visual, sectionIndex), index * 110);
   });
 
   section.querySelectorAll<HTMLElement>("img, video").forEach((visual, index) => {
     if (!visual.closest("figure, picture")) {
-      assignReveal(visual, sectionIndex % 2 === 0 ? "image-right" : "image-left", index * 80);
+      assignReveal(visual, sectionIndex % 2 === 0 ? "image-right" : "image-left", index * 100);
     }
   });
 
   section.querySelectorAll<HTMLElement>("article").forEach((card, index) => {
-    assignReveal(card, "card", index * 80);
+    assignReveal(card, "card", index * 100);
   });
 
   section.querySelectorAll<HTMLElement>("h2, h3").forEach((heading, index) => {
-    assignReveal(heading, "heading", index * 65);
+    assignReveal(heading, "heading", index * 80);
   });
 
   section.querySelectorAll<HTMLElement>("h4, h5, h6").forEach((heading, index) => {
-    assignReveal(heading, "up", index * 55);
+    assignReveal(heading, "up", index * 70);
   });
 
   section
     .querySelectorAll<HTMLElement>(
       "[class*='uppercase'][class*='tracking'], [class*='SectionLabel'], [class*='section-label']",
     )
-    .forEach((label, index) => assignReveal(label, "label", index * 55));
+    .forEach((label, index) => assignReveal(label, "label", index * 70));
 
   section.querySelectorAll<HTMLElement>("p, ul, ol, blockquote").forEach((copy, index) => {
-    assignReveal(copy, "copy", 75 + index * 45);
+    assignReveal(copy, "copy", 90 + index * 55);
   });
 
   section
     .querySelectorAll<HTMLElement>(
       "button, a[class*='inline-flex'], a[class*='rounded'], form",
     )
-    .forEach((control, index) => assignReveal(control, "up", 120 + index * 50));
+    .forEach((control, index) => assignReveal(control, "up", 150 + index * 65));
 }
 
 export function ScrollRevealController() {
@@ -164,19 +164,29 @@ export function ScrollRevealController() {
 
           const element = entry.target as HTMLElement;
           element.classList.add("is-scroll-visible");
-          window.setTimeout(() => element.classList.add("is-scroll-complete"), 1250);
+          window.setTimeout(() => element.classList.add("is-scroll-complete"), 1650);
           observer.unobserve(element);
         });
       },
       {
-        rootMargin: "0px 0px -7% 0px",
-        threshold: 0.14,
+        rootMargin: "0px 0px -16% 0px",
+        threshold: 0.2,
       },
     );
 
-    revealElements.forEach((element) => observer.observe(element));
+    // Two frames guarantee that the concealed starting state is painted before
+    // IntersectionObserver can apply the visible state. Without this, inline
+    // Framer Motion styles could make both states land in the same frame.
+    let secondFrame = 0;
+    const firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(() => {
+        revealElements.forEach((element) => observer.observe(element));
+      });
+    });
 
     return () => {
+      window.cancelAnimationFrame(firstFrame);
+      if (secondFrame) window.cancelAnimationFrame(secondFrame);
       observer.disconnect();
       document.documentElement.classList.remove("scroll-reveal-ready");
       sections.forEach((section) => section.removeAttribute(SECTION_ATTRIBUTE));
