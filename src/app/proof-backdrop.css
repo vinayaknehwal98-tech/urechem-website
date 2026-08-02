@@ -1,5 +1,6 @@
-/* Static water-drop background for the Proof & Expertise section.
-   It fills the empty upper-right area beside the heading with a soft edge. */
+/* Static background treatment for the Proof & Expertise section.
+   The original circular proof graphic is pulled upward from the content grid
+   so it fills the empty upper-right area beside the heading. */
 #proof-expertise [data-no-site-motion] {
   top: -19rem !important;
   right: -1% !important;
@@ -7,14 +8,14 @@
   height: 18rem !important;
   max-width: none !important;
   overflow: hidden !important;
-  display: block !important;
-  opacity: 0.76 !important;
-  filter: blur(1.05px) saturate(1.06) contrast(1.04) !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-size: cover !important;
-  border-radius: 1.5rem !important;
-  box-shadow: 0 24px 70px rgba(30, 64, 175, 0.10) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0.58 !important;
+  filter: blur(1.1px) !important;
+  background-image: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   transform: none !important;
   transition: none !important;
   animation: none !important;
@@ -23,7 +24,20 @@
   z-index: 0 !important;
 }
 
-#proof-expertise [data-no-site-motion] > img,
+#proof-expertise [data-no-site-motion] > img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 18% !important;
+  opacity: 0.9 !important;
+  filter: contrast(1.07) saturate(1.06) brightness(1.02) !important;
+  mix-blend-mode: multiply !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
 #proof-expertise [data-no-site-motion] > div:last-child {
   display: none !important;
 }
@@ -69,8 +83,8 @@
     right: -5% !important;
     width: 64% !important;
     height: 15rem !important;
-    opacity: 0.62 !important;
-    filter: blur(1.15px) saturate(1.04) !important;
+    opacity: 0.48 !important;
+    filter: blur(1.35px) !important;
   }
 
   #product-universe::before {
@@ -88,9 +102,12 @@
     right: -28% !important;
     width: 118% !important;
     height: 10rem !important;
-    opacity: 0.34 !important;
-    filter: blur(1.25px) saturate(1.02) !important;
-    border-radius: 1rem !important;
+    opacity: 0.24 !important;
+    filter: blur(1.5px) !important;
+  }
+
+  #proof-expertise [data-no-site-motion] > img {
+    object-position: center 14% !important;
   }
 
   #product-universe::before {
