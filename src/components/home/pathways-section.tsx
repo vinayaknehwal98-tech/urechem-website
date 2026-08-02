@@ -23,7 +23,11 @@ const pathwayImages = [
 ];
 
 const revealEase = [0.16, 1, 0.3, 1] as const;
-const cardViewport = { amount: 0.05, margin: "0px 0px 15% 0px", once: true } as const;
+const cardViewport = {
+  amount: 0.01,
+  margin: "0px 0px 26% 0px",
+  once: true,
+} as const;
 
 export function PathwaysSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -42,16 +46,28 @@ export function PathwaysSection() {
             initial={
               shouldReduceMotion
                 ? false
-                : { opacity: 0.16, y: 74, scale: 0.93, rotateX: 9 }
+                : {
+                    opacity: 0.24,
+                    y: 92,
+                    scale: 0.91,
+                    rotateX: 10,
+                    filter: "blur(10px)",
+                  }
             }
             key={pathway.title}
-            style={{ transformPerspective: 1000, transformOrigin: "center bottom" }}
-            transition={{ delay: index * 0.12, duration: 0.9, ease: revealEase }}
+            style={{ transformPerspective: 1100, transformOrigin: "center bottom" }}
+            transition={{ delay: index * 0.15, duration: 1.02, ease: revealEase }}
             viewport={cardViewport}
             whileInView={
               shouldReduceMotion
                 ? undefined
-                : { opacity: 1, y: 0, scale: 1, rotateX: 0 }
+                : {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    rotateX: 0,
+                    filter: "blur(0px)",
+                  }
             }
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(34,211,238,0.18),transparent_30%)] opacity-0 transition duration-300 group-hover:opacity-100" />
@@ -80,7 +96,7 @@ export function PathwaysSection() {
               aria-hidden="true"
               className="absolute bottom-0 left-0 h-px w-full origin-left bg-gradient-to-r from-transparent via-cyan-200/75 to-transparent"
               initial={shouldReduceMotion ? false : { scaleX: 0 }}
-              transition={{ delay: 0.28 + index * 0.12, duration: 0.72, ease: revealEase }}
+              transition={{ delay: 0.35 + index * 0.15, duration: 0.9, ease: revealEase }}
               viewport={cardViewport}
               whileInView={shouldReduceMotion ? undefined : { scaleX: 1 }}
             />
