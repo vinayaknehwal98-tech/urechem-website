@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { LeadCaptureFlyer } from "@/components/layout/lead-capture-flyer";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { ScrollRevealController } from "@/components/motion/scroll-reveal-controller";
 import { SiteOpeningAnimation } from "@/components/motion/site-opening-animation";
 import "./globals.css";
 import "./light-contrast.css";
 import "./opening-animation.css";
-import "./scroll-reveal.css";
 import "./scrollbar-fix.css";
 
 export const metadata: Metadata = {
@@ -69,7 +67,6 @@ export default function RootLayout({
         <SiteOpeningAnimation />
         <SiteHeader />
         <LeadCaptureFlyer />
-        <ScrollRevealController />
         <main className="flex-1" id="main-content" tabIndex={-1}>{children}</main>
         <SiteFooter />
       </body>
