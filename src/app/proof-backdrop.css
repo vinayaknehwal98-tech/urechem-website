@@ -1,0 +1,27 @@
+/* Keep the supplied proof graphic readable while preserving its gentle motion. */
+#proof-expertise [data-no-site-motion] {
+  opacity: 0.68 !important;
+  filter: blur(0.35px) !important;
+}
+
+#proof-expertise [data-no-site-motion] > img {
+  opacity: 0.96;
+  filter: contrast(1.04) saturate(1.06);
+  mix-blend-mode: multiply;
+}
+
+#proof-expertise [data-no-site-motion] > div:last-child {
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 0.01),
+    rgba(255, 255, 255, 0.05) 48%,
+    rgba(255, 255, 255, 0.24)
+  ) !important;
+}
+
+@media (max-width: 767px) {
+  #proof-expertise [data-no-site-motion] {
+    opacity: 0.54 !important;
+    filter: none !important;
+  }
+}
