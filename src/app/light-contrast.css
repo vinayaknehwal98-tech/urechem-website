@@ -144,3 +144,25 @@ body main section.bg-slate-950 p {
 body main section.bg-slate-950 p[class*="text-cyan"] {
   color: #67e8f9 !important;
 }
+
+/* Application hero review cards: keep light pills readable on dark media. */
+body .hero-review-panel .hero-review-item {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(255, 255, 255, 0.72) !important;
+  color: #0f172a !important;
+  box-shadow: 0 8px 24px rgba(2, 18, 36, 0.14);
+}
+
+body .hero-review-panel .hero-review-item span {
+  color: #0f172a !important;
+}
+
+body .hero-review-panel .hero-review-item svg {
+  color: #0284c7 !important;
+}
+
+body .hero-review-panel .hero-review-chip {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(255, 255, 255, 0.72) !important;
+  color: #0f172a !important;
+}
