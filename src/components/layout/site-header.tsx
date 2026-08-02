@@ -9,7 +9,7 @@ import { Container } from "@/components/ui/container";
 export function SiteHeader() {
   return (
     <header
-      className="absolute inset-x-0 top-0 z-40 bg-transparent shadow-none"
+      className="absolute inset-x-0 top-0 z-40 border-b border-white/30 bg-transparent shadow-none"
       style={{
         position: "absolute",
         insetInline: 0,
@@ -17,7 +17,10 @@ export function SiteHeader() {
         backgroundColor: "transparent",
         backgroundImage: "none",
         boxShadow: "none",
-        border: "none",
+        borderTop: "none",
+        borderLeft: "none",
+        borderRight: "none",
+        borderBottom: "1px solid rgba(255,255,255,0.3)",
         backdropFilter: "none",
         WebkitBackdropFilter: "none",
       }}
