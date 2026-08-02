@@ -3,6 +3,7 @@ import { LeadCaptureFlyer } from "@/components/layout/lead-capture-flyer";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteOpeningAnimation } from "@/components/motion/site-opening-animation";
+import { SitewideScrollMotion } from "@/components/motion/sitewide-scroll-motion";
 import "./globals.css";
 import "./light-contrast.css";
 import "./opening-animation.css";
@@ -67,6 +68,7 @@ export default function RootLayout({
         <SiteOpeningAnimation />
         <SiteHeader />
         <LeadCaptureFlyer />
+        <SitewideScrollMotion />
         <main className="flex-1" id="main-content" tabIndex={-1}>{children}</main>
         <SiteFooter />
       </body>
