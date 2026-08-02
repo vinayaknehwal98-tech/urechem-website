@@ -1,4 +1,5 @@
 .urechem-opening {
+  --urechem-impact-tip-offset: clamp(2rem, 3.3vw, 3rem);
   align-items: center;
   background: transparent;
   contain: strict;
@@ -24,9 +25,18 @@
   z-index: 3;
 }
 
+/* Keep every expanding water/reveal circle anchored beneath the droplet,
+   at its rounded lower tip instead of through the centre of the mark. */
+.urechem-opening__liquid circle {
+  transform: translateY(var(--urechem-impact-tip-offset));
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
 .urechem-opening__splash {
   height: 5rem;
   left: 50%;
+  margin-top: var(--urechem-impact-tip-offset);
   opacity: 0;
   position: absolute;
   top: 50%;
