@@ -8,24 +8,8 @@ import { Container } from "@/components/ui/container";
 
 export function SiteHeader() {
   return (
-    <header
-      className="absolute inset-x-0 top-0 z-40 border-b border-white/30 bg-transparent shadow-none"
-      style={{
-        position: "absolute",
-        insetInline: 0,
-        top: 0,
-        backgroundColor: "transparent",
-        backgroundImage: "none",
-        boxShadow: "none",
-        borderTop: "none",
-        borderLeft: "none",
-        borderRight: "none",
-        borderBottom: "1px solid rgba(255,255,255,0.3)",
-        backdropFilter: "none",
-        WebkitBackdropFilter: "none",
-      }}
-    >
-      <Container className="grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 bg-transparent sm:h-18 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-4 lg:gap-6">
+    <header className="sticky top-0 z-40 border-b border-blue-100 bg-white/95 shadow-[0_1px_0_rgba(30,64,175,0.08),0_12px_32px_rgba(15,23,42,0.07)]">
+      <Container className="grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:h-18 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-4 lg:gap-6">
         <Link
           aria-label="Urechem Chemicals home"
           className="group inline-flex min-w-0 items-center rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
