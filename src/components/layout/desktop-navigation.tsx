@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { Armchair, Building2, Car, ChevronDown, Factory } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { applicationCategories } from "@/data/homepage";
@@ -21,6 +21,13 @@ const dropdownItems: Record<string, NavigationItem[]> = {
     href: `/industries/${industry.slug}`,
   })),
 };
+
+const industryIcons = {
+  construction: Building2,
+  automotive: Car,
+  "furniture-bedding": Armchair,
+  "industrial-facilities": Factory,
+} as const;
 
 export function DesktopNavigation() {
   const pathname = usePathname();
@@ -41,6 +48,7 @@ export function DesktopNavigation() {
         const menu = dropdownItems[item.label];
         const isOpen = openMenu === item.label;
         const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+        const isIndustriesMenu = item.label === "Industries";
 
         return (
           <div
@@ -82,7 +90,12 @@ export function DesktopNavigation() {
             </Link>
 
             {menu ? (
-              <div className="absolute left-1/2 top-full z-50 w-[22rem] -translate-x-1/2 pt-3">
+              <div
+                className={cn(
+                  "absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3",
+                  isIndustriesMenu ? "w-[38rem]" : "w-[22rem]",
+                )}
+              >
                 <AnimatePresence>
                   {isOpen ? (
                     <motion.div
@@ -94,29 +107,82 @@ export function DesktopNavigation() {
                       transition={{ duration: shouldReduceMotion ? 0.01 : 0.32, ease: [0.22, 1, 0.36, 1] }}
                     >
                       <Link
-                        className="mb-1 flex items-center justify-between rounded-[var(--radius-sm)] bg-blue-50 px-3 py-2.5 text-sm font-black text-blue-950 transition hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
+                        className="mb-2 flex items-center justify-between rounded-[var(--radius-sm)] bg-blue-50 px-4 py-3 text-sm font-black text-blue-950 transition hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
                         href={item.href}
                         onClick={() => setOpenMenu(null)}
                         role="menuitem"
                       >
-                        View all {item.label.toLowerCase()}
-                        <span aria-hidden="true" className="text-blue-700">
+                        <span>
+                          View all {item.label.toLowerCase()}
+                          {isIndustriesMenu ? (
+                            <span className="mt-0.5 block text-xs font-medium text-slate-600">
+                              Explore sector-specific polyurethane systems and technical pathways.
+                            </span>
+                          ) : null}
+                        </span>
+                        <span aria-hidden="true" className="text-lg text-blue-700">
                           →
                         </span>
                       </Link>
-                      <div className={cn("grid", menu.length > 6 && "grid-cols-2")}>
-                        {menu.map((menuItem) => (
-                          <Link
-                            className="rounded-[var(--radius-sm)] px-3 py-2.5 text-sm font-medium leading-5 text-slate-700 transition duration-300 hover:bg-blue-50 hover:pl-4 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
-                            href={menuItem.href}
-                            key={menuItem.href}
-                            onClick={() => setOpenMenu(null)}
-                            role="menuitem"
-                          >
-                            {menuItem.label}
-                          </Link>
-                        ))}
-                      </div>
+
+                      {isIndustriesMenu ? (
+                        <div className="grid grid-cols-2 gap-2 p-1">
+                          {industries.map((industry) => {
+                            const Icon = industryIcons[industry.slug as keyof typeof industryIcons] ?? Factory;
+
+                            return (
+                              <Link
+                                className="group rounded-lg border border-slate-200 bg-white p-3 transition duration-300 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-blue-50/70 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
+                                href={`/industries/${industry.slug}`}
+                                key={industry.slug}
+                                onClick={() => setOpenMenu(null)}
+                                role="menuitem"
+                              >
+                                <div className="flex items-start gap-3">
+                                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-700 transition group-hover:bg-blue-700 group-hover:text-white">
+                                    <Icon aria-hidden="true" className="h-5 w-5" />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="flex items-center justify-between gap-2 text-sm font-extrabold text-blue-950">
+                                      {industry.name}
+                                      <span aria-hidden="true" className="text-blue-600 transition-transform group-hover:translate-x-1">
+                                        →
+                                      </span>
+                                    </span>
+                                    <span className="mt-1 block text-xs leading-5 text-slate-600">
+                                      {industry.summary}
+                                    </span>
+                                    <span className="mt-2 flex flex-wrap gap-1">
+                                      {industry.needs.slice(0, 2).map((need) => (
+                                        <span
+                                          className="rounded-full bg-slate-100 px-2 py-1 text-[0.65rem] font-semibold text-slate-600"
+                                          key={need}
+                                        >
+                                          {need}
+                                        </span>
+                                      ))}
+                                    </span>
+                                  </span>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className={cn("grid", menu.length > 6 && "grid-cols-2")}>
+                          {menu.map((menuItem) => (
+                            <Link
+                              className="rounded-[var(--radius-sm)] px-3 py-2.5 text-sm font-medium leading-5 text-slate-700 transition duration-300 hover:bg-blue-50 hover:pl-4 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
+                              href={menuItem.href}
+                              key={menuItem.href}
+                              onClick={() => setOpenMenu(null)}
+                              role="menuitem"
+                            >
+                              {menuItem.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </motion.div>
                   ) : null}
                 </AnimatePresence>
