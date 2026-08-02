@@ -1,41 +1,108 @@
-/* Keep the supplied proof graphic clearly visible while preserving its gentle motion. */
+/* Static background treatment for the Proof & Expertise section. */
 #proof-expertise [data-no-site-motion] {
-  top: -1.5rem !important;
-  right: -3% !important;
-  width: 64% !important;
+  top: -1rem !important;
+  right: -4% !important;
+  width: 66% !important;
   max-width: none !important;
   overflow: visible !important;
-  opacity: 0.9 !important;
-  filter: none !important;
+  opacity: 0.52 !important;
+  filter: blur(3px) !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  will-change: auto !important;
 }
 
 #proof-expertise [data-no-site-motion] > img {
   opacity: 1 !important;
-  filter: contrast(1.16) saturate(1.14) brightness(0.96) !important;
-  mix-blend-mode: normal !important;
-  filter-origin: center;
+  filter: contrast(1.03) saturate(1.02) !important;
+  mix-blend-mode: multiply !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
-/* Remove the whitening veil that previously washed out the supplied graphic. */
 #proof-expertise [data-no-site-motion] > div:last-child {
   display: none !important;
+}
+
+/* Static yellow-foam backdrop for the Product Universe section. */
+#product-universe::before {
+  content: "";
+  position: absolute;
+  top: 2.25rem;
+  right: 2%;
+  z-index: 0;
+  width: min(46vw, 46rem);
+  height: 22rem;
+  pointer-events: none;
+  background-image: url("/media/product-universe-foam-backdrop.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  opacity: 0.42;
+  filter: blur(3px) saturate(0.96);
+  transform: none;
+  animation: none;
+}
+
+#product-universe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.86) 38%,
+    rgba(255, 255, 255, 0.18) 72%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
 }
 
 @media (max-width: 1023px) {
   #proof-expertise [data-no-site-motion] {
     top: 1rem !important;
     right: -8% !important;
-    width: 78% !important;
-    opacity: 0.72 !important;
+    width: 80% !important;
+    opacity: 0.4 !important;
+    filter: blur(3px) !important;
+  }
+
+  #product-universe::before {
+    top: 4rem;
+    right: -8%;
+    width: 64vw;
+    height: 19rem;
+    opacity: 0.32;
   }
 }
 
 @media (max-width: 767px) {
   #proof-expertise [data-no-site-motion] {
-    top: 3.5rem !important;
-    right: -24% !important;
-    width: 118% !important;
-    opacity: 0.42 !important;
-    filter: none !important;
+    top: 4rem !important;
+    right: -26% !important;
+    width: 120% !important;
+    opacity: 0.28 !important;
+    filter: blur(2.5px) !important;
+  }
+
+  #product-universe::before {
+    top: 5rem;
+    right: -28%;
+    width: 115vw;
+    height: 17rem;
+    opacity: 0.22;
+    filter: blur(2.5px) saturate(0.92);
+  }
+
+  #product-universe::after {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.82) 0%,
+      rgba(255, 255, 255, 0.34) 45%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
   }
 }
