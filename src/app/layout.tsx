@@ -68,8 +68,7 @@ export default function RootLayout({
         <SiteOpeningAnimation />
         <SiteHeader />
         <LeadCaptureFlyer />
-        <SitewideScrollMotion />
-        <main className="flex-1" id="main-content" tabIndex={-1}>{children}</main>
+        <SitewideScrollMotion>{children}</SitewideScrollMotion>
         <SiteFooter />
       </body>
     </html>
