@@ -129,3 +129,18 @@ body .transparent-media-copy .hero-tagline {
     0 2px 2px rgba(2, 18, 36, 0.94),
     0 4px 14px rgba(2, 18, 36, 0.72);
 }
+
+/* Preserve high contrast inside intentional dark CTA bands. */
+body main section.bg-slate-950 h2,
+body main section.bg-slate-950 h3,
+body main section.bg-slate-950 strong {
+  color: #ffffff !important;
+}
+
+body main section.bg-slate-950 p {
+  color: #cbd5e1 !important;
+}
+
+body main section.bg-slate-950 p[class*="text-cyan"] {
+  color: #67e8f9 !important;
+}
