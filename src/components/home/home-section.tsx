@@ -15,15 +15,51 @@ type HomeSectionProps = {
 };
 
 const revealEase = [0.16, 1, 0.3, 1] as const;
-
-// Start the reveal before the section reaches the visible viewport. This keeps
-// the original cinematic movement while preventing a hidden heading from
-// looking like extra whitespace during fast scrolling.
 const sectionViewport = {
   amount: 0.01,
   margin: "0px 0px 30% 0px",
   once: true,
 } as const;
+
+const headerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const labelVariants = {
+  hidden: { opacity: 0.35, x: -46, filter: "blur(7px)" },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.82, ease: revealEase },
+  },
+};
+
+const titleVariants = {
+  hidden: { opacity: 0.28, y: 82, rotateX: 9, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1.02, ease: revealEase },
+  },
+};
+
+const introVariants = {
+  hidden: { opacity: 0.35, y: 38, filter: "blur(6px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, ease: revealEase },
+  },
+};
 
 export function HomeSection({ eyebrow, title, intro, children, className, id }: HomeSectionProps) {
   const shouldReduceMotion = useReducedMotion();
@@ -46,65 +82,34 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
       />
 
       <Container className="relative z-10">
-        <div className="mb-8 max-w-3xl">
-          <motion.div
-            initial={
-              shouldReduceMotion
-                ? false
-                : { opacity: 0.35, x: -46, filter: "blur(7px)" }
-            }
-            transition={{ duration: 0.82, ease: revealEase }}
-            viewport={sectionViewport}
-            whileInView={
-              shouldReduceMotion
-                ? undefined
-                : { opacity: 1, x: 0, filter: "blur(0px)" }
-            }
-          >
+        <motion.div
+          className="mb-8 max-w-3xl"
+          initial={shouldReduceMotion ? false : "hidden"}
+          variants={headerVariants}
+          viewport={sectionViewport}
+          whileInView={shouldReduceMotion ? undefined : "visible"}
+        >
+          <motion.div variants={labelVariants}>
             <SectionLabel>{eyebrow}</SectionLabel>
           </motion.div>
 
-          <div className="mt-5 overflow-hidden pb-2">
-            <motion.h2
-              className="text-balance text-4xl font-black leading-tight text-blue-950 sm:text-5xl"
-              initial={
-                shouldReduceMotion
-                  ? false
-                  : { opacity: 0.28, y: 82, rotateX: 9, filter: "blur(8px)" }
-              }
-              style={{ transformPerspective: 1000, transformOrigin: "left bottom" }}
-              transition={{ delay: 0.06, duration: 1.02, ease: revealEase }}
-              viewport={sectionViewport}
-              whileInView={
-                shouldReduceMotion
-                  ? undefined
-                  : { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }
-              }
-            >
-              {title}
-            </motion.h2>
-          </div>
+          <motion.h2
+            className="mt-5 text-balance text-4xl font-black leading-tight text-blue-950 sm:text-5xl"
+            style={{ transformPerspective: 1000, transformOrigin: "left bottom" }}
+            variants={titleVariants}
+          >
+            {title}
+          </motion.h2>
 
           {intro ? (
             <motion.p
               className="mt-4 text-lg leading-8 text-slate-600"
-              initial={
-                shouldReduceMotion
-                  ? false
-                  : { opacity: 0.35, y: 38, filter: "blur(6px)" }
-              }
-              transition={{ delay: 0.15, duration: 0.9, ease: revealEase }}
-              viewport={sectionViewport}
-              whileInView={
-                shouldReduceMotion
-                  ? undefined
-                  : { opacity: 1, y: 0, filter: "blur(0px)" }
-              }
+              variants={introVariants}
             >
               {intro}
             </motion.p>
           ) : null}
-        </div>
+        </motion.div>
 
         <motion.div
           initial={
