@@ -1,15 +1,10 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowRight, FileText, ShieldAlert } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 import { applications, industries, productFamilies, type ProductFamily } from "@/data/catalog";
 
 export function ValidationNote() {
-  return (
-    <p className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
-      <ShieldAlert className="mr-2 inline size-4" />
-      Final product selection requires review by qualified Urechem technical stakeholders.
-    </p>
-  );
+  return null;
 }
 
 export function FamilyCard({ family }: { family: ProductFamily }) {
