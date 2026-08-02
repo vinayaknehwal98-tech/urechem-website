@@ -8,7 +8,7 @@ import { Container } from "@/components/ui/container";
 
 export function SiteHeader() {
   return (
-    <header className="absolute inset-x-0 top-0 z-40 border-b border-transparent bg-transparent shadow-none md:sticky md:border-blue-100 md:bg-white/95 md:shadow-[0_1px_0_rgba(30,64,175,0.08),0_12px_32px_rgba(15,23,42,0.07)]">
+    <header className="absolute inset-x-0 top-0 z-40 border-b border-white/15 bg-transparent shadow-none">
       <Container className="grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:h-18 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-4 lg:gap-6">
         <Link
           aria-label="Urechem Chemicals home"
