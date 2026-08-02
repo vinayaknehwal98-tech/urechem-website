@@ -10,37 +10,19 @@ type RevealProps = {
   distance?: number;
 };
 
-const revealEase = [0.16, 1, 0.3, 1] as const;
+const revealEase = [0.22, 1, 0.36, 1] as const;
 
-export function Reveal({ children, className, delay = 0, distance = 54 }: RevealProps) {
+export function Reveal({ children, className, delay = 0, distance = 30 }: RevealProps) {
   const shouldReduceMotion = useReducedMotion();
-  const safeDistance = Math.min(Math.max(distance, 28), 86);
+  const safeDistance = Math.min(Math.max(distance, 16), 40);
 
   return (
     <motion.div
       className={cn(className)}
-      initial={
-        shouldReduceMotion
-          ? false
-          : {
-              opacity: 0.38,
-              y: safeDistance,
-              scale: 0.988,
-              filter: "blur(8px)",
-            }
-      }
-      transition={{ delay, duration: 0.96, ease: revealEase }}
-      viewport={{ amount: 0.14, margin: "0px 0px -7% 0px", once: true }}
-      whileInView={
-        shouldReduceMotion
-          ? undefined
-          : {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              filter: "blur(0px)",
-            }
-      }
+      initial={shouldReduceMotion ? false : { opacity: 0.7, y: safeDistance }}
+      transition={{ delay, duration: 0.66, ease: revealEase }}
+      viewport={{ amount: 0.1, margin: "0px 0px -4% 0px", once: true }}
+      whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
     >
       {children}
     </motion.div>
