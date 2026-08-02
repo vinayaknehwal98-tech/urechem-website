@@ -22,6 +22,8 @@ const pathwayImages = [
   },
 ];
 
+const revealEase = [0.16, 1, 0.3, 1] as const;
+
 export function PathwaysSection() {
   const shouldReduceMotion = useReducedMotion();
 
@@ -36,11 +38,32 @@ export function PathwaysSection() {
         {pathways.map((pathway, index) => (
           <motion.article
             className="group relative min-h-80 overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/14 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(11,40,64,0.58)_45%,rgba(4,17,31,0.9))] shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/36 hover:shadow-[0_26px_90px_rgba(0,0,0,0.36),0_0_42px_rgba(34,211,238,0.1)]"
-            initial={shouldReduceMotion ? false : { opacity: 0.94, y: 10 }}
+            initial={
+              shouldReduceMotion
+                ? false
+                : {
+                    opacity: 0.24,
+                    y: 92,
+                    scale: 0.91,
+                    rotateX: 10,
+                    filter: "blur(10px)",
+                  }
+            }
             key={pathway.title}
-            transition={{ delay: index * 0.09, duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ amount: 0.2, once: true }}
-            whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+            style={{ transformPerspective: 1100, transformOrigin: "center bottom" }}
+            transition={{ delay: index * 0.15, duration: 1.02, ease: revealEase }}
+            viewport={{ amount: 0.18, margin: "0px 0px -8% 0px", once: true }}
+            whileInView={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    rotateX: 0,
+                    filter: "blur(0px)",
+                  }
+            }
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_18%,rgba(34,211,238,0.18),transparent_30%)] opacity-0 transition duration-300 group-hover:opacity-100" />
             <div className="absolute right-5 top-5 z-10 rounded-full border border-white/12 bg-navy-950/64 px-2 py-1 font-mono text-xs text-cyan-100">
@@ -64,7 +87,14 @@ export function PathwaysSection() {
                 </ButtonLink>
               </div>
             </div>
-            <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-cyan-200/55 to-transparent" />
+            <motion.div
+              aria-hidden="true"
+              className="absolute bottom-0 left-0 h-px w-full origin-left bg-gradient-to-r from-transparent via-cyan-200/75 to-transparent"
+              initial={shouldReduceMotion ? false : { scaleX: 0 }}
+              transition={{ delay: 0.35 + index * 0.15, duration: 0.9, ease: revealEase }}
+              viewport={{ amount: 0.3, once: true }}
+              whileInView={shouldReduceMotion ? undefined : { scaleX: 1 }}
+            />
           </motion.article>
         ))}
       </div>
