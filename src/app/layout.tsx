@@ -6,6 +6,7 @@ import { SiteOpeningAnimation } from "@/components/motion/site-opening-animation
 import "./globals.css";
 import "./light-contrast.css";
 import "./opening-animation.css";
+import "./scrollbar-fix.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://urechem-website.vercel.app"),
