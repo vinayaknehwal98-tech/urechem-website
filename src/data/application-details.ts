@@ -54,8 +54,8 @@ export const applicationDetails: Record<string, ApplicationDetail> = {
   "automotive-seating": {
     scopeTitle: "Automotive seat and transport comfort applications",
     overview: "Automotive seating requires a controlled balance of comfort, resilience, durability, moulding performance and repeatable production.",
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=85&w=1600",
-    imageAlt: "Automotive interior and seating",
+    image: "https://images.pexels.com/photos/15200595/pexels-photo-15200595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    imageAlt: "Modern automotive seating without visible branding",
     imageCaption: "Seat performance is assessed against comfort, loading, mould geometry and manufacturing consistency.",
     useCases: ["Car seat cushions", "Bus and commercial seats", "Headrests", "Armrests", "Seat bolsters", "Prototype programs"],
     requirements: ["Comfort distribution", "Fatigue resistance", "Resilience", "Mould repeatability", "Demould efficiency", "Quality control"],
