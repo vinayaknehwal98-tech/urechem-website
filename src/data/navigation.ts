@@ -24,7 +24,8 @@ export const productFamilyLinks: NavigationItem[] = [
   { label: "UreShield waterproofing and polyurea", href: "/products/ureshield-waterproofing-polyurea-systems" },
   { label: "Uretherm spray-foam systems", href: "/products/uretherm-spray-foam-systems" },
   { label: "ChemNate MDI range", href: "/products/chemnate-mdi-range" },
-  { label: "KlayOl polyol and PPG ranges", href: "/products/klayol-polyol-range" },
+  { label: "KlayOl polyol range", href: "/products/klayol-polyol-range" },
+  { label: "KlayOl PPG range", href: "/products/klayol-ppg-range" },
   { label: "Flexible systems and additives", href: "/products/flexible-systems" },
 ];
 
