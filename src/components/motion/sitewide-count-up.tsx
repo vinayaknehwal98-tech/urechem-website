@@ -28,9 +28,16 @@ export function SitewideCountUp() {
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-
           const element = entry.target as HTMLElement;
+          const rect = entry.boundingClientRect;
+          const visiblyInsideViewport =
+            entry.isIntersecting &&
+            entry.intersectionRatio >= 0.08 &&
+            rect.top < window.innerHeight &&
+            rect.bottom > 0;
+
+          if (!visiblyInsideViewport) continue;
+
           observer.unobserve(element);
 
           const target = Number(element.dataset.countTarget ?? "0");
@@ -68,8 +75,8 @@ export function SitewideCountUp() {
         }
       },
       {
-        threshold: 0.28,
-        rootMargin: "0px 0px -8% 0px",
+        threshold: [0, 0.08, 0.2],
+        rootMargin: "0px",
       },
     );
 
@@ -98,7 +105,7 @@ export function SitewideCountUp() {
         element.dataset.countTarget = String(target);
         element.dataset.countSuffix = suffix;
         element.dataset.countDecimals = String(decimals);
-        element.dataset.countDelay = String(Math.min((statisticIndex % 8) * 85, 425));
+        element.dataset.countDelay = String(Math.min((statisticIndex % 4) * 70, 210));
         element.style.fontVariantNumeric = "tabular-nums";
         element.setAttribute("aria-label", originalText.trim());
 
