@@ -13,8 +13,13 @@ const HERO_VIDEO_HD =
 const HERO_POSTER =
   "https://images.pexels.com/videos/9339478/pexels-photo-9339478.jpeg?auto=compress&fit=crop&w=2200";
 
+const HERO_COMPLETE_ATTRIBUTE = "data-urechem-hero-intro-complete";
+const HERO_COMPLETE_EVENT = "urechem:hero-intro-complete";
+const HERO_SEQUENCE_DURATION_MS = 2300;
+
 const processSteps = ["Formulate", "Validate", "Deliver"];
 const heroTitleWords = "Intelligent chemistry for better polyurethane solutions.".split(" ");
+const revealEase = [0.22, 1, 0.36, 1] as const;
 
 const titleContainerVariants: Variants = {
   hidden: {},
@@ -35,12 +40,60 @@ const titleWordVariants: Variants = {
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
+    filter: "none",
     transition: {
       duration: 0.72,
-      ease: [0.22, 1, 0.36, 1],
+      ease: revealEase,
     },
   },
+};
+
+const supportingCopyVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay,
+      duration: 0.64,
+      ease: revealEase,
+    },
+  }),
+};
+
+const processContainerVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 1.28,
+      duration: 0.68,
+      ease: revealEase,
+    },
+  },
+};
+
+const processStepVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+  },
+  visible: (index = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 1.44 + index * 0.12,
+      duration: 0.56,
+      ease: revealEase,
+    },
+  }),
 };
 
 export function HeroSection() {
@@ -60,7 +113,7 @@ export function HeroSection() {
     let introObserver: MutationObserver | null = null;
     let frame = 0;
 
-    const revealTitle = () => {
+    const revealHero = () => {
       frame = window.requestAnimationFrame(() => setHeroCanAnimate(true));
     };
 
@@ -68,7 +121,7 @@ export function HeroSection() {
       introObserver = new MutationObserver(() => {
         if (!html.hasAttribute("data-urechem-intro-active")) {
           introObserver?.disconnect();
-          revealTitle();
+          revealHero();
         }
       });
 
@@ -77,7 +130,7 @@ export function HeroSection() {
         attributeFilter: ["data-urechem-intro-active"],
       });
     } else {
-      revealTitle();
+      revealHero();
     }
 
     return () => {
@@ -85,6 +138,29 @@ export function HeroSection() {
       window.cancelAnimationFrame(frame);
     };
   }, [shouldReduceMotion]);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    html.removeAttribute(HERO_COMPLETE_ATTRIBUTE);
+
+    if (!heroCanAnimate) {
+      return () => html.removeAttribute(HERO_COMPLETE_ATTRIBUTE);
+    }
+
+    let timer = 0;
+
+    const markHeroComplete = () => {
+      html.setAttribute(HERO_COMPLETE_ATTRIBUTE, "true");
+      window.dispatchEvent(new Event(HERO_COMPLETE_EVENT));
+    };
+
+    timer = window.setTimeout(markHeroComplete, shouldReduceMotion ? 0 : HERO_SEQUENCE_DURATION_MS);
+
+    return () => {
+      window.clearTimeout(timer);
+      html.removeAttribute(HERO_COMPLETE_ATTRIBUTE);
+    };
+  }, [heroCanAnimate, shouldReduceMotion]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -136,8 +212,13 @@ export function HeroSection() {
     };
   }, [shouldReduceMotion, videoFailed]);
 
+  const animationState = heroCanAnimate ? "visible" : "hidden";
+
   return (
-    <section className="minimal-hero relative isolate overflow-hidden border-b border-blue-100 bg-slate-100 md:min-h-[calc(100dvh-4.5rem)]">
+    <section
+      className="minimal-hero relative isolate overflow-hidden border-b border-blue-100 bg-slate-100 md:min-h-[calc(100dvh-4.5rem)]"
+      data-urechem-hero-section
+    >
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-30 overflow-hidden bg-slate-100 bg-cover bg-[70%_center] md:bg-center"
@@ -171,7 +252,7 @@ export function HeroSection() {
       <Container className="flex min-h-[38rem] items-center py-16 sm:min-h-[42rem] md:min-h-[calc(100dvh-4.5rem)] md:py-24">
         <div className="relative z-10 max-w-2xl">
           <motion.h1
-            animate={heroCanAnimate ? "visible" : "hidden"}
+            animate={animationState}
             aria-label="Intelligent chemistry for better polyurethane solutions."
             className="hero-title max-w-[20rem] text-[clamp(2.35rem,8.5vw,3rem)] font-semibold leading-[1.02] tracking-[-0.035em] sm:max-w-2xl sm:text-[clamp(3.25rem,4.6vw,4.5rem)] sm:leading-[0.98]"
             initial={shouldReduceMotion ? false : "hidden"}
@@ -189,19 +270,38 @@ export function HeroSection() {
             ))}
           </motion.h1>
 
-          <p className="hero-tagline mt-6 text-base font-semibold sm:text-lg">
+          <motion.p
+            animate={animationState}
+            className="hero-tagline mt-6 text-base font-semibold sm:text-lg"
+            custom={0.92}
+            initial={shouldReduceMotion ? false : "hidden"}
+            variants={supportingCopyVariants}
+          >
             We deliver what we promise.
-          </p>
+          </motion.p>
 
-          <p className="hero-description mt-3 max-w-lg text-sm leading-6 sm:text-base sm:leading-7">
+          <motion.p
+            animate={animationState}
+            className="hero-description mt-3 max-w-lg text-sm leading-6 sm:text-base sm:leading-7"
+            custom={1.08}
+            initial={shouldReduceMotion ? false : "hidden"}
+            variants={supportingCopyVariants}
+          >
             Advanced polyurethane systems, specialty chemicals and technical support for real-world applications.
-          </p>
+          </motion.p>
 
-          <div className="hero-process mt-10 grid max-w-xl grid-cols-3 border-y border-white/25">
+          <motion.div
+            animate={animationState}
+            className="hero-process mt-10 grid max-w-xl grid-cols-3 border-y border-white/25"
+            initial={shouldReduceMotion ? false : "hidden"}
+            variants={processContainerVariants}
+          >
             {processSteps.map((step, index) => (
-              <div
+              <motion.div
                 className={`py-4 ${index > 0 ? "border-l border-white/20 pl-5 sm:pl-6" : "pr-4"}`}
+                custom={index}
                 key={step}
+                variants={processStepVariants}
               >
                 <span className="hero-step-number block text-[0.62rem] font-semibold tracking-[0.24em]">
                   0{index + 1}
@@ -209,9 +309,9 @@ export function HeroSection() {
                 <span className="hero-step-label mt-1.5 block text-xs font-medium uppercase tracking-[0.16em] sm:text-sm">
                   {step}
                 </span>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </Container>
 
