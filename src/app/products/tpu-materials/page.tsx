@@ -43,7 +43,15 @@ export default function Page() {
                 className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(14,165,233,0.08),transparent_48%,rgba(37,99,235,0.06))]"
               />
               <div className="relative">
-                <SectionLabel className="tpu-hero-label">Thermoplastic polyurethane</SectionLabel>
+                <div className="inline-flex items-center gap-2 rounded-[var(--radius-sm)] border border-blue-200 bg-blue-50 px-3 py-2 shadow-[0_8px_24px_rgba(30,64,175,0.1)]">
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 rounded-full bg-sky-500 shadow-[0_0_14px_rgba(14,165,233,0.55)]"
+                  />
+                  <span className="font-mono text-xs font-bold uppercase tracking-[0.04em] text-blue-800">
+                    Thermoplastic polyurethane
+                  </span>
+                </div>
                 <h1 className="mt-6 max-w-5xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.05em] text-white [text-shadow:0_4px_24px_rgba(0,0,0,0.45)] sm:text-6xl lg:text-7xl">
                   TPU material pathways
                 </h1>
