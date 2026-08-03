@@ -24,8 +24,8 @@ const pathwayImages = [
 
 const revealEase = [0.16, 1, 0.3, 1] as const;
 const cardViewport = {
-  amount: 0.01,
-  margin: "0px 0px 26% 0px",
+  amount: 0.12,
+  margin: "0px 0px -4% 0px",
   once: true,
 } as const;
 
@@ -42,31 +42,39 @@ export function PathwaysSection() {
       <div className="grid gap-4 lg:grid-cols-3">
         {pathways.map((pathway, index) => (
           <motion.article
-            className="group relative min-h-80 overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/14 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(11,40,64,0.58)_45%,rgba(4,17,31,0.9))] shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/36 hover:shadow-[0_26px_90px_rgba(0,0,0,0.36),0_0_42px_rgba(34,211,238,0.1)]"
-            initial={
+            className="group relative min-h-80 overflow-hidden rounded-[var(--radius-lg)] border border-cyan-200/14 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(11,40,64,0.58)_45%,rgba(4,17,31,0.9))] shadow-[var(--shadow-soft)] transition-[border-color,box-shadow] duration-300 hover:border-cyan-200/36 hover:shadow-[0_26px_90px_rgba(0,0,0,0.36),0_0_42px_rgba(34,211,238,0.1)]"
+            initial={false}
+            key={pathway.title}
+            style={{
+              backfaceVisibility: "hidden",
+              transformOrigin: "center bottom",
+              transformPerspective: 1100,
+            }}
+            transition={{
+              delay: index * 0.15,
+              duration: 1.02,
+              ease: revealEase,
+              filter: { duration: 0.34, ease: "easeOut" },
+            }}
+            viewport={cardViewport}
+            whileHover={
               shouldReduceMotion
-                ? false
+                ? undefined
                 : {
-                    opacity: 0.24,
-                    y: 92,
-                    scale: 0.91,
-                    rotateX: 10,
-                    filter: "blur(10px)",
+                    y: -4,
+                    scale: 1.012,
+                    transition: { duration: 0.28, ease: revealEase },
                   }
             }
-            key={pathway.title}
-            style={{ transformPerspective: 1100, transformOrigin: "center bottom" }}
-            transition={{ delay: index * 0.15, duration: 1.02, ease: revealEase }}
-            viewport={cardViewport}
             whileInView={
               shouldReduceMotion
                 ? undefined
                 : {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    rotateX: 0,
-                    filter: "blur(0px)",
+                    opacity: [0.24, 1],
+                    y: [92, 0],
+                    scale: [0.91, 1],
+                    rotateX: [10, 0],
+                    filter: ["blur(10px)", "blur(0px)", "none"],
                   }
             }
           >
@@ -95,10 +103,10 @@ export function PathwaysSection() {
             <motion.div
               aria-hidden="true"
               className="absolute bottom-0 left-0 h-px w-full origin-left bg-gradient-to-r from-transparent via-cyan-200/75 to-transparent"
-              initial={shouldReduceMotion ? false : { scaleX: 0 }}
+              initial={false}
               transition={{ delay: 0.35 + index * 0.15, duration: 0.9, ease: revealEase }}
               viewport={cardViewport}
-              whileInView={shouldReduceMotion ? undefined : { scaleX: 1 }}
+              whileInView={shouldReduceMotion ? undefined : { scaleX: [0, 1] }}
             />
           </motion.article>
         ))}
