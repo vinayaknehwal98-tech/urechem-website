@@ -41,7 +41,7 @@ export function ProductUniverseSection() {
                     y: [0, -6, 0],
                   }
             }
-            className="pointer-events-none absolute -inset-8 bg-cover bg-center opacity-38 blur-[6px]"
+            className="pointer-events-none absolute -inset-8 bg-cover bg-center opacity-[0.38] blur-[6px]"
             style={{ backgroundImage: "url('/images/product-family-droplet-bg.svg')" }}
             transition={{ duration: 16, ease: "easeInOut", repeat: Infinity }}
           />
@@ -68,7 +68,7 @@ export function ProductUniverseSection() {
             {productFamilies.map((family, index) => (
               <button
                 className={cn(
-                  "group flex min-h-32 w-full flex-col justify-between rounded-[var(--radius-lg)] border bg-white/88 p-4 text-left text-slate-950 shadow-[var(--shadow-soft)] backdrop-blur-[3px] transition duration-300 hover:-translate-y-1 hover:border-sky-400 hover:bg-white/95 hover:shadow-[0_18px_48px_rgba(30,64,175,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600",
+                  "group flex min-h-32 w-full flex-col justify-between rounded-[var(--radius-lg)] border bg-white/[0.88] p-4 text-left text-slate-950 shadow-[var(--shadow-soft)] backdrop-blur-[3px] transition duration-300 hover:-translate-y-1 hover:border-sky-400 hover:bg-white/[0.95] hover:shadow-[0_18px_48px_rgba(30,64,175,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600",
                   activeIndex === index ? accentClasses[family.accent] : "border-blue-100",
                 )}
                 key={family.name}
