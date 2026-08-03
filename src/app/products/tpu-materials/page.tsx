@@ -26,29 +26,50 @@ export default function Page() {
             backgroundPosition: background.position,
           }}
         />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,15,28,0.46)_0%,rgba(2,15,28,0.3)_48%,rgba(2,15,28,0.42)_100%)]"
+        />
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_48%,rgba(2,15,28,0.4),transparent_42%),radial-gradient(circle_at_82%_48%,rgba(14,165,233,0.16),transparent_34%)]"
+        />
+
         <Container className="relative w-full">
-          <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center xl:gap-16">
-            <div className="transparent-media-copy">
-              <SectionLabel>Thermoplastic polyurethane</SectionLabel>
-              <h1 className="mt-6 max-w-5xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
-                TPU material pathways
-              </h1>
-              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-700">
-                A controlled selection route across polyester-based, polyether-based and polycaprolactone-based TPU where strength, flexibility, wear, chemical exposure, temperature and processing all shape the final grade decision.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink href="/consultant?product=TPU%20materials" size="lg">
-                  Discuss a TPU requirement
-                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                </ButtonLink>
-                <ButtonLink href="/technical-brief-builder" size="lg" variant="secondary">
-                  Build a material brief
-                </ButtonLink>
+          <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center xl:gap-12">
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-slate-950/[0.62] p-6 shadow-[0_28px_90px_rgba(2,18,36,0.32)] backdrop-blur-[4px] sm:p-8 lg:p-10">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(14,165,233,0.1),transparent_45%,rgba(37,99,235,0.08))]"
+              />
+              <div className="relative">
+                <SectionLabel>Thermoplastic polyurethane</SectionLabel>
+                <h1 className="mt-6 max-w-5xl text-balance text-5xl font-black leading-[0.96] tracking-[-0.05em] text-white [text-shadow:0_4px_24px_rgba(0,0,0,0.45)] sm:text-6xl lg:text-7xl">
+                  TPU material pathways
+                </h1>
+                <p className="mt-6 max-w-3xl text-lg font-medium leading-8 text-white/[0.9] [text-shadow:0_2px_12px_rgba(0,0,0,0.42)]">
+                  A controlled selection route across polyester-based, polyether-based and polycaprolactone-based TPU where strength, flexibility, wear, chemical exposure, temperature and processing all shape the final grade decision.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <ButtonLink href="/consultant?product=TPU%20materials" size="lg">
+                    Discuss a TPU requirement
+                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                  </ButtonLink>
+                  <ButtonLink href="/technical-brief-builder" size="lg" variant="secondary">
+                    Build a material brief
+                  </ButtonLink>
+                </div>
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[620px] rounded-[2rem] border border-white/70 bg-transparent p-5 shadow-[0_28px_90px_rgba(2,18,36,0.28)] sm:p-7">
-              <TpuMaterialVisual />
+            <div className="relative mx-auto w-full max-w-[620px] rounded-[2rem] border border-cyan-100/30 bg-slate-950/[0.68] p-4 shadow-[0_30px_100px_rgba(2,18,36,0.46)] backdrop-blur-[5px] sm:p-6">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_50%_38%,rgba(14,165,233,0.2),transparent_58%)]"
+              />
+              <div className="relative">
+                <TpuMaterialVisual />
+              </div>
             </div>
           </div>
         </Container>
