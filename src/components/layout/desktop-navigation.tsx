@@ -10,16 +10,21 @@ import { industries } from "@/data/catalog";
 import { primaryNavigation, productFamilyLinks, type NavigationItem } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 
+const industryNavigationItems: NavigationItem[] = [
+  ...industries.map((industry) => ({
+    label: industry.name,
+    href: `/industries/${industry.slug}`,
+  })),
+  { label: "Flexible packaging", href: "/industries/flexible-packaging" },
+];
+
 const dropdownItems: Record<string, NavigationItem[]> = {
   Products: productFamilyLinks,
   Applications: applicationCategories.map((application) => ({
     label: application.title,
     href: application.href,
   })),
-  Industries: industries.map((industry) => ({
-    label: industry.name,
-    href: `/industries/${industry.slug}`,
-  })),
+  Industries: industryNavigationItems,
 };
 
 export function DesktopNavigation() {
