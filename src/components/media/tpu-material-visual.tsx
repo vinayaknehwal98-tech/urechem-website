@@ -6,11 +6,12 @@ export function TpuMaterialVisual() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-cyan-100/20 bg-[linear-gradient(145deg,rgba(37,99,235,0.25),rgba(8,47,73,0.42),rgba(255,255,255,0.05))] p-5 shadow-[var(--shadow-deep)] sm:p-7">
-      <div className="absolute -left-16 -top-16 h-48 w-48 rounded-full bg-blue-400/15 blur-3xl motion-safe:animate-pulse" />
+    <div className="relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-cyan-100/30 bg-[linear-gradient(145deg,rgba(2,15,28,0.78),rgba(8,47,73,0.7),rgba(15,23,42,0.76))] p-5 shadow-[0_24px_75px_rgba(2,15,28,0.4)] sm:p-7">
+      <div className="absolute -left-16 -top-16 h-52 w-52 rounded-full bg-cyan-300/20 blur-3xl motion-safe:animate-pulse" />
+      <div className="absolute -bottom-20 -right-16 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
       <motion.svg
         aria-labelledby="tpu-visual-title tpu-visual-description"
-        className="relative h-auto w-full"
+        className="relative h-auto w-full drop-shadow-[0_12px_28px_rgba(0,0,0,0.42)]"
         initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.97, y: 18 }}
         role="img"
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
@@ -23,28 +24,36 @@ export function TpuMaterialVisual() {
         </desc>
         <defs>
           <linearGradient id="tpu-wheel" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stopColor="#67e8f9" />
-            <stop offset="0.5" stopColor="#3b82f6" />
-            <stop offset="1" stopColor="#1d4ed8" />
+            <stop offset="0" stopColor="#a5f3fc" />
+            <stop offset="0.45" stopColor="#38bdf8" />
+            <stop offset="1" stopColor="#2563eb" />
           </linearGradient>
           <linearGradient id="tpu-core" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0" stopColor="#e0f2fe" />
+            <stop offset="0" stopColor="#f8fafc" />
             <stop offset="1" stopColor="#94a3b8" />
           </linearGradient>
+          <filter id="tpu-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="9" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
 
         <motion.g
           animate={shouldReduceMotion ? undefined : { rotate: 360 }}
+          filter="url(#tpu-glow)"
           style={{ transformOrigin: "350px 270px" }}
           transition={{ duration: 24, ease: "linear", repeat: Infinity }}
         >
           <circle cx="350" cy="270" fill="none" r="150" stroke="url(#tpu-wheel)" strokeWidth="68" />
-          <circle cx="350" cy="270" fill="url(#tpu-core)" r="76" stroke="#f8fafc" strokeWidth="8" />
-          <g fill="#dbeafe" opacity="0.75">
-            <circle cx="350" cy="111" r="10" />
-            <circle cx="509" cy="270" r="10" />
-            <circle cx="350" cy="429" r="10" />
-            <circle cx="191" cy="270" r="10" />
+          <circle cx="350" cy="270" fill="url(#tpu-core)" r="76" stroke="#ffffff" strokeWidth="9" />
+          <g fill="#ecfeff" opacity="0.95">
+            <circle cx="350" cy="111" r="11" />
+            <circle cx="509" cy="270" r="11" />
+            <circle cx="350" cy="429" r="11" />
+            <circle cx="191" cy="270" r="11" />
           </g>
         </motion.g>
 
@@ -56,26 +65,27 @@ export function TpuMaterialVisual() {
           ] }}
           d="M65 120c70-70 110 70 180 0s110 70 180 0 110 70 180 0"
           fill="none"
-          stroke="#a5f3fc"
+          filter="url(#tpu-glow)"
+          stroke="#67e8f9"
           strokeLinecap="round"
-          strokeWidth="12"
+          strokeWidth="14"
           transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
         />
-        <g fill="#ecfeff" stroke="#0ea5e9" strokeWidth="4">
-          <circle cx="65" cy="120" r="17" />
-          <circle cx="245" cy="120" r="17" />
-          <circle cx="425" cy="120" r="17" />
-          <circle cx="605" cy="120" r="17" />
+        <g fill="#ffffff" stroke="#38bdf8" strokeWidth="5">
+          <circle cx="65" cy="120" r="18" />
+          <circle cx="245" cy="120" r="18" />
+          <circle cx="425" cy="120" r="18" />
+          <circle cx="605" cy="120" r="18" />
         </g>
 
-        <g fill="#e0f2fe" fontFamily="Arial, sans-serif" fontSize="18" fontWeight="700" textAnchor="middle">
+        <g fill="#ffffff" fontFamily="Arial, sans-serif" fontSize="19" fontWeight="800" textAnchor="middle">
           <text x="115" y="468">ABRASION</text>
           <text x="270" y="468">FLEXIBILITY</text>
           <text x="445" y="468">CHEMICAL</text>
           <text x="600" y="468">CUSTOMISATION</text>
         </g>
       </motion.svg>
-      <p className="relative mt-4 text-center text-sm leading-6 text-cyan-50/85">
+      <p className="relative mt-4 rounded-xl border border-white/10 bg-slate-950/[0.48] px-4 py-3 text-center text-sm font-medium leading-6 text-white/[0.92]">
         TPU type, hardness, additive package and processing route must be matched to the final part and service environment.
       </p>
     </div>
