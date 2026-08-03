@@ -72,12 +72,12 @@ export const industryDetails: Record<string, IndustryDetail> = {
     ],
   },
   automotive: {
-    heroImage: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=86&w=2400",
+    heroImage: "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=2400",
     heroPosition: "center 58%",
     overview:
       "Automotive seating and interior-comfort programs require a controlled balance of comfort, resilience, fatigue resistance, moulding behaviour and production repeatability. Urechem routes these enquiries toward moulded HR system and polyol pathways for qualified technical discussion.",
-    image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=85&w=1600",
-    imageAlt: "Automotive interior and seating environment",
+    image: "https://images.pexels.com/photos/15200595/pexels-photo-15200595.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    imageAlt: "Modern automotive seating without visible branding",
     imageCaption:
       "Seat performance is shaped by foam chemistry, mould geometry, process control, repeated loading and the final trim construction.",
     challenges: [
