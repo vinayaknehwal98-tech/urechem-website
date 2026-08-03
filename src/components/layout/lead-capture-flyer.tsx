@@ -1,16 +1,20 @@
 "use client";
 
 import { ArrowRight, Mail, Phone, UserRound, X } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const sessionStorageKey = "urechem-consultation-flyer-dismissed-session-v3";
 const flyerDelay = 4500;
-const maximumIntroWait = 5000;
+const minimumPostHeroDelay = 650;
+const heroCompleteAttribute = "data-urechem-hero-intro-complete";
+const heroCompleteEvent = "urechem:hero-intro-complete";
 
 export function LeadCaptureFlyer() {
   const pathname = usePathname();
+  const shouldReduceMotion = useReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLElement>(null);
@@ -45,27 +49,40 @@ export function LeadCaptureFlyer() {
 
     let cancelled = false;
     let timer = 0;
-    const startedWaitingAt = Date.now();
+    const mountedAt = Date.now();
+    const isHomePage = pathname === "/";
 
     const showFlyer = () => {
-      if (cancelled) return;
-
-      const introIsActive = document.documentElement.hasAttribute("data-urechem-intro-active");
-      const hasWaitedTooLong = Date.now() - startedWaitingAt >= maximumIntroWait;
-
-      if (introIsActive && !hasWaitedTooLong) {
-        timer = window.setTimeout(showFlyer, 250);
-        return;
-      }
-
-      setIsOpen(true);
+      if (!cancelled) setIsOpen(true);
     };
 
-    timer = window.setTimeout(showFlyer, forceFlyer ? 250 : flyerDelay);
+    const scheduleFlyer = (delay: number) => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(showFlyer, delay);
+    };
+
+    const scheduleAfterHero = () => {
+      if (cancelled) return;
+
+      const elapsed = Date.now() - mountedAt;
+      const remainingBaseDelay = forceFlyer ? 180 : Math.max(0, flyerDelay - elapsed);
+      scheduleFlyer(Math.max(forceFlyer ? 180 : minimumPostHeroDelay, remainingBaseDelay));
+    };
+
+    if (isHomePage) {
+      if (document.documentElement.hasAttribute(heroCompleteAttribute)) {
+        scheduleAfterHero();
+      } else {
+        window.addEventListener(heroCompleteEvent, scheduleAfterHero, { once: true });
+      }
+    } else {
+      scheduleFlyer(forceFlyer ? 250 : flyerDelay);
+    }
 
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
+      window.removeEventListener(heroCompleteEvent, scheduleAfterHero);
     };
   }, [isExcludedPath, pathname]);
 
@@ -131,7 +148,13 @@ export function LeadCaptureFlyer() {
   if (!isOpen || isExcludedPath) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] grid place-items-center p-4 sm:p-6" role="presentation">
+    <motion.div
+      animate={{ opacity: 1 }}
+      className="fixed inset-0 z-[80] grid place-items-center p-4 sm:p-6"
+      initial={shouldReduceMotion ? false : { opacity: 0 }}
+      role="presentation"
+      transition={{ duration: 0.28, ease: "easeOut" }}
+    >
       <button
         aria-hidden="true"
         className="absolute inset-0 h-full w-full cursor-default bg-blue-950/72 backdrop-blur-sm"
@@ -140,14 +163,22 @@ export function LeadCaptureFlyer() {
         onClick={dismiss}
       />
 
-      <section
+      <motion.section
+        animate={{ opacity: 1, scale: 1, y: 0 }}
         aria-labelledby="consultation-flyer-title"
         aria-modal="true"
         className="relative z-10 w-full max-w-2xl overflow-hidden rounded-[var(--radius-lg)] border border-blue-200 bg-white shadow-[0_30px_110px_rgba(3,19,43,0.38)]"
+        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.965, y: 28 }}
         ref={dialogRef}
         role="dialog"
+        transition={{ delay: shouldReduceMotion ? 0 : 0.08, duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="h-2 bg-[linear-gradient(90deg,#1d4ed8,#22d3ee)]" />
+        <motion.div
+          animate={{ scaleX: 1 }}
+          className="h-2 origin-left bg-[linear-gradient(90deg,#1d4ed8,#22d3ee)]"
+          initial={shouldReduceMotion ? false : { scaleX: 0 }}
+          transition={{ delay: shouldReduceMotion ? 0 : 0.18, duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+        />
 
         <button
           aria-label="Close consultation flyer"
@@ -160,7 +191,12 @@ export function LeadCaptureFlyer() {
         </button>
 
         <div className="grid gap-7 p-6 sm:p-9">
-          <div className="pr-12">
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            className="pr-12"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+            transition={{ delay: shouldReduceMotion ? 0 : 0.22, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
             <p className="text-sm font-black uppercase tracking-[0.17em] text-blue-700">Urechem Chemicals</p>
             <h2
               className="mt-3 max-w-xl text-3xl font-black leading-tight text-blue-950 sm:text-4xl"
@@ -171,9 +207,15 @@ export function LeadCaptureFlyer() {
             <p className="mt-4 max-w-xl leading-7 text-slate-600">
               Share your contact details to continue to a consultation request. We deliver what we promise.
             </p>
-          </div>
+          </motion.div>
 
-          <form className="grid gap-4" onSubmit={handleSubmit}>
+          <motion.form
+            animate={{ opacity: 1, y: 0 }}
+            className="grid gap-4"
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+            onSubmit={handleSubmit}
+            transition={{ delay: shouldReduceMotion ? 0 : 0.3, duration: 0.52, ease: [0.22, 1, 0.36, 1] }}
+          >
             <label className="grid gap-2 text-sm font-bold text-blue-950">
               Name
               <span className="relative">
@@ -244,9 +286,9 @@ export function LeadCaptureFlyer() {
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </Button>
             </div>
-          </form>
+          </motion.form>
         </div>
-      </section>
-    </div>
+      </motion.section>
+    </motion.div>
   );
 }
