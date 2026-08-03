@@ -1,0 +1,16 @@
+/* Scoped exception for the TPU image hero.
+   This file is loaded after light-contrast.css so the dark hero can keep light copy. */
+body .tpu-hero-contrast .tpu-hero-copy h1,
+body .tpu-hero-contrast .tpu-hero-copy p {
+  color: #f8fbff !important;
+  -webkit-text-fill-color: #f8fbff !important;
+}
+
+body .tpu-hero-contrast .tpu-hero-copy p {
+  opacity: 0.94;
+}
+
+body .tpu-hero-contrast .tpu-material-visual .tpu-visual-caption {
+  color: #f8fbff !important;
+  -webkit-text-fill-color: #f8fbff !important;
+}
