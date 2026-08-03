@@ -35,38 +35,33 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-0 h-px w-full origin-left bg-gradient-to-r from-blue-700 via-cyan-400 to-transparent"
-        initial={shouldReduceMotion ? false : { opacity: 0.2, scaleX: 0.08 }}
+        initial={false}
         transition={{ duration: 1.15, ease: revealEase }}
         viewport={sectionViewport}
-        whileInView={shouldReduceMotion ? undefined : { opacity: 0.8, scaleX: 1 }}
+        whileInView={
+          shouldReduceMotion
+            ? undefined
+            : {
+                opacity: [0.2, 0.8],
+                scaleX: [0.08, 1],
+              }
+        }
       />
 
       <Container className="relative z-10">
-        {/* Keep the whole heading block on one observer/transform. The earlier
-            nested title variant could remain translated after the label had
-            already appeared, which looked like a large empty gap. */}
         <motion.div
           className="mb-8 max-w-3xl"
-          initial={
-            shouldReduceMotion
-              ? false
-              : {
-                  opacity: 0.28,
-                  y: 62,
-                  scale: 0.982,
-                  filter: "blur(8px)",
-                }
-          }
+          initial={false}
           transition={{ duration: 1.02, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
               ? undefined
               : {
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  filter: "blur(0px)",
+                  opacity: [0.28, 1],
+                  y: [62, 0],
+                  scale: [0.982, 1],
+                  filter: ["blur(8px)", "blur(0px)", "none"],
                 }
           }
         >
@@ -77,32 +72,21 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
           >
             {title}
           </h2>
-          {intro ? (
-            <p className="mt-4 text-lg leading-8 text-slate-600">{intro}</p>
-          ) : null}
+          {intro ? <p className="mt-4 text-lg leading-8 text-slate-600">{intro}</p> : null}
         </motion.div>
 
         <motion.div
-          initial={
-            shouldReduceMotion
-              ? false
-              : {
-                  opacity: 0.42,
-                  y: 72,
-                  scale: 0.985,
-                  filter: "blur(9px)",
-                }
-          }
+          initial={false}
           transition={{ delay: 0.12, duration: 1.02, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
               ? undefined
               : {
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  filter: "blur(0px)",
+                  opacity: [0.42, 1],
+                  y: [72, 0],
+                  scale: [0.985, 1],
+                  filter: ["blur(9px)", "blur(0px)", "none"],
                 }
           }
         >
