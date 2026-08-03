@@ -3,6 +3,7 @@ import { LeadCaptureFlyer } from "@/components/layout/lead-capture-flyer";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteOpeningAnimation } from "@/components/motion/site-opening-animation";
+import { SitewideCountUp } from "@/components/motion/sitewide-count-up";
 import { SitewideScrollMotion } from "@/components/motion/sitewide-scroll-motion";
 import "./globals.css";
 import "./light-contrast.css";
@@ -69,6 +70,7 @@ export default function RootLayout({
         <SiteOpeningAnimation />
         <SiteHeader />
         <LeadCaptureFlyer />
+        <SitewideCountUp />
         <SitewideScrollMotion>{children}</SitewideScrollMotion>
         <SiteFooter />
       </body>
