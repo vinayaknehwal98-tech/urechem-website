@@ -143,6 +143,29 @@ body main section.bg-slate-950 p[class*="text-cyan"] {
   color: #67e8f9 !important;
 }
 
+/* TPU hero uses intentionally dark glass panels inside the light-theme site. */
+body .tpu-dark-copy :is(h1, h2, h3, p, strong) {
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+}
+
+body .tpu-dark-copy > p,
+body .tpu-dark-copy p:not([class*="font-mono"]) {
+  color: rgba(248, 250, 252, 0.9) !important;
+  -webkit-text-fill-color: rgba(248, 250, 252, 0.9) !important;
+}
+
+body .tpu-dark-copy [class*="text-cyan"],
+body .tpu-dark-copy [class*="text-sky"] {
+  color: #a5f3fc !important;
+  -webkit-text-fill-color: #a5f3fc !important;
+}
+
+body .tpu-dark-visual-copy {
+  color: rgba(248, 250, 252, 0.94) !important;
+  -webkit-text-fill-color: rgba(248, 250, 252, 0.94) !important;
+}
+
 /* Application hero review cards. */
 body main .hero-review-panel .hero-review-item {
   background: rgba(255, 255, 255, 0.96) !important;
