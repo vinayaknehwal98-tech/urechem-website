@@ -77,6 +77,46 @@
   );
 }
 
+/* Keep the supplied pipette-and-water photo visibly present behind the family cards. */
+#product-universe [style*="product-family-droplet-bg.svg"] {
+  opacity: 0.88 !important;
+  filter: blur(2.5px) saturate(1.18) contrast(1.08) brightness(0.98) !important;
+  background-position: center 48% !important;
+  background-size: cover !important;
+}
+
+#product-universe [style*="product-family-droplet-bg.svg"] + div {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(235, 247, 255, 0.28) 58%,
+    rgba(226, 242, 255, 0.36) 100%
+  ) !important;
+}
+
+#product-universe [style*="product-family-droplet-bg.svg"] + div + div {
+  background: radial-gradient(
+    circle at 52% 38%,
+    rgba(34, 211, 238, 0.04),
+    transparent 48%
+  ) !important;
+}
+
+#product-universe [style*="product-family-droplet-bg.svg"] ~ svg {
+  opacity: 0.06 !important;
+}
+
+#product-universe [style*="product-family-droplet-bg.svg"] ~ div button {
+  background-color: rgba(255, 255, 255, 0.84) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+#product-universe [style*="product-family-droplet-bg.svg"] ~ div button:hover,
+#product-universe [style*="product-family-droplet-bg.svg"] ~ div button:focus-visible {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+}
+
 @media (max-width: 1023px) {
   #proof-expertise [data-no-site-motion] {
     top: -16rem !important;
