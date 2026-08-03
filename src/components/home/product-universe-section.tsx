@@ -10,9 +10,9 @@ import { productFamilies } from "@/data/homepage";
 import { cn } from "@/lib/utils";
 
 const accentClasses: Record<string, string> = {
-  cyan: "border-sky-300 bg-sky-50 text-slate-950",
-  turquoise: "border-teal-300 bg-teal-50 text-slate-950",
-  metal: "border-slate-300 bg-slate-100 text-slate-950",
+  cyan: "border-sky-300 bg-sky-50/90 text-slate-950",
+  turquoise: "border-teal-300 bg-teal-50/90 text-slate-950",
+  metal: "border-slate-300 bg-slate-100/90 text-slate-950",
 };
 
 export function ProductUniverseSection() {
@@ -30,10 +30,32 @@ export function ProductUniverseSection() {
     >
       <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="relative hidden overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white p-4 shadow-[var(--shadow-deep)] sm:p-5 lg:block">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(14,165,233,0.11),transparent_28%),radial-gradient(circle_at_72%_62%,rgba(20,184,166,0.1),transparent_32%)]" />
+          <motion.div
+            aria-hidden="true"
+            animate={
+              shouldReduceMotion
+                ? undefined
+                : {
+                    scale: [1.05, 1.095, 1.05],
+                    x: [0, 7, 0],
+                    y: [0, -6, 0],
+                  }
+            }
+            className="pointer-events-none absolute -inset-8 bg-cover bg-center opacity-38 blur-[6px]"
+            style={{ backgroundImage: "url('/images/product-family-droplet-bg.svg')" }}
+            transition={{ duration: 16, ease: "easeInOut", repeat: Infinity }}
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.7),rgba(244,249,255,0.82))]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_52%_38%,rgba(34,211,238,0.08),transparent_42%),radial-gradient(circle_at_15%_78%,rgba(37,99,235,0.07),transparent_35%)]"
+          />
           <svg
             aria-hidden="true"
-            className="absolute inset-0 hidden h-full w-full opacity-60 lg:block"
+            className="pointer-events-none absolute inset-0 hidden h-full w-full opacity-35 lg:block"
             fill="none"
             preserveAspectRatio="none"
             viewBox="0 0 720 520"
@@ -46,7 +68,7 @@ export function ProductUniverseSection() {
             {productFamilies.map((family, index) => (
               <button
                 className={cn(
-                  "group flex min-h-32 w-full flex-col justify-between rounded-[var(--radius-lg)] border bg-white p-4 text-left text-slate-950 shadow-[var(--shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-sky-400 hover:shadow-[0_18px_48px_rgba(30,64,175,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600",
+                  "group flex min-h-32 w-full flex-col justify-between rounded-[var(--radius-lg)] border bg-white/88 p-4 text-left text-slate-950 shadow-[var(--shadow-soft)] backdrop-blur-[3px] transition duration-300 hover:-translate-y-1 hover:border-sky-400 hover:bg-white/95 hover:shadow-[0_18px_48px_rgba(30,64,175,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600",
                   activeIndex === index ? accentClasses[family.accent] : "border-blue-100",
                 )}
                 key={family.name}
