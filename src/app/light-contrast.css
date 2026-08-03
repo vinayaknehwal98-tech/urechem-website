@@ -172,6 +172,19 @@ body .tpu-material-visual .tpu-visual-caption {
   -webkit-text-fill-color: rgba(248, 250, 252, 0.95) !important;
 }
 
+body .tpu-hero-copy .tpu-hero-label {
+  background: rgba(239, 246, 255, 0.98) !important;
+  border-color: rgba(147, 197, 253, 0.95) !important;
+  color: #1d4ed8 !important;
+  -webkit-text-fill-color: #1d4ed8 !important;
+  text-shadow: none !important;
+}
+
+body .tpu-hero-copy .tpu-hero-label > span {
+  background: #0ea5e9 !important;
+  box-shadow: 0 0 14px rgba(14, 165, 233, 0.58) !important;
+}
+
 /* Application hero review cards. */
 body main .hero-review-panel .hero-review-item {
   background: rgba(255, 255, 255, 0.96) !important;
