@@ -21,6 +21,7 @@ type SavedStyle = {
 const EASING = "cubic-bezier(0.16, 1, 0.3, 1)";
 const TARGET_ATTRIBUTE = "data-site-motion-target";
 const DONE_ATTRIBUTE = "data-site-motion-done";
+const SWEEP_ATTRIBUTE = "data-site-motion-sweep";
 
 function isCardCandidate(element: HTMLElement) {
   if (element.tagName === "ARTICLE") return true;
@@ -122,7 +123,7 @@ function restoreStyle(element: HTMLElement, saved: SavedStyle) {
   element.style.willChange = saved.willChange;
 }
 
-function addImageSweep(element: HTMLElement, delay: number, animations: Animation[]) {
+function addImageSweep(element: HTMLElement, delay: number, animations: Set<Animation>) {
   if (!element.matches("figure, picture, [data-site-motion-image-shell]")) return;
 
   const previousPosition = element.style.position;
@@ -131,6 +132,7 @@ function addImageSweep(element: HTMLElement, delay: number, animations: Animatio
 
   const sweep = document.createElement("span");
   sweep.setAttribute("aria-hidden", "true");
+  sweep.setAttribute(SWEEP_ATTRIBUTE, "true");
   Object.assign(sweep.style, {
     position: "absolute",
     inset: "-6% auto -6% 0",
@@ -139,14 +141,15 @@ function addImageSweep(element: HTMLElement, delay: number, animations: Animatio
     pointerEvents: "none",
     background: "linear-gradient(110deg, #082f67 0%, #2563eb 52%, #67e8f9 100%)",
     boxShadow: "0 0 48px rgba(37, 99, 235, 0.34)",
-    transform: "translateX(-170%) skewX(-12deg)",
+    transform: "translate3d(-170%,0,0) skewX(-12deg)",
+    willChange: "transform, opacity",
   });
   element.appendChild(sweep);
 
   const animation = sweep.animate(
     [
-      { transform: "translateX(-170%) skewX(-12deg)", opacity: 0.96 },
-      { transform: "translateX(255%) skewX(-12deg)", opacity: 0 },
+      { transform: "translate3d(-170%,0,0) skewX(-12deg)", opacity: 0.96 },
+      { transform: "translate3d(255%,0,0) skewX(-12deg)", opacity: 0 },
     ],
     {
       delay: delay + 40,
@@ -156,8 +159,9 @@ function addImageSweep(element: HTMLElement, delay: number, animations: Animatio
     },
   );
 
-  animations.push(animation);
+  animations.add(animation);
   animation.onfinish = () => {
+    animations.delete(animation);
     animation.cancel();
     sweep.remove();
     if (computedPosition === "static") element.style.position = previousPosition;
@@ -180,24 +184,29 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
     let disposed = false;
     let setupFrame = 0;
     let revealFrame = 0;
+    let scanFrame = 0;
     let observer: IntersectionObserver | null = null;
     let introObserver: MutationObserver | null = null;
     let contentObserver: MutationObserver | null = null;
 
     const registered = new Set<HTMLElement>();
-    const animations: Animation[] = [];
+    const animations = new Set<Animation>();
     const savedStyles = new Map<HTMLElement, SavedStyle>();
 
     const play = (element: HTMLElement) => {
-      if (element.hasAttribute(DONE_ATTRIBUTE)) return;
+      if (disposed || element.hasAttribute(DONE_ATTRIBUTE)) return;
 
       const kind = (element.getAttribute(TARGET_ATTRIBUTE) || "copy") as MotionKind;
       const delay = Number(element.dataset.siteMotionDelay || 0);
       const direction = Number(element.dataset.siteMotionDirection || 1);
-      const saved = savedStyles.get(element);
+      const saved = saveStyle(element);
+      savedStyles.set(element, saved);
 
       element.setAttribute(DONE_ATTRIBUTE, "true");
       observer?.unobserve(element);
+      element.style.backfaceVisibility = "hidden";
+      element.style.transformOrigin = kind === "heading" ? "left bottom" : "center bottom";
+      element.style.willChange = kind === "control" ? "transform, opacity" : "transform, opacity, filter";
 
       const animation = element.animate(keyframesFor(kind, direction), {
         delay,
@@ -206,12 +215,13 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         fill: "both",
       });
 
-      animations.push(animation);
+      animations.add(animation);
       if (kind === "image") addImageSweep(element, delay, animations);
 
       animation.onfinish = () => {
+        animations.delete(animation);
         animation.cancel();
-        if (saved) restoreStyle(element, saved);
+        restoreStyle(element, saved);
       };
     };
 
@@ -232,22 +242,9 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         return;
       }
 
-      const initial = keyframesFor(kind, direction)[0] as {
-        filter?: string;
-        opacity?: number;
-        transform?: string;
-      };
-
-      savedStyles.set(element, saveStyle(element));
       element.setAttribute(TARGET_ATTRIBUTE, kind);
       element.dataset.siteMotionDelay = String(Math.min(delay, 340));
       element.dataset.siteMotionDirection = String(direction);
-      element.style.backfaceVisibility = "hidden";
-      element.style.transformOrigin = kind === "heading" ? "left bottom" : "center bottom";
-      element.style.willChange = "transform, opacity, filter";
-      if (initial.opacity !== undefined) element.style.opacity = String(initial.opacity);
-      if (initial.transform) element.style.transform = initial.transform;
-      if (initial.filter) element.style.filter = initial.filter;
       registered.add(element);
       observer?.observe(element);
     };
@@ -258,7 +255,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         "figure, picture, [class*='overflow-hidden'][class*='rounded']",
       );
 
-      if (shell && !shell.closest(`[${TARGET_ATTRIBUTE}]`)) {
+      if (shell && !shell.closest(`[${TARGET_ATTRIBUTE}]`) && !shell.closest("[data-no-site-motion]")) {
         shell.setAttribute("data-site-motion-image-shell", "true");
         registerTarget(shell, "image", imageIndex * 90, direction);
         return;
@@ -268,9 +265,14 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
     };
 
     const scan = () => {
+      scanFrame = 0;
+      if (disposed) return;
+
       const sections = Array.from(root.querySelectorAll<HTMLElement>("section"));
 
       sections.forEach((section, sectionIndex) => {
+        if (section.closest("[data-no-site-motion]")) return;
+
         let cardIndex = 0;
         let imageIndex = 0;
         let headingIndex = 0;
@@ -293,7 +295,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         });
 
         section.querySelectorAll<HTMLElement>("img, video").forEach((element) => {
-          if (element.closest("figure, picture")) return;
+          if (element.closest("figure, picture, [data-no-site-motion]")) return;
           registerImage(element, sectionIndex, imageIndex);
           imageIndex += 1;
         });
@@ -317,14 +319,19 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       });
     };
 
+    const scheduleScan = () => {
+      if (disposed || scanFrame) return;
+      scanFrame = window.requestAnimationFrame(scan);
+    };
+
     const begin = () => {
       if (disposed) return;
 
       observer = new IntersectionObserver(
         (entries) => {
-          entries.forEach((entry) => {
+          for (const entry of entries) {
             if (entry.isIntersecting) play(entry.target as HTMLElement);
-          });
+          }
         },
         {
           rootMargin: "0px 0px 22% 0px",
@@ -334,9 +341,18 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
 
       scan();
 
-      // Dynamic client components can add cards after hydration. Register those
-      // additions as well instead of limiting motion to server-rendered markup.
-      contentObserver = new MutationObserver(() => scan());
+      contentObserver = new MutationObserver((records) => {
+        const hasRealContentAddition = records.some((record) =>
+          Array.from(record.addedNodes).some((node) => {
+            if (!(node instanceof HTMLElement)) return false;
+            if (node.hasAttribute(SWEEP_ATTRIBUTE) || node.closest(`[${SWEEP_ATTRIBUTE}]`)) return false;
+            if (node.closest("[aria-hidden='true']")) return false;
+            return true;
+          }),
+        );
+
+        if (hasRealContentAddition) scheduleScan();
+      });
       contentObserver.observe(root, { childList: true, subtree: true });
 
       revealFrame = window.requestAnimationFrame(() => {
@@ -353,9 +369,6 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       });
     };
 
-    // On direct inner-page loads, the opening droplet overlay previously hid
-    // the entire scroll animation while it played underneath. Wait until the
-    // intro is finished, then start the inner-page reveal sequence.
     if (document.documentElement.hasAttribute("data-urechem-intro-active")) {
       introObserver = new MutationObserver(() => {
         if (!document.documentElement.hasAttribute("data-urechem-intro-active")) {
@@ -375,6 +388,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       disposed = true;
       window.cancelAnimationFrame(setupFrame);
       window.cancelAnimationFrame(revealFrame);
+      window.cancelAnimationFrame(scanFrame);
       observer?.disconnect();
       introObserver?.disconnect();
       contentObserver?.disconnect();
