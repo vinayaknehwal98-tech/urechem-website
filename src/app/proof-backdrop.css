@@ -1,7 +1,7 @@
 /* Static background treatment for the Proof & Expertise section.
    The original circular proof graphic is pulled upward from the content grid
    so it fills the empty upper-right area beside the heading. */
-#proof-expertise [data-no-site-motion] {
+#proof-expertise [data-no-site-motion][aria-hidden="true"] {
   top: -19rem !important;
   right: -1% !important;
   width: 58% !important;
@@ -24,7 +24,7 @@
   z-index: 0 !important;
 }
 
-#proof-expertise [data-no-site-motion] > img {
+#proof-expertise [data-no-site-motion][aria-hidden="true"] > img {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
@@ -38,7 +38,7 @@
   animation: none !important;
 }
 
-#proof-expertise [data-no-site-motion] > div:last-child {
+#proof-expertise [data-no-site-motion][aria-hidden="true"] > div:last-child {
   display: none !important;
 }
 
@@ -118,7 +118,7 @@
 }
 
 @media (max-width: 1023px) {
-  #proof-expertise [data-no-site-motion] {
+  #proof-expertise [data-no-site-motion][aria-hidden="true"] {
     top: -16rem !important;
     right: -5% !important;
     width: 64% !important;
@@ -137,7 +137,7 @@
 }
 
 @media (max-width: 767px) {
-  #proof-expertise [data-no-site-motion] {
+  #proof-expertise [data-no-site-motion][aria-hidden="true"] {
     top: -11.5rem !important;
     right: -28% !important;
     width: 118% !important;
@@ -146,7 +146,7 @@
     filter: blur(1.5px) !important;
   }
 
-  #proof-expertise [data-no-site-motion] > img {
+  #proof-expertise [data-no-site-motion][aria-hidden="true"] > img {
     object-position: center 14% !important;
   }
 
