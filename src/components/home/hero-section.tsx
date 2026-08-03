@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Container } from "@/components/ui/container";
 
 const HERO_VIDEO_FULL_HD =
@@ -14,12 +14,77 @@ const HERO_POSTER =
   "https://images.pexels.com/videos/9339478/pexels-photo-9339478.jpeg?auto=compress&fit=crop&w=2200";
 
 const processSteps = ["Formulate", "Validate", "Deliver"];
+const heroTitleWords = "Intelligent chemistry for better polyurethane solutions.".split(" ");
+
+const titleContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      delayChildren: 0.12,
+      staggerChildren: 0.07,
+    },
+  },
+};
+
+const titleWordVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 34,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.72,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoIsPlaying, setVideoIsPlaying] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
+  const [heroCanAnimate, setHeroCanAnimate] = useState(false);
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setHeroCanAnimate(true);
+      return;
+    }
+
+    const html = document.documentElement;
+    let introObserver: MutationObserver | null = null;
+    let frame = 0;
+
+    const revealTitle = () => {
+      frame = window.requestAnimationFrame(() => setHeroCanAnimate(true));
+    };
+
+    if (html.hasAttribute("data-urechem-intro-active")) {
+      introObserver = new MutationObserver(() => {
+        if (!html.hasAttribute("data-urechem-intro-active")) {
+          introObserver?.disconnect();
+          revealTitle();
+        }
+      });
+
+      introObserver.observe(html, {
+        attributes: true,
+        attributeFilter: ["data-urechem-intro-active"],
+      });
+    } else {
+      revealTitle();
+    }
+
+    return () => {
+      introObserver?.disconnect();
+      window.cancelAnimationFrame(frame);
+    };
+  }, [shouldReduceMotion]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -105,16 +170,24 @@ export function HeroSection() {
 
       <Container className="flex min-h-[38rem] items-center py-16 sm:min-h-[42rem] md:min-h-[calc(100dvh-4.5rem)] md:py-24">
         <div className="relative z-10 max-w-2xl">
-          <div className="mb-5 flex items-center gap-3">
-            <span aria-hidden="true" className="h-px w-8 bg-cyan-300" />
-            <p className="hero-eyebrow text-[0.7rem] font-semibold uppercase tracking-[0.3em] sm:text-xs">
-              URECHEM CHEMICALS
-            </p>
-          </div>
-
-          <h1 className="hero-title max-w-[20rem] text-[clamp(2.35rem,8.5vw,3rem)] font-semibold leading-[1.02] tracking-[-0.035em] sm:max-w-2xl sm:text-[clamp(3.25rem,4.6vw,4.5rem)] sm:leading-[0.98]">
-            Intelligent chemistry for better polyurethane solutions.
-          </h1>
+          <motion.h1
+            animate={heroCanAnimate ? "visible" : "hidden"}
+            aria-label="Intelligent chemistry for better polyurethane solutions."
+            className="hero-title max-w-[20rem] text-[clamp(2.35rem,8.5vw,3rem)] font-semibold leading-[1.02] tracking-[-0.035em] sm:max-w-2xl sm:text-[clamp(3.25rem,4.6vw,4.5rem)] sm:leading-[0.98]"
+            initial={shouldReduceMotion ? false : "hidden"}
+            variants={titleContainerVariants}
+          >
+            {heroTitleWords.map((word, index) => (
+              <motion.span
+                aria-hidden="true"
+                className="mr-[0.22em] inline-block will-change-transform last:mr-0"
+                key={`${word}-${index}`}
+                variants={titleWordVariants}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </motion.h1>
 
           <p className="hero-tagline mt-6 text-base font-semibold sm:text-lg">
             We deliver what we promise.
@@ -159,7 +232,6 @@ export function HeroSection() {
           text-shadow: 0 3px 18px rgba(2, 15, 28, 0.26);
         }
 
-        .minimal-hero .hero-eyebrow,
         .minimal-hero .hero-tagline,
         .minimal-hero .hero-step-number {
           color: #a5f3fc !important;
