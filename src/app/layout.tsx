@@ -7,6 +7,7 @@ import { SitewideCountUp } from "@/components/motion/sitewide-count-up";
 import { SitewideScrollMotion } from "@/components/motion/sitewide-scroll-motion";
 import "./globals.css";
 import "./light-contrast.css";
+import "./tpu-contrast.css";
 import "./opening-animation.css";
 import "./proof-backdrop.css";
 import "./scrollbar-fix.css";
