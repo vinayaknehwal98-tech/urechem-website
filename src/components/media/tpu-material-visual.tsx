@@ -6,7 +6,7 @@ export function TpuMaterialVisual() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-cyan-100/30 bg-[linear-gradient(145deg,rgba(2,15,28,0.78),rgba(8,47,73,0.7),rgba(15,23,42,0.76))] p-5 shadow-[0_24px_75px_rgba(2,15,28,0.4)] sm:p-7">
+    <div className="tpu-material-visual relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-cyan-100/30 bg-[linear-gradient(145deg,rgba(2,15,28,0.78),rgba(8,47,73,0.7),rgba(15,23,42,0.76))] p-5 shadow-[0_24px_75px_rgba(2,15,28,0.4)] sm:p-7">
       <div className="absolute -left-16 -top-16 h-52 w-52 rounded-full bg-cyan-300/20 blur-3xl motion-safe:animate-pulse" />
       <div className="absolute -bottom-20 -right-16 h-56 w-56 rounded-full bg-blue-500/20 blur-3xl" />
       <motion.svg
@@ -85,7 +85,7 @@ export function TpuMaterialVisual() {
           <text x="600" y="468">CUSTOMISATION</text>
         </g>
       </motion.svg>
-      <p className="relative mt-4 rounded-xl border border-white/10 bg-slate-950/[0.48] px-4 py-3 text-center text-sm font-medium leading-6 text-white/[0.92]">
+      <p className="tpu-visual-caption relative mt-4 rounded-xl border border-white/10 bg-slate-950/[0.48] px-4 py-3 text-center text-sm font-medium leading-6 text-white/[0.92]">
         TPU type, hardness, additive package and processing route must be matched to the final part and service environment.
       </p>
     </div>
