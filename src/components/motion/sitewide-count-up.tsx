@@ -17,6 +17,18 @@ function formatNumber(value: number, decimals: number) {
   }).format(value);
 }
 
+function getAnimationDuration(target: number, isAboutNumbersMetric: boolean) {
+  if (isAboutNumbersMetric) {
+    if (target <= 10) return 3200;
+    if (target <= 30) return 3400;
+    if (target <= 60) return 3600;
+    if (target <= 200) return 3800;
+    return 4200;
+  }
+
+  return Math.min(2300, 1500 + Math.log10(Math.max(target, 1) + 1) * 185);
+}
+
 export function SitewideCountUp() {
   const pathname = usePathname();
 
@@ -44,7 +56,9 @@ export function SitewideCountUp() {
           const suffix = element.dataset.countSuffix ?? "";
           const decimals = Number(element.dataset.countDecimals ?? "0");
           const delay = Number(element.dataset.countDelay ?? "0");
-          const duration = Math.min(2300, 1500 + Math.log10(Math.max(target, 1) + 1) * 185);
+          const isAboutNumbersMetric = pathname === "/about" && Boolean(element.closest("#numbers"));
+          const shouldShowEveryInteger = isAboutNumbersMetric && decimals === 0 && target <= 200;
+          const duration = getAnimationDuration(target, isAboutNumbersMetric);
 
           const timer = window.setTimeout(() => {
             activeTimers.delete(timer);
@@ -52,9 +66,14 @@ export function SitewideCountUp() {
 
             const animate = (now: number) => {
               const progress = Math.min((now - startedAt) / duration, 1);
-              const easedProgress = easeOutCubic(progress);
-              const rawValue = target * easedProgress;
-              const displayedValue = decimals > 0 ? rawValue : Math.round(rawValue);
+              const animatedProgress = shouldShowEveryInteger ? progress : easeOutCubic(progress);
+              const rawValue = target * animatedProgress;
+              const displayedValue =
+                decimals > 0
+                  ? rawValue
+                  : shouldShowEveryInteger
+                    ? Math.min(target, Math.floor(rawValue))
+                    : Math.round(rawValue);
 
               element.textContent = `${formatNumber(displayedValue, decimals)}${suffix}`;
 
@@ -100,12 +119,15 @@ export function SitewideCountUp() {
         const decimalPart = numericText.split(".")[1];
         const decimals = decimalPart?.length ?? 0;
         const suffix = match[3];
+        const isAboutNumbersMetric = pathname === "/about" && Boolean(element.closest("#numbers"));
+        const staggerStep = isAboutNumbersMetric ? 110 : 70;
+        const maximumDelay = isAboutNumbersMetric ? 330 : 210;
 
         element.dataset.urechemCountUp = shouldReduceMotion ? "complete" : "ready";
         element.dataset.countTarget = String(target);
         element.dataset.countSuffix = suffix;
         element.dataset.countDecimals = String(decimals);
-        element.dataset.countDelay = String(Math.min((statisticIndex % 4) * 70, 210));
+        element.dataset.countDelay = String(Math.min((statisticIndex % 4) * staggerStep, maximumDelay));
         element.style.fontVariantNumeric = "tabular-nums";
         element.setAttribute("aria-label", originalText.trim());
 
