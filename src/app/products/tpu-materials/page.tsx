@@ -17,7 +17,7 @@ export default function Page() {
 
   return (
     <>
-      <section className="relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden border-b border-blue-100 py-16 sm:py-20 lg:py-24">
+      <section className="tpu-hero-contrast relative isolate flex min-h-[calc(100svh-5rem)] items-center overflow-hidden border-b border-blue-100 py-16 sm:py-20 lg:py-24">
         <div
           aria-hidden="true"
           className="absolute inset-0 -z-30 bg-cover"
@@ -28,19 +28,19 @@ export default function Page() {
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,15,28,0.46)_0%,rgba(2,15,28,0.3)_48%,rgba(2,15,28,0.42)_100%)]"
+          className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,15,28,0.34)_0%,rgba(2,15,28,0.16)_48%,rgba(2,15,28,0.28)_100%)]"
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_48%,rgba(2,15,28,0.4),transparent_42%),radial-gradient(circle_at_82%_48%,rgba(14,165,233,0.16),transparent_34%)]"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_48%,rgba(2,15,28,0.32),transparent_42%),radial-gradient(circle_at_82%_48%,rgba(14,165,233,0.14),transparent_34%)]"
         />
 
         <Container className="relative w-full">
           <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr] lg:items-center xl:gap-12">
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-slate-950/[0.62] p-6 shadow-[0_28px_90px_rgba(2,18,36,0.32)] backdrop-blur-[4px] sm:p-8 lg:p-10">
+            <div className="tpu-hero-copy relative overflow-hidden rounded-[1.75rem] border border-white/20 bg-[linear-gradient(135deg,rgba(2,15,28,0.76),rgba(2,15,28,0.5))] p-6 shadow-[0_24px_72px_rgba(2,18,36,0.28)] backdrop-blur-[3px] sm:p-8 lg:p-9">
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(14,165,233,0.1),transparent_45%,rgba(37,99,235,0.08))]"
+                className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(14,165,233,0.08),transparent_48%,rgba(37,99,235,0.06))]"
               />
               <div className="relative">
                 <SectionLabel>Thermoplastic polyurethane</SectionLabel>
@@ -62,14 +62,8 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[620px] rounded-[2rem] border border-cyan-100/30 bg-slate-950/[0.68] p-4 shadow-[0_30px_100px_rgba(2,18,36,0.46)] backdrop-blur-[5px] sm:p-6">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_50%_38%,rgba(14,165,233,0.2),transparent_58%)]"
-              />
-              <div className="relative">
-                <TpuMaterialVisual />
-              </div>
+            <div className="relative mx-auto w-full max-w-[620px]">
+              <TpuMaterialVisual />
             </div>
           </div>
         </Container>
