@@ -3,34 +3,80 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
-const APPROACH_MARGIN = 360;
-const revealCallbacks = new WeakMap<Element, () => void>();
-let sharedObserver: IntersectionObserver | null = null;
+const APPROACH_MARGIN = 520;
+const PERIODIC_CHECK_MS = 400;
 
-function getSharedObserver() {
-  if (typeof window === "undefined") return null;
+type RevealCallback = () => void;
 
-  if (!sharedObserver) {
-    sharedObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
+const pendingReveals = new Map<Element, RevealCallback>();
+let animationFrame = 0;
+let periodicCheck = 0;
+let monitoring = false;
 
-          const reveal = revealCallbacks.get(entry.target);
-          reveal?.();
-          revealCallbacks.delete(entry.target);
-          sharedObserver?.unobserve(entry.target);
-        }
-      },
-      {
-        root: null,
-        rootMargin: `${APPROACH_MARGIN}px 0px ${APPROACH_MARGIN}px 0px`,
-        threshold: 0.001,
-      },
-    );
+function stopMonitoring() {
+  if (typeof window === "undefined" || !monitoring) return;
+
+  monitoring = false;
+  window.removeEventListener("scroll", scheduleRevealCheck);
+  window.removeEventListener("resize", scheduleRevealCheck);
+  window.clearInterval(periodicCheck);
+  periodicCheck = 0;
+
+  if (animationFrame) {
+    window.cancelAnimationFrame(animationFrame);
+    animationFrame = 0;
+  }
+}
+
+function runRevealCheck() {
+  animationFrame = 0;
+
+  if (typeof window === "undefined") return;
+
+  const viewportHeight = window.innerHeight;
+
+  for (const [node, reveal] of pendingReveals) {
+    if (!node.isConnected) {
+      pendingReveals.delete(node);
+      continue;
+    }
+
+    const bounds = node.getBoundingClientRect();
+    const isApproaching =
+      bounds.top <= viewportHeight + APPROACH_MARGIN && bounds.bottom >= -APPROACH_MARGIN;
+
+    if (!isApproaching) continue;
+
+    pendingReveals.delete(node);
+    reveal();
   }
 
-  return sharedObserver;
+  if (pendingReveals.size === 0) stopMonitoring();
+}
+
+function scheduleRevealCheck() {
+  if (typeof window === "undefined" || animationFrame) return;
+  animationFrame = window.requestAnimationFrame(runRevealCheck);
+}
+
+function startMonitoring() {
+  if (typeof window === "undefined" || monitoring) return;
+
+  monitoring = true;
+  window.addEventListener("scroll", scheduleRevealCheck, { passive: true });
+  window.addEventListener("resize", scheduleRevealCheck, { passive: true });
+  periodicCheck = window.setInterval(scheduleRevealCheck, PERIODIC_CHECK_MS);
+}
+
+function registerReveal(node: Element, reveal: RevealCallback) {
+  pendingReveals.set(node, reveal);
+  startMonitoring();
+  scheduleRevealCheck();
+}
+
+function unregisterReveal(node: Element) {
+  pendingReveals.delete(node);
+  if (pendingReveals.size === 0) stopMonitoring();
 }
 
 export function useApproachReveal<T extends HTMLElement>() {
@@ -45,42 +91,23 @@ export function useApproachReveal<T extends HTMLElement>() {
     }
 
     const node = ref.current;
-    if (!node) return;
-
-    let frame = 0;
-    let fallbackTimer = 0;
-
-    const reveal = () => {
-      window.clearTimeout(fallbackTimer);
-      frame = window.requestAnimationFrame(() => setIsVisible(true));
-    };
-
-    const bounds = node.getBoundingClientRect();
-    const alreadyApproaching =
-      bounds.top <= window.innerHeight + APPROACH_MARGIN && bounds.bottom >= -APPROACH_MARGIN;
-
-    if (alreadyApproaching) {
-      reveal();
-      return () => window.cancelAnimationFrame(frame);
-    }
-
-    const observer = getSharedObserver();
-    if (!observer) {
+    if (!node) {
       setIsVisible(true);
       return;
     }
 
-    revealCallbacks.set(node, reveal);
-    observer.observe(node);
+    let cancelled = false;
 
-    // Safety net: content must never remain in its hidden/blurred state.
-    fallbackTimer = window.setTimeout(reveal, 1800);
+    const reveal = () => {
+      if (cancelled) return;
+      setIsVisible(true);
+    };
+
+    registerReveal(node, reveal);
 
     return () => {
-      window.cancelAnimationFrame(frame);
-      window.clearTimeout(fallbackTimer);
-      revealCallbacks.delete(node);
-      observer.unobserve(node);
+      cancelled = true;
+      unregisterReveal(node);
     };
   }, [shouldReduceMotion]);
 
