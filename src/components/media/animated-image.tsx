@@ -53,6 +53,7 @@ export function AnimatedImage({
         "group relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white shadow-[var(--shadow-deep)]",
         className,
       )}
+      data-no-site-motion
       initial={false}
       ref={ref}
       transition={{
