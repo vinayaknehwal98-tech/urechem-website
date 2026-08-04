@@ -2,10 +2,9 @@
 
 import { useEffect } from "react";
 
-const CONTENT_PLAYBACK_RATE = 0.76;
-const REVEAL_SELECTOR = "[data-site-motion-target]";
-const MIN_REVEAL_DURATION_MS = 420;
-const MAX_REVEAL_DURATION_MS = 1800;
+const CONTENT_PLAYBACK_RATE = 0.58;
+const MIN_REVEAL_DURATION_MS = 380;
+const MAX_REVEAL_DURATION_MS = 2200;
 
 function animationTarget(animation: Animation) {
   const effect = animation.effect;
@@ -29,7 +28,7 @@ function isContentReveal(animation: Animation) {
   );
 }
 
-function applySellerSpritePace(animation: Animation) {
+function applySlowerPace(animation: Animation) {
   if (animation.playbackRate === 0) return;
 
   try {
@@ -41,6 +40,9 @@ function applySellerSpritePace(animation: Animation) {
 
 export function SiteMotionTempo() {
   useEffect(() => {
+    const main = document.getElementById("main-content");
+    if (!main) return;
+
     const processed = new WeakSet<Animation>();
     const waitingByTarget = new Map<Element, Set<Animation>>();
     let scanFrame = 0;
@@ -55,7 +57,7 @@ export function SiteMotionTempo() {
 
       animations.forEach((animation) => {
         if (animation.playState === "finished" || animation.playState === "idle") return;
-        applySellerSpritePace(animation);
+        applySlowerPace(animation);
         animation.play();
       });
     };
@@ -67,8 +69,8 @@ export function SiteMotionTempo() {
         });
       },
       {
-        rootMargin: "0px 0px -8% 0px",
-        threshold: 0.01,
+        rootMargin: "0px 0px -10% 0px",
+        threshold: 0.02,
       },
     );
 
@@ -79,13 +81,15 @@ export function SiteMotionTempo() {
         if (processed.has(animation) || !isContentReveal(animation)) return;
 
         const target = animationTarget(animation);
-        const revealTarget = target?.closest(REVEAL_SELECTOR);
-        if (!revealTarget) return;
+        if (!target || !main.contains(target) || target.closest("[data-motion-tempo-ignore]")) return;
 
         processed.add(animation);
+        applySlowerPace(animation);
 
+        const revealTarget =
+          target.closest("section, article, figure, [data-site-motion-target]") ?? target;
         const bounds = revealTarget.getBoundingClientRect();
-        const isBelowRevealLine = bounds.top > window.innerHeight * 0.92;
+        const isBelowRevealLine = bounds.top > window.innerHeight * 0.9;
 
         if (isBelowRevealLine && animation.playState === "running") {
           animation.pause();
@@ -93,8 +97,6 @@ export function SiteMotionTempo() {
           waiting.add(animation);
           waitingByTarget.set(revealTarget, waiting);
           revealObserver.observe(revealTarget);
-        } else {
-          applySellerSpritePace(animation);
         }
       });
     };
@@ -107,11 +109,11 @@ export function SiteMotionTempo() {
       });
 
       window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(scanAnimations, 140);
+      settleTimer = window.setTimeout(scanAnimations, 180);
     };
 
     const mutationObserver = new MutationObserver(scheduleScan);
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
+    mutationObserver.observe(main, { childList: true, subtree: true });
 
     window.addEventListener("scroll", scheduleScan, { passive: true });
     window.addEventListener("resize", scheduleScan, { passive: true });
