@@ -20,6 +20,7 @@ export function UreShieldSection() {
   return (
     <HomeSection
       backgroundImage={background.src}
+      backgroundLayout="right-panel"
       backgroundPosition={background.position}
       className="bg-[linear-gradient(180deg,#071a2d,#0b2840)]"
       eyebrow="Waterproofing and polyurea"
