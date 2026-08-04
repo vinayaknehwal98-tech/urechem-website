@@ -61,6 +61,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head>
+        <link crossOrigin="anonymous" href="https://images.pexels.com" rel="preconnect" />
+        <link crossOrigin="anonymous" href="https://videos.pexels.com" rel="preconnect" />
+        <link crossOrigin="anonymous" href="https://images.unsplash.com" rel="preconnect" />
+        <link href="https://images.pexels.com" rel="dns-prefetch" />
+        <link href="https://videos.pexels.com" rel="dns-prefetch" />
+        <link href="https://images.unsplash.com" rel="dns-prefetch" />
+      </head>
       <body className="flex min-h-full flex-col">
         <a
           className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-md bg-white px-4 py-3 font-semibold text-blue-950 shadow-lg transition focus:translate-y-0"
