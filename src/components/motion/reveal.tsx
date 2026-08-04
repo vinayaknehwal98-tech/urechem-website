@@ -21,8 +21,8 @@ const restingState = {
 
 export function Reveal({ children, className, delay = 0, distance = 54 }: RevealProps) {
   const { ref, isVisible, shouldReduceMotion } = useApproachReveal<HTMLDivElement>();
-  const safeDistance = Math.min(Math.max(distance, 28), 72);
-  const safeDelay = Math.min(Math.max(delay, 0), 0.08);
+  const safeDistance = Math.min(Math.max(distance, 24), 68);
+  const safeDelay = Math.min(Math.max(delay, 0), 0.36);
 
   return (
     <motion.div
@@ -30,9 +30,9 @@ export function Reveal({ children, className, delay = 0, distance = 54 }: Reveal
         shouldReduceMotion || !isVisible
           ? restingState
           : {
-              opacity: [0.38, 1],
+              opacity: [0.24, 1],
               y: [safeDistance, 0],
-              scale: [0.988, 1],
+              scale: [0.984, 1],
               filter: ["blur(6px)", "blur(0px)", "none"],
             }
       }
@@ -41,10 +41,10 @@ export function Reveal({ children, className, delay = 0, distance = 54 }: Reveal
       ref={ref}
       transition={{
         delay: safeDelay,
-        opacity: { duration: 0.5, ease: revealEase, times: [0, 1] },
-        y: { duration: 0.72, ease: revealEase, times: [0, 1] },
-        scale: { duration: 0.72, ease: revealEase, times: [0, 1] },
-        filter: { duration: 0.22, ease: "easeOut", times: [0, 0.65, 1] },
+        opacity: { duration: 0.82, ease: revealEase, times: [0, 1] },
+        y: { duration: 1.12, ease: revealEase, times: [0, 1] },
+        scale: { duration: 1.12, ease: revealEase, times: [0, 1] },
+        filter: { duration: 0.46, ease: "easeOut", times: [0, 0.72, 1] },
       }}
     >
       {children}
