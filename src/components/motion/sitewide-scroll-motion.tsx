@@ -157,7 +157,12 @@ function hideUntilReveal(element: HTMLElement, kind: MotionKind, direction: numb
   element.style.filter = "blur(7px)";
 }
 
-function addImageSweep(element: HTMLElement, delay: number, animations: Set<Animation>) {
+function addImageSweep(
+  element: HTMLElement,
+  delay: number,
+  animations: Set<Animation>,
+  sweepCleanups: Set<() => void>,
+) {
   if (!element.matches("figure, picture, [data-site-motion-image-shell]")) return;
 
   const previousPosition = element.style.position;
@@ -193,13 +198,21 @@ function addImageSweep(element: HTMLElement, delay: number, animations: Set<Anim
     },
   );
 
-  animations.add(animation);
-  animation.onfinish = () => {
+  let cleaned = false;
+  const cleanup = () => {
+    if (cleaned) return;
+    cleaned = true;
+    animation.onfinish = null;
     animations.delete(animation);
+    sweepCleanups.delete(cleanup);
     animation.cancel();
     sweep.remove();
     if (computedPosition === "static") element.style.position = previousPosition;
   };
+
+  animations.add(animation);
+  sweepCleanups.add(cleanup);
+  animation.onfinish = cleanup;
 }
 
 export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
@@ -216,7 +229,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
     if (reduceMotion) return;
 
     let disposed = false;
-    let setupFrame = 0;
+    let begun = false;
     let scanFrame = 0;
     let observer: IntersectionObserver | null = null;
     let introObserver: MutationObserver | null = null;
@@ -224,6 +237,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
 
     const registered = new Set<HTMLElement>();
     const animations = new Set<Animation>();
+    const sweepCleanups = new Set<() => void>();
     const savedStyles = new Map<HTMLElement, SavedStyle>();
 
     const play = (element: HTMLElement) => {
@@ -245,12 +259,13 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       });
 
       animations.add(animation);
-      if (kind === "image") addImageSweep(element, delay, animations);
+      if (kind === "image") addImageSweep(element, delay, animations, sweepCleanups);
 
       animation.onfinish = () => {
         animations.delete(animation);
+        animation.onfinish = null;
         animation.cancel();
-        restoreStyle(element, saved);
+        if (element.isConnected) restoreStyle(element, saved);
       };
     };
 
@@ -295,10 +310,20 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       registerTarget(image, "image", imageIndex * 120, direction);
     };
 
+    const releaseDetachedTargets = () => {
+      for (const element of registered) {
+        if (element.isConnected) continue;
+        observer?.unobserve(element);
+        registered.delete(element);
+        savedStyles.delete(element);
+      }
+    };
+
     const scan = () => {
       scanFrame = 0;
       if (disposed) return;
 
+      releaseDetachedTargets();
       const sections = Array.from(root.querySelectorAll<HTMLElement>("section"));
 
       sections.forEach((section, sectionIndex) => {
@@ -356,7 +381,8 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
     };
 
     const begin = () => {
-      if (disposed) return;
+      if (disposed || begun) return;
+      begun = true;
 
       observer = new IntersectionObserver(
         (entries) => {
@@ -373,31 +399,26 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       scan();
 
       contentObserver = new MutationObserver((records) => {
-        const hasRealContentAddition = records.some((record) =>
-          Array.from(record.addedNodes).some((node) => {
+        const hasRealContentChange = records.some((record) => {
+          const nodes = [...Array.from(record.addedNodes), ...Array.from(record.removedNodes)];
+          return nodes.some((node) => {
             if (!(node instanceof HTMLElement)) return false;
             if (node.hasAttribute(SWEEP_ATTRIBUTE) || node.closest(`[${SWEEP_ATTRIBUTE}]`)) return false;
             if (node.closest("[aria-hidden='true']")) return false;
             return true;
-          }),
-        );
+          });
+        });
 
-        if (hasRealContentAddition) scheduleScan();
+        if (hasRealContentChange) scheduleScan();
       });
       contentObserver.observe(root, { childList: true, subtree: true });
-    };
-
-    const scheduleBegin = () => {
-      setupFrame = window.requestAnimationFrame(() => {
-        setupFrame = window.requestAnimationFrame(begin);
-      });
     };
 
     if (document.documentElement.hasAttribute("data-urechem-intro-active")) {
       introObserver = new MutationObserver(() => {
         if (!document.documentElement.hasAttribute("data-urechem-intro-active")) {
           introObserver?.disconnect();
-          scheduleBegin();
+          begin();
         }
       });
       introObserver.observe(document.documentElement, {
@@ -410,22 +431,26 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
 
     return () => {
       disposed = true;
-      window.cancelAnimationFrame(setupFrame);
       window.cancelAnimationFrame(scanFrame);
       observer?.disconnect();
       introObserver?.disconnect();
       contentObserver?.disconnect();
+      sweepCleanups.forEach((cleanup) => cleanup());
       animations.forEach((animation) => animation.cancel());
+      sweepCleanups.clear();
+      animations.clear();
 
       registered.forEach((element) => {
         const saved = savedStyles.get(element);
-        if (saved) restoreStyle(element, saved);
+        if (saved && element.isConnected) restoreStyle(element, saved);
         element.removeAttribute(TARGET_ATTRIBUTE);
         element.removeAttribute(DONE_ATTRIBUTE);
         element.removeAttribute("data-site-motion-image-shell");
         delete element.dataset.siteMotionDelay;
         delete element.dataset.siteMotionDirection;
       });
+      registered.clear();
+      savedStyles.clear();
     };
   }, [pathname]);
 
