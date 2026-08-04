@@ -45,9 +45,9 @@ function keyframesFor(kind: MotionKind, direction: number): Keyframe[] {
     case "heading":
       return [
         {
-          opacity: 0.18,
-          transform: "translate3d(0, 76px, 0) rotateX(8deg)",
-          filter: "blur(8px)",
+          opacity: 0,
+          transform: "translate3d(0, 82px, 0) rotateX(8deg)",
+          filter: "blur(10px)",
         },
         {
           opacity: 1,
@@ -58,9 +58,9 @@ function keyframesFor(kind: MotionKind, direction: number): Keyframe[] {
     case "card":
       return [
         {
-          opacity: 0.2,
-          transform: "translate3d(0, 72px, 0) scale(0.93) rotateX(8deg)",
-          filter: "blur(8px)",
+          opacity: 0,
+          transform: "translate3d(0, 86px, 0) scale(0.92) rotateX(9deg)",
+          filter: "blur(10px)",
         },
         {
           opacity: 1,
@@ -71,9 +71,9 @@ function keyframesFor(kind: MotionKind, direction: number): Keyframe[] {
     case "image":
       return [
         {
-          opacity: 0.2,
-          transform: `translate3d(${direction * 64}px, 22px, 0) scale(0.95)`,
-          filter: "blur(8px) saturate(0.82)",
+          opacity: 0,
+          transform: `translate3d(${direction * 72}px, 28px, 0) scale(0.94)`,
+          filter: "blur(10px) saturate(0.8)",
         },
         {
           opacity: 1,
@@ -83,24 +83,24 @@ function keyframesFor(kind: MotionKind, direction: number): Keyframe[] {
       ];
     case "control":
       return [
-        { opacity: 0.28, transform: "translate3d(0, 30px, 0) scale(0.96)" },
+        { opacity: 0, transform: "translate3d(0, 38px, 0) scale(0.95)" },
         { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" },
       ];
     case "copy":
     default:
       return [
-        { opacity: 0.28, transform: "translate3d(0, 34px, 0)", filter: "blur(5px)" },
+        { opacity: 0, transform: "translate3d(0, 44px, 0)", filter: "blur(7px)" },
         { opacity: 1, transform: "translate3d(0, 0, 0)", filter: "blur(0px)" },
       ];
   }
 }
 
 function durationFor(kind: MotionKind) {
-  if (kind === "heading") return 980;
-  if (kind === "card") return 940;
-  if (kind === "image") return 1020;
-  if (kind === "control") return 760;
-  return 820;
+  if (kind === "heading") return 1520;
+  if (kind === "card") return 1460;
+  if (kind === "image") return 1620;
+  if (kind === "control") return 1220;
+  return 1340;
 }
 
 function saveStyle(element: HTMLElement): SavedStyle {
@@ -121,6 +121,40 @@ function restoreStyle(element: HTMLElement, saved: SavedStyle) {
   element.style.transform = saved.transform;
   element.style.transformOrigin = saved.transformOrigin;
   element.style.willChange = saved.willChange;
+}
+
+function hideUntilReveal(element: HTMLElement, kind: MotionKind, direction: number) {
+  element.style.backfaceVisibility = "hidden";
+  element.style.transformOrigin = kind === "heading" ? "left bottom" : "center bottom";
+  element.style.willChange = kind === "control" ? "transform, opacity" : "transform, opacity, filter";
+  element.style.opacity = "0";
+
+  if (kind === "heading") {
+    element.style.transform = "translate3d(0, 82px, 0) rotateX(8deg)";
+    element.style.filter = "blur(10px)";
+    return;
+  }
+
+  if (kind === "card") {
+    element.style.transform = "translate3d(0, 86px, 0) scale(0.92) rotateX(9deg)";
+    element.style.filter = "blur(10px)";
+    return;
+  }
+
+  if (kind === "image") {
+    element.style.transform = `translate3d(${direction * 72}px, 28px, 0) scale(0.94)`;
+    element.style.filter = "blur(10px) saturate(0.8)";
+    return;
+  }
+
+  if (kind === "control") {
+    element.style.transform = "translate3d(0, 38px, 0) scale(0.95)";
+    element.style.filter = "none";
+    return;
+  }
+
+  element.style.transform = "translate3d(0, 44px, 0)";
+  element.style.filter = "blur(7px)";
 }
 
 function addImageSweep(element: HTMLElement, delay: number, animations: Set<Animation>) {
@@ -152,8 +186,8 @@ function addImageSweep(element: HTMLElement, delay: number, animations: Set<Anim
       { transform: "translate3d(255%,0,0) skewX(-12deg)", opacity: 0 },
     ],
     {
-      delay: delay + 40,
-      duration: 1040,
+      delay: delay + 80,
+      duration: 1520,
       easing: EASING,
       fill: "both",
     },
@@ -183,7 +217,6 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
 
     let disposed = false;
     let setupFrame = 0;
-    let revealFrame = 0;
     let scanFrame = 0;
     let observer: IntersectionObserver | null = null;
     let introObserver: MutationObserver | null = null;
@@ -199,14 +232,10 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       const kind = (element.getAttribute(TARGET_ATTRIBUTE) || "copy") as MotionKind;
       const delay = Number(element.dataset.siteMotionDelay || 0);
       const direction = Number(element.dataset.siteMotionDirection || 1);
-      const saved = saveStyle(element);
-      savedStyles.set(element, saved);
+      const saved = savedStyles.get(element) ?? saveStyle(element);
 
       element.setAttribute(DONE_ATTRIBUTE, "true");
       observer?.unobserve(element);
-      element.style.backfaceVisibility = "hidden";
-      element.style.transformOrigin = kind === "heading" ? "left bottom" : "center bottom";
-      element.style.willChange = kind === "control" ? "transform, opacity" : "transform, opacity, filter";
 
       const animation = element.animate(keyframesFor(kind, direction), {
         delay,
@@ -242,9 +271,11 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         return;
       }
 
+      savedStyles.set(element, saveStyle(element));
       element.setAttribute(TARGET_ATTRIBUTE, kind);
-      element.dataset.siteMotionDelay = String(Math.min(delay, 340));
+      element.dataset.siteMotionDelay = String(Math.min(delay, 520));
       element.dataset.siteMotionDirection = String(direction);
+      hideUntilReveal(element, kind, direction);
       registered.add(element);
       observer?.observe(element);
     };
@@ -257,11 +288,11 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
 
       if (shell && !shell.closest(`[${TARGET_ATTRIBUTE}]`) && !shell.closest("[data-no-site-motion]")) {
         shell.setAttribute("data-site-motion-image-shell", "true");
-        registerTarget(shell, "image", imageIndex * 90, direction);
+        registerTarget(shell, "image", imageIndex * 120, direction);
         return;
       }
 
-      registerTarget(image, "image", imageIndex * 90, direction);
+      registerTarget(image, "image", imageIndex * 120, direction);
     };
 
     const scan = () => {
@@ -285,7 +316,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
           )
           .forEach((element) => {
             if (!isCardCandidate(element)) return;
-            registerTarget(element, "card", cardIndex * 85);
+            registerTarget(element, "card", cardIndex * 125);
             cardIndex += 1;
           });
 
@@ -301,19 +332,19 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         });
 
         section.querySelectorAll<HTMLElement>("h1, h2, h3").forEach((element) => {
-          registerTarget(element, "heading", headingIndex * 65);
+          registerTarget(element, "heading", headingIndex * 100);
           headingIndex += 1;
         });
 
         section.querySelectorAll<HTMLElement>("p, ul, ol, blockquote").forEach((element) => {
-          registerTarget(element, "copy", 70 + copyIndex * 45);
+          registerTarget(element, "copy", 130 + copyIndex * 72);
           copyIndex += 1;
         });
 
         section
           .querySelectorAll<HTMLElement>("button, form, a[class*='inline-flex']")
           .forEach((element) => {
-            registerTarget(element, "control", 110 + controlIndex * 55);
+            registerTarget(element, "control", 180 + controlIndex * 88);
             controlIndex += 1;
           });
       });
@@ -334,8 +365,8 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
           }
         },
         {
-          rootMargin: "0px 0px 22% 0px",
-          threshold: 0.01,
+          rootMargin: "0px 0px -16% 0px",
+          threshold: 0.04,
         },
       );
 
@@ -354,13 +385,6 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         if (hasRealContentAddition) scheduleScan();
       });
       contentObserver.observe(root, { childList: true, subtree: true });
-
-      revealFrame = window.requestAnimationFrame(() => {
-        registered.forEach((element) => {
-          const rect = element.getBoundingClientRect();
-          if (rect.top < window.innerHeight * 1.12 && rect.bottom > -80) play(element);
-        });
-      });
     };
 
     const scheduleBegin = () => {
@@ -381,13 +405,12 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         attributeFilter: ["data-urechem-intro-active"],
       });
     } else {
-      scheduleBegin();
+      begin();
     }
 
     return () => {
       disposed = true;
       window.cancelAnimationFrame(setupFrame);
-      window.cancelAnimationFrame(revealFrame);
       window.cancelAnimationFrame(scanFrame);
       observer?.disconnect();
       introObserver?.disconnect();
