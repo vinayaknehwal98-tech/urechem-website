@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
-const APPROACH_MARGIN = 520;
-const PERIODIC_CHECK_MS = 400;
+const APPROACH_MARGIN = 140;
+const PERIODIC_CHECK_MS = 500;
 
 type RevealCallback = () => void;
 
