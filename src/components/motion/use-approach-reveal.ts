@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
-const APPROACH_MARGIN = 140;
+const APPROACH_MARGIN = 0;
 const PERIODIC_CHECK_MS = 500;
 
 type RevealCallback = () => void;
@@ -42,10 +42,10 @@ function runRevealCheck() {
     }
 
     const bounds = node.getBoundingClientRect();
-    const isApproaching =
+    const isEnteringViewport =
       bounds.top <= viewportHeight + APPROACH_MARGIN && bounds.bottom >= -APPROACH_MARGIN;
 
-    if (!isApproaching) continue;
+    if (!isEnteringViewport) continue;
 
     pendingReveals.delete(node);
     reveal();
