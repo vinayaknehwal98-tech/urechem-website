@@ -41,10 +41,10 @@ export function AnimatedImage({
       animate={
         shouldAnimate
           ? {
-              opacity: [0.36, 1],
-              x: [-48, 0],
-              y: [26, 0],
-              scale: [0.965, 1],
+              opacity: [0.28, 1],
+              x: [-44, 0],
+              y: [24, 0],
+              scale: [0.968, 1],
               filter: ["blur(6px) saturate(0.86)", "blur(0px) saturate(1)", "none"],
             }
           : restingState
@@ -57,11 +57,11 @@ export function AnimatedImage({
       initial={false}
       ref={ref}
       transition={{
-        opacity: { duration: 0.5, ease: revealEase, times: [0, 1] },
-        x: { duration: 0.76, ease: revealEase, times: [0, 1] },
-        y: { duration: 0.76, ease: revealEase, times: [0, 1] },
-        scale: { duration: 0.76, ease: revealEase, times: [0, 1] },
-        filter: { duration: 0.22, ease: "easeOut", times: [0, 0.65, 1] },
+        opacity: { duration: 0.84, ease: revealEase, times: [0, 1] },
+        x: { duration: 1.16, ease: revealEase, times: [0, 1] },
+        y: { duration: 1.16, ease: revealEase, times: [0, 1] },
+        scale: { duration: 1.16, ease: revealEase, times: [0, 1] },
+        filter: { duration: 0.48, ease: "easeOut", times: [0, 0.72, 1] },
       }}
       whileHover={shouldReduceMotion ? undefined : { scale: 1.01, y: -3 }}
     >
@@ -69,7 +69,7 @@ export function AnimatedImage({
         animate={shouldAnimate ? { scale: [1.1, 1] } : { scale: 1 }}
         className="absolute -inset-y-8 inset-x-0"
         initial={false}
-        transition={{ duration: 1.02, ease: revealEase }}
+        transition={{ duration: 1.36, ease: revealEase }}
       >
         <Image
           alt={alt}
@@ -96,7 +96,7 @@ export function AnimatedImage({
         aria-hidden="true"
         className="pointer-events-none absolute -inset-y-4 left-0 z-20 w-[42%] -skew-x-12 bg-gradient-to-r from-blue-800/70 via-cyan-300/70 to-transparent"
         initial={false}
-        transition={{ delay: 0.02, duration: 0.88, ease: revealEase }}
+        transition={{ delay: 0.08, duration: 1.12, ease: revealEase }}
       />
 
       <motion.div
@@ -108,7 +108,7 @@ export function AnimatedImage({
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 left-0 z-30 w-1/5 -skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent"
         initial={false}
-        transition={{ delay: 0.12, duration: 0.78, ease: "easeInOut" }}
+        transition={{ delay: 0.22, duration: 1.02, ease: "easeInOut" }}
       />
     </motion.figure>
   );
