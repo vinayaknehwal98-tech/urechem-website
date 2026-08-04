@@ -6,6 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { ButtonLink } from "@/components/ui/button";
 import { primaryNavigation } from "@/data/navigation";
+import { lockBodyScroll } from "@/lib/body-scroll-lock";
 
 export function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,12 +48,12 @@ export function MobileNavigation() {
       }
     };
 
+    const releaseScrollLock = lockBodyScroll();
     document.addEventListener("keydown", handleKeyDown);
-    document.body.classList.add("overflow-hidden");
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.classList.remove("overflow-hidden");
+      releaseScrollLock();
       previousFocusRef.current?.focus();
     };
   }, [isOpen]);
