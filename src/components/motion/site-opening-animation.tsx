@@ -4,35 +4,46 @@ import { gsap } from "gsap";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 const SESSION_KEY = "urechem-opening-animation-played";
+const PRELOAD_BUDGET_MS = 300;
 
 function delay(milliseconds: number) {
   return new Promise<void>((resolve) => window.setTimeout(resolve, milliseconds));
 }
 
+async function waitForImage(image: HTMLImageElement, signal: AbortSignal) {
+  if (!image.complete) {
+    await new Promise<void>((resolve) => {
+      const settle = () => resolve();
+      image.addEventListener("load", settle, { once: true, signal });
+      image.addEventListener("error", settle, { once: true, signal });
+      signal.addEventListener("abort", settle, { once: true });
+    });
+  }
+
+  if (signal.aborted) return;
+
+  try {
+    await image.decode();
+  } catch {
+    // A loaded image may reject decode in some browsers.
+  }
+}
+
 async function preloadOpeningAssets() {
   const priorityImages = Array.from(
-    document.querySelectorAll<HTMLImageElement>('img[fetchpriority="high"], img[src*="urechem-mark"]'),
+    document.querySelectorAll<HTMLImageElement>('img[fetchpriority="high"], img[src*="urechem-logo"]'),
   );
 
+  if (!priorityImages.length) return;
+
+  const controller = new AbortController();
+
   await Promise.race([
-    Promise.allSettled([
-      ...priorityImages.map(async (image) => {
-        if (!image.complete) {
-          await new Promise<void>((resolve) => {
-            image.addEventListener("load", () => resolve(), { once: true });
-            image.addEventListener("error", () => resolve(), { once: true });
-          });
-        }
-        try {
-          await image.decode();
-        } catch {
-          // A loaded image may reject decode in some browsers.
-        }
-      }),
-      document.fonts?.ready ?? Promise.resolve(),
-    ]),
-    delay(1500),
+    Promise.allSettled(priorityImages.map((image) => waitForImage(image, controller.signal))).then(() => undefined),
+    delay(PRELOAD_BUDGET_MS),
   ]);
+
+  controller.abort();
 }
 
 function OpeningDroplet() {
@@ -66,7 +77,7 @@ export function SiteOpeningAnimation() {
   const liquidRef = useRef<SVGCircleElement>(null);
   const rippleRef = useRef<SVGCircleElement>(null);
   const splashRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<ReturnType<typeof gsap.timeline> | null>(null);
+  const timelineRef = useRef<ReturnType<typeof gsap.timeline> | ReturnType<typeof gsap.to> | null>(null);
   const completedRef = useRef(false);
   const startedRef = useRef(false);
   const restoreOverflowRef = useRef<() => void>(() => undefined);
@@ -74,6 +85,7 @@ export function SiteOpeningAnimation() {
   const complete = useCallback(() => {
     if (completedRef.current) return;
     completedRef.current = true;
+    timelineRef.current = null;
 
     const html = document.documentElement;
     const logoMark = document.querySelector<HTMLElement>("[data-urechem-logo-mark]");
@@ -92,11 +104,14 @@ export function SiteOpeningAnimation() {
 
   const skip = useCallback(() => {
     timelineRef.current?.kill();
-    if (!overlayRef.current) {
+    const overlay = overlayRef.current;
+
+    if (!overlay) {
       complete();
       return;
     }
-    gsap.to(overlayRef.current, {
+
+    timelineRef.current = gsap.to(overlay, {
       duration: 0.22,
       ease: "power1.out",
       opacity: 0,
@@ -121,7 +136,10 @@ export function SiteOpeningAnimation() {
     };
 
     let cancelled = false;
-    const watchdogTimer = window.setTimeout(complete, 5500);
+    const watchdogTimer = window.setTimeout(() => {
+      timelineRef.current?.kill();
+      complete();
+    }, 5500);
 
     const run = async () => {
       try {
@@ -130,11 +148,25 @@ export function SiteOpeningAnimation() {
         const explicitForce = introMode === "force";
         const automatedReview = navigator.webdriver && !explicitForce;
         const explicitSkip = introMode === "skip";
-        const alreadyPlayed = sessionStorage.getItem(SESSION_KEY) === "true";
+
+        let alreadyPlayed = false;
+        try {
+          alreadyPlayed = window.sessionStorage.getItem(SESSION_KEY) === "true";
+        } catch {
+          alreadyPlayed = false;
+        }
+
         const fullAnimation = explicitForce || (!reducedMotion && !automatedReview && !explicitSkip && !alreadyPlayed);
 
-        if (fullAnimation) sessionStorage.setItem(SESSION_KEY, "true");
-        await preloadOpeningAssets();
+        if (fullAnimation) {
+          try {
+            window.sessionStorage.setItem(SESSION_KEY, "true");
+          } catch {
+            // The animation can still run when browser storage is unavailable.
+          }
+          await preloadOpeningAssets();
+        }
+
         if (cancelled) return;
 
         const overlay = overlayRef.current;
@@ -160,7 +192,7 @@ export function SiteOpeningAnimation() {
 
         if (!fullAnimation) {
           if (revealTargets.length) gsap.set(revealTargets, { opacity: 1, visibility: "visible" });
-          gsap.to(overlay, {
+          timelineRef.current = gsap.to(overlay, {
             duration: reducedMotion ? 0.18 : 0.34,
             ease: "power1.out",
             opacity: 0,
@@ -277,6 +309,7 @@ export function SiteOpeningAnimation() {
       window.clearTimeout(watchdogTimer);
       window.removeEventListener("resize", handleResize);
       timelineRef.current?.kill();
+      timelineRef.current = null;
       restoreOverflowRef.current();
       html.removeAttribute("data-urechem-intro-active");
     };
