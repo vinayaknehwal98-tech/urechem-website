@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Droplets, ShieldCheck } from "lucide-react";
 import { AnimatedImage } from "@/components/media/animated-image";
+import { getProductBackground } from "@/data/product-backgrounds";
 import { ureshieldProducts } from "@/data/ureshield";
 import { HomeSection } from "./home-section";
 
@@ -14,9 +15,12 @@ export function UreShieldSection() {
   const visibleProducts = ureshieldProducts.filter(
     (product) => !REMOVED_URESHIELD_PRODUCTS.has(product.name),
   );
+  const background = getProductBackground("ureshield-waterproofing-polyurea-systems");
 
   return (
     <HomeSection
+      backgroundImage={background.src}
+      backgroundPosition={background.position}
       className="bg-[linear-gradient(180deg,#071a2d,#0b2840)]"
       eyebrow="Waterproofing and polyurea"
       id="ureshield"
