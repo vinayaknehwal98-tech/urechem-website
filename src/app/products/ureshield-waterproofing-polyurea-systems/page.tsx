@@ -3,7 +3,6 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
 import { ureshieldProducts, ureshieldReferenceNote } from "@/data/ureshield";
-import { getProductBackground } from "@/data/product-backgrounds";
 
 const REMOVED_URESHIELD_PRODUCTS = new Set([
   "UreShield DrucPietra",
@@ -21,7 +20,6 @@ export default function Page() {
   const visibleProducts = ureshieldProducts.filter(
     (product) => !REMOVED_URESHIELD_PRODUCTS.has(product.name),
   );
-  const background = getProductBackground("ureshield-waterproofing-polyurea-systems");
 
   return (
     <>
@@ -30,8 +28,9 @@ export default function Page() {
           aria-hidden="true"
           className="absolute inset-0 -z-30 bg-cover"
           style={{
-            backgroundImage: `url(${background.src})`,
-            backgroundPosition: background.position,
+            backgroundImage:
+              "url(https://images.unsplash.com/photo-1685464196339-46a985b2049b?auto=format&fit=crop&fm=jpg&q=86&w=2400)",
+            backgroundPosition: "center 54%",
           }}
         />
         <Container className="relative w-full">
