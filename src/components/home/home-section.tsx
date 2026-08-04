@@ -49,22 +49,58 @@ export function HomeSection({
         backgroundLayout === "right-panel" ? (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-10 -top-8 z-0 hidden h-[32rem] w-[56%] overflow-hidden lg:block"
-            style={{
-              WebkitMaskImage:
-                "radial-gradient(ellipse 92% 86% at 68% 46%, #000 0%, #000 56%, rgba(0,0,0,0.94) 67%, rgba(0,0,0,0.62) 80%, rgba(0,0,0,0.24) 91%, transparent 100%)",
-              maskImage:
-                "radial-gradient(ellipse 92% 86% at 68% 46%, #000 0%, #000 56%, rgba(0,0,0,0.94) 67%, rgba(0,0,0,0.62) 80%, rgba(0,0,0,0.24) 91%, transparent 100%)",
-            }}
+            className="pointer-events-none absolute -right-8 top-5 z-0 hidden h-[29rem] w-[57%] overflow-hidden lg:block"
           >
             <div
-              className="absolute -inset-5 scale-[1.045] bg-cover bg-no-repeat opacity-95 blur-[2px] saturate-[1.06]"
+              className="absolute -inset-4 scale-[1.04] bg-cover bg-no-repeat opacity-95 blur-[2px] saturate-[1.06]"
               style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundPosition,
               }}
             />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.34)_0%,rgba(255,255,255,0.12)_24%,rgba(255,255,255,0.02)_56%,transparent_100%)]" />
+
+            <div
+              className="absolute inset-y-0 left-0 w-[17rem]"
+              style={{
+                background:
+                  "linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0.97) 15%, rgba(255,255,255,0.82) 36%, rgba(255,255,255,0.46) 62%, rgba(255,255,255,0.12) 84%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-x-0 top-0 h-24"
+              style={{
+                background:
+                  "linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.92) 18%, rgba(255,255,255,0.62) 46%, rgba(255,255,255,0.2) 76%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-x-0 bottom-0 h-28"
+              style={{
+                background:
+                  "linear-gradient(0deg, #ffffff 0%, rgba(255,255,255,0.94) 18%, rgba(255,255,255,0.66) 48%, rgba(255,255,255,0.22) 78%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-y-0 right-0 w-14"
+              style={{
+                background:
+                  "linear-gradient(270deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.34) 45%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute left-0 top-0 h-36 w-48"
+              style={{
+                background:
+                  "radial-gradient(circle at 0% 0%, #ffffff 0%, rgba(255,255,255,0.9) 34%, rgba(255,255,255,0.42) 67%, transparent 100%)",
+              }}
+            />
+            <div
+              className="absolute bottom-0 left-0 h-36 w-48"
+              style={{
+                background:
+                  "radial-gradient(circle at 0% 100%, #ffffff 0%, rgba(255,255,255,0.9) 34%, rgba(255,255,255,0.42) 67%, transparent 100%)",
+              }}
+            />
           </div>
         ) : (
           <>
