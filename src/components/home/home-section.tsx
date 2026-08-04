@@ -47,13 +47,16 @@ export function HomeSection({
         <>
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-3 z-0 scale-[1.035] bg-cover opacity-45 blur-[3px]"
+            className="pointer-events-none absolute -inset-4 z-0 scale-[1.04] bg-cover bg-no-repeat opacity-90 blur-[2px] saturate-[1.08]"
             style={{
               backgroundImage: `url(${backgroundImage})`,
               backgroundPosition,
             }}
           />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[1] bg-white/60" />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(255,255,255,0.55)_0%,rgba(255,255,255,0.30)_48%,rgba(255,255,255,0.20)_100%)]"
+          />
         </>
       ) : null}
 
