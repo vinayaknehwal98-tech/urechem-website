@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LeadCaptureFlyer } from "@/components/layout/lead-capture-flyer";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { SiteMotionTempo } from "@/components/motion/site-motion-tempo";
 import { SiteOpeningAnimation } from "@/components/motion/site-opening-animation";
 import { SitewideCountUp } from "@/components/motion/sitewide-count-up";
 import { SitewideScrollMotion } from "@/components/motion/sitewide-scroll-motion";
@@ -69,6 +70,7 @@ export default function RootLayout({
         </a>
         <noscript><style>{`.urechem-opening{display:none!important}`}</style></noscript>
         <SiteOpeningAnimation />
+        <SiteMotionTempo />
         <SiteHeader />
         <LeadCaptureFlyer />
         <SitewideCountUp />
