@@ -56,7 +56,6 @@ export function DesktopNavigation() {
                 setOpenMenu(null);
               }
             }}
-            onMouseEnter={() => menu && setOpenMenu(item.label)}
             onMouseLeave={() => menu && setOpenMenu(null)}
           >
             <Link
@@ -69,6 +68,7 @@ export function DesktopNavigation() {
               )}
               href={item.href}
               onFocus={() => menu && setOpenMenu(item.label)}
+              onMouseEnter={() => menu && setOpenMenu(item.label)}
             >
               {item.label}
               {menu ? (
