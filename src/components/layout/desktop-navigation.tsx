@@ -4,7 +4,7 @@ import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { applicationCategories } from "@/data/homepage";
 import { industries } from "@/data/catalog";
 import { primaryNavigation, productFamilyLinks, type NavigationItem } from "@/data/navigation";
@@ -27,19 +27,49 @@ const dropdownItems: Record<string, NavigationItem[]> = {
   Industries: industryNavigationItems,
 };
 
+const CLOSE_DELAY_MS = 160;
+
 export function DesktopNavigation() {
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
+
+  const cancelScheduledClose = useCallback(() => {
+    if (closeTimerRef.current === null) return;
+    window.clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = null;
+  }, []);
+
+  const openDropdown = useCallback(
+    (label: string) => {
+      cancelScheduledClose();
+      setOpenMenu(label);
+    },
+    [cancelScheduledClose],
+  );
+
+  const closeDropdown = useCallback(() => {
+    cancelScheduledClose();
+    setOpenMenu(null);
+  }, [cancelScheduledClose]);
+
+  const scheduleDropdownClose = useCallback(() => {
+    cancelScheduledClose();
+    closeTimerRef.current = window.setTimeout(() => {
+      closeTimerRef.current = null;
+      setOpenMenu(null);
+    }, CLOSE_DELAY_MS);
+  }, [cancelScheduledClose]);
+
+  useEffect(() => cancelScheduledClose, [cancelScheduledClose]);
 
   return (
     <nav
       aria-label="Primary navigation"
       className="hidden items-center justify-between gap-0.5 px-1 lg:flex xl:gap-1 xl:px-3"
       onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          setOpenMenu(null);
-        }
+        if (event.key === "Escape") closeDropdown();
       }}
     >
       {primaryNavigation.map((item) => {
@@ -53,10 +83,10 @@ export function DesktopNavigation() {
             key={item.href}
             onBlur={(event) => {
               if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                setOpenMenu(null);
+                closeDropdown();
               }
             }}
-            onMouseLeave={() => menu && setOpenMenu(null)}
+            onMouseLeave={() => menu && scheduleDropdownClose()}
           >
             <Link
               aria-current={isActive ? "page" : undefined}
@@ -67,8 +97,8 @@ export function DesktopNavigation() {
                 isActive && "text-blue-800",
               )}
               href={item.href}
-              onFocus={() => menu && setOpenMenu(item.label)}
-              onMouseEnter={() => menu && setOpenMenu(item.label)}
+              onFocus={() => menu && openDropdown(item.label)}
+              onMouseEnter={() => menu && openDropdown(item.label)}
             >
               {item.label}
               {menu ? (
@@ -87,7 +117,13 @@ export function DesktopNavigation() {
             </Link>
 
             {menu ? (
-              <div className="absolute left-1/2 top-full z-50 w-[22rem] -translate-x-1/2 pt-3">
+              <div
+                className={cn(
+                  "absolute left-1/2 top-full z-50 w-[22rem] -translate-x-1/2 pt-3",
+                  isOpen ? "pointer-events-auto" : "pointer-events-none",
+                )}
+                onMouseEnter={cancelScheduledClose}
+              >
                 <AnimatePresence>
                   {isOpen ? (
                     <motion.div
@@ -101,7 +137,7 @@ export function DesktopNavigation() {
                       <Link
                         className="mb-1 flex items-center justify-between rounded-[var(--radius-sm)] bg-blue-50 px-3 py-2.5 text-sm font-black text-blue-950 transition hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
                         href={item.href}
-                        onClick={() => setOpenMenu(null)}
+                        onClick={closeDropdown}
                         role="menuitem"
                       >
                         View all {item.label.toLowerCase()}
@@ -115,7 +151,7 @@ export function DesktopNavigation() {
                             className="rounded-[var(--radius-sm)] px-3 py-2.5 text-sm font-medium leading-5 text-slate-700 transition duration-300 hover:bg-blue-50 hover:pl-4 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
                             href={menuItem.href}
                             key={menuItem.href}
-                            onClick={() => setOpenMenu(null)}
+                            onClick={closeDropdown}
                             role="menuitem"
                           >
                             {menuItem.label}
