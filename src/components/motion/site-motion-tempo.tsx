@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const CONTENT_PLAYBACK_RATE = 0.58;
+const CONTENT_PLAYBACK_RATE = 1.2;
 const MIN_REVEAL_DURATION_MS = 380;
 const MAX_REVEAL_DURATION_MS = 2200;
 
