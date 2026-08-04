@@ -22,7 +22,7 @@ const restingState = {
 export function Reveal({ children, className, delay = 0, distance = 54 }: RevealProps) {
   const { ref, isVisible, shouldReduceMotion } = useApproachReveal<HTMLDivElement>();
   const safeDistance = Math.min(Math.max(distance, 24), 68);
-  const safeDelay = Math.min(Math.max(delay, 0), 0.36);
+  const safeDelay = Math.min(Math.max(delay, 0), 0.32);
 
   return (
     <motion.div
@@ -41,10 +41,10 @@ export function Reveal({ children, className, delay = 0, distance = 54 }: Reveal
       ref={ref}
       transition={{
         delay: safeDelay,
-        opacity: { duration: 0.82, ease: revealEase, times: [0, 1] },
-        y: { duration: 1.12, ease: revealEase, times: [0, 1] },
-        scale: { duration: 1.12, ease: revealEase, times: [0, 1] },
-        filter: { duration: 0.46, ease: "easeOut", times: [0, 0.72, 1] },
+        opacity: { duration: 0.74, ease: revealEase, times: [0, 1] },
+        y: { duration: 1.02, ease: revealEase, times: [0, 1] },
+        scale: { duration: 1.02, ease: revealEase, times: [0, 1] },
+        filter: { duration: 0.42, ease: "easeOut", times: [0, 0.72, 1] },
       }}
     >
       {children}
