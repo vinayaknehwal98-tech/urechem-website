@@ -4,36 +4,7 @@ import { gsap } from "gsap";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 const SESSION_KEY = "urechem-opening-animation-played";
-
-function delay(milliseconds: number) {
-  return new Promise<void>((resolve) => window.setTimeout(resolve, milliseconds));
-}
-
-async function preloadOpeningAssets() {
-  const priorityImages = Array.from(
-    document.querySelectorAll<HTMLImageElement>('img[fetchpriority="high"], img[src*="urechem-mark"]'),
-  );
-
-  await Promise.race([
-    Promise.allSettled([
-      ...priorityImages.map(async (image) => {
-        if (!image.complete) {
-          await new Promise<void>((resolve) => {
-            image.addEventListener("load", () => resolve(), { once: true });
-            image.addEventListener("error", () => resolve(), { once: true });
-          });
-        }
-        try {
-          await image.decode();
-        } catch {
-          // A loaded image may reject decode in some browsers.
-        }
-      }),
-      document.fonts?.ready ?? Promise.resolve(),
-    ]),
-    delay(1500),
-  ]);
-}
+const INTRO_WATCHDOG_MS = 2600;
 
 function OpeningDroplet() {
   return (
@@ -76,32 +47,35 @@ export function SiteOpeningAnimation() {
     completedRef.current = true;
 
     const html = document.documentElement;
-    const logoMark = document.querySelector<HTMLElement>("[data-urechem-logo-mark]");
-    const logoName = document.querySelector<HTMLElement>("[data-urechem-logo-name]");
-    const logoTagline = document.querySelector<HTMLElement>("[data-urechem-logo-tagline]");
-    const heroElements = Array.from(document.querySelectorAll<HTMLElement>("[data-hero-intro]"));
-    const revealTargets = [logoMark, logoName, logoTagline, ...heroElements].filter(
-      (target): target is HTMLElement => target !== null,
+    const revealTargets = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        "[data-urechem-logo-mark], [data-urechem-logo-name], [data-urechem-logo-tagline], [data-hero-intro]",
+      ),
     );
 
     html.removeAttribute("data-urechem-intro-active");
     restoreOverflowRef.current();
-    if (revealTargets.length) gsap.set(revealTargets, { clearProps: "opacity,transform,visibility" });
+    if (revealTargets.length) {
+      gsap.set(revealTargets, { clearProps: "opacity,transform,visibility" });
+    }
     setIsVisible(false);
   }, []);
 
   const skip = useCallback(() => {
     timelineRef.current?.kill();
-    if (!overlayRef.current) {
+    const overlay = overlayRef.current;
+
+    if (!overlay) {
       complete();
       return;
     }
-    gsap.to(overlayRef.current, {
-      duration: 0.22,
+
+    gsap.to(overlay, {
+      duration: 0.12,
       ease: "power1.out",
       opacity: 0,
-      onComplete: complete,
       pointerEvents: "none",
+      onComplete: complete,
     });
   }, [complete]);
 
@@ -112,6 +86,7 @@ export function SiteOpeningAnimation() {
     const html = document.documentElement;
     const previousHtmlOverflow = html.style.overflow;
     const previousBodyOverflow = document.body.style.overflow;
+
     html.setAttribute("data-urechem-intro-active", "true");
     html.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
@@ -121,21 +96,36 @@ export function SiteOpeningAnimation() {
     };
 
     let cancelled = false;
-    const watchdogTimer = window.setTimeout(complete, 5500);
+    let startFrame = 0;
+    const watchdogTimer = window.setTimeout(complete, INTRO_WATCHDOG_MS);
 
-    const run = async () => {
+    const run = () => {
+      if (cancelled) return;
+
       try {
         const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         const introMode = new URLSearchParams(window.location.search).get("intro");
         const explicitForce = introMode === "force";
-        const automatedReview = navigator.webdriver && !explicitForce;
         const explicitSkip = introMode === "skip";
-        const alreadyPlayed = sessionStorage.getItem(SESSION_KEY) === "true";
-        const fullAnimation = explicitForce || (!reducedMotion && !automatedReview && !explicitSkip && !alreadyPlayed);
+        const automatedReview = navigator.webdriver && !explicitForce;
 
-        if (fullAnimation) sessionStorage.setItem(SESSION_KEY, "true");
-        await preloadOpeningAssets();
-        if (cancelled) return;
+        let alreadyPlayed = false;
+        try {
+          alreadyPlayed = sessionStorage.getItem(SESSION_KEY) === "true";
+        } catch {
+          alreadyPlayed = false;
+        }
+
+        const fullAnimation =
+          explicitForce || (!reducedMotion && !automatedReview && !explicitSkip && !alreadyPlayed);
+
+        if (fullAnimation) {
+          try {
+            sessionStorage.setItem(SESSION_KEY, "true");
+          } catch {
+            // The animation can still run when session storage is unavailable.
+          }
+        }
 
         const overlay = overlayRef.current;
         const droplet = dropletRef.current;
@@ -154,18 +144,20 @@ export function SiteOpeningAnimation() {
         const logoMark = document.querySelector<HTMLElement>("[data-urechem-logo-mark]");
         const logoName = document.querySelector<HTMLElement>("[data-urechem-logo-name]");
         const logoTagline = document.querySelector<HTMLElement>("[data-urechem-logo-tagline]");
-        const logoTargets = [logoMark, logoName, logoTagline].filter((target): target is HTMLElement => target !== null);
-        const heroElements = Array.from(document.querySelectorAll<HTMLElement>("[data-hero-intro]"));
-        const revealTargets = [...logoTargets, ...heroElements];
+        const logoTargets = [logoMark, logoName, logoTagline].filter(
+          (target): target is HTMLElement => target !== null,
+        );
 
         if (!fullAnimation) {
-          if (revealTargets.length) gsap.set(revealTargets, { opacity: 1, visibility: "visible" });
+          if (logoTargets.length) {
+            gsap.set(logoTargets, { opacity: 1, visibility: "visible" });
+          }
           gsap.to(overlay, {
-            duration: reducedMotion ? 0.18 : 0.34,
+            duration: reducedMotion ? 0.08 : 0.16,
             ease: "power1.out",
             opacity: 0,
-            onComplete: complete,
             pointerEvents: "none",
+            onComplete: complete,
           });
           return;
         }
@@ -175,12 +167,13 @@ export function SiteOpeningAnimation() {
         const impactX = viewportWidth / 2;
         const dropletHeight = droplet.getBoundingClientRect().height || 92;
         const impactY = viewportHeight / 2 + dropletHeight * 0.46;
-        const maximumRadius = Math.max(
-          Math.hypot(impactX, impactY),
-          Math.hypot(viewportWidth - impactX, impactY),
-          Math.hypot(impactX, viewportHeight - impactY),
-          Math.hypot(viewportWidth - impactX, viewportHeight - impactY),
-        ) * 1.08;
+        const maximumRadius =
+          Math.max(
+            Math.hypot(impactX, impactY),
+            Math.hypot(viewportWidth - impactX, impactY),
+            Math.hypot(impactX, viewportHeight - impactY),
+            Math.hypot(viewportWidth - impactX, viewportHeight - impactY),
+          ) * 1.08;
 
         const targetRect = logoMark?.getBoundingClientRect();
         const dropletSize = Math.max(60, Math.min(92, viewportWidth * 0.07));
@@ -192,13 +185,14 @@ export function SiteOpeningAnimation() {
           : -viewportHeight * 0.42;
 
         gsap.set(overlay, { opacity: 1 });
+        gsap.set(cover, { opacity: 1 });
         gsap.set(droplet, {
           opacity: 1,
-          scaleX: 0.78,
-          scaleY: 1.22,
+          scaleX: 0.8,
+          scaleY: 1.2,
           transformOrigin: "50% 55%",
           x: 0,
-          y: -viewportHeight * 0.62,
+          y: -viewportHeight * 0.6,
         });
         gsap.set(trail, { opacity: 0, scaleY: 0.25, transformOrigin: "50% 100%" });
         gsap.set(reveal, { attr: { cx: impactX, cy: impactY, r: 0 } });
@@ -213,53 +207,73 @@ export function SiteOpeningAnimation() {
           xPercent: -50,
           yPercent: -50,
         });
-        if (logoTargets.length) gsap.set(logoTargets, { opacity: 0, visibility: "visible" });
-        if (heroElements.length) gsap.set(heroElements, { opacity: 0, y: 26 });
+        if (logoTargets.length) {
+          gsap.set(logoTargets, { opacity: 0, visibility: "visible" });
+        }
 
-        const timeline = gsap.timeline({ defaults: { overwrite: "auto" } });
+        const timeline = gsap.timeline({
+          defaults: { overwrite: "auto" },
+          onComplete: complete,
+        });
         timelineRef.current = timeline;
 
         timeline
-          .to(trail, { duration: 0.2, ease: "power1.out", opacity: 0.3, scaleY: 1 }, 0.18)
-          .to(droplet, { duration: 0.78, ease: "power2.in", scaleX: 0.9, scaleY: 1.12, y: 0 }, 0.18)
-          .to(trail, { duration: 0.16, ease: "power1.in", opacity: 0, scaleY: 0.4 }, 0.78)
-          .to(droplet, { duration: 0.09, ease: "power2.out", scaleX: 1.3, scaleY: 0.7, y: 4 }, 0.96)
-          .to(droplet, { duration: 0.18, ease: "back.out(2)", scaleX: 0.96, scaleY: 1.04, y: -3 }, 1.05)
-          .to(splash, { autoAlpha: 0.78, duration: 0.24, ease: "power2.out", scale: 1 }, 0.98)
-          .to(splash, { autoAlpha: 0, duration: 0.4, ease: "power1.out", scale: 1.32 }, 1.2)
-          .to(ripple, { attr: { r: 84 }, duration: 0.58, ease: "power2.out", opacity: 0.42, strokeWidth: 1 }, 1.01)
-          .to(ripple, { attr: { r: 142 }, duration: 0.46, ease: "power1.out", opacity: 0 }, 1.46)
-          .to(liquid, { attr: { r: maximumRadius * 0.98 }, duration: 1.12, ease: "power3.inOut", opacity: 0.2 }, 1.12)
-          .to(reveal, { attr: { r: maximumRadius * 1.08 }, duration: 1.18, ease: "power3.inOut" }, 1.12)
-          .to(liquid, { duration: 0.54, ease: "power2.out", opacity: 0 }, 1.86)
-          .to(cover, { duration: 0.2, opacity: 0 }, 2.16)
-          .to(droplet, {
-            duration: 0.58,
-            ease: "power3.inOut",
-            rotation: 0,
-            scale: targetScale,
-            x: targetX,
-            y: targetY,
-          }, 2.18)
-          .to(droplet, { duration: 0.16, ease: "power1.out", opacity: 0 }, 2.65);
+          .to(trail, { duration: 0.12, ease: "power1.out", opacity: 0.28, scaleY: 1 }, 0.04)
+          .to(droplet, { duration: 0.48, ease: "power2.in", scaleX: 0.92, scaleY: 1.08, y: 0 }, 0.04)
+          .to(trail, { duration: 0.1, ease: "power1.in", opacity: 0, scaleY: 0.4 }, 0.43)
+          .to(droplet, { duration: 0.07, ease: "power2.out", scaleX: 1.3, scaleY: 0.7, y: 4 }, 0.52)
+          .to(droplet, { duration: 0.11, ease: "back.out(2)", scaleX: 0.97, scaleY: 1.03, y: -2 }, 0.59)
+          .to(splash, { autoAlpha: 0.76, duration: 0.14, ease: "power2.out", scale: 1 }, 0.54)
+          .to(splash, { autoAlpha: 0, duration: 0.22, ease: "power1.out", scale: 1.3 }, 0.68)
+          .to(ripple, { attr: { r: 82 }, duration: 0.32, ease: "power2.out", opacity: 0.4, strokeWidth: 1 }, 0.55)
+          .to(ripple, { attr: { r: 138 }, duration: 0.26, ease: "power1.out", opacity: 0 }, 0.82)
+          .to(liquid, { attr: { r: maximumRadius * 0.98 }, duration: 0.64, ease: "power3.inOut", opacity: 0.18 }, 0.6)
+          .to(reveal, { attr: { r: maximumRadius * 1.08 }, duration: 0.68, ease: "power3.inOut" }, 0.6)
+          .to(liquid, { duration: 0.25, ease: "power2.out", opacity: 0 }, 1.06)
+          .to(cover, { duration: 0.1, opacity: 0 }, 1.18)
+          .to(
+            droplet,
+            {
+              duration: 0.34,
+              ease: "power3.inOut",
+              scale: targetScale,
+              x: targetX,
+              y: targetY,
+            },
+            1.02,
+          )
+          .to(droplet, { duration: 0.1, ease: "power1.out", opacity: 0 }, 1.34);
 
-        if (logoMark) timeline.to(logoMark, { duration: 0.16, ease: "power1.out", opacity: 1 }, 2.65);
+        if (logoMark) {
+          timeline.to(logoMark, { duration: 0.1, ease: "power1.out", opacity: 1 }, 1.33);
+        }
         if (logoName) {
-          timeline.fromTo(logoName, { opacity: 0, x: -12 }, { duration: 0.42, ease: "power3.out", opacity: 1, x: 0 }, 2.68);
+          timeline.fromTo(
+            logoName,
+            { opacity: 0, x: -10 },
+            { duration: 0.22, ease: "power3.out", opacity: 1, x: 0 },
+            1.34,
+          );
         }
         if (logoTagline) {
-          timeline.fromTo(logoTagline, { opacity: 0, y: 6 }, { duration: 0.36, ease: "power2.out", opacity: 1, y: 0 }, 2.84);
+          timeline.fromTo(
+            logoTagline,
+            { opacity: 0, y: 5 },
+            { duration: 0.2, ease: "power2.out", opacity: 1, y: 0 },
+            1.4,
+          );
         }
-        if (heroElements.length) {
-          timeline.to(heroElements, { duration: 0.64, ease: "power3.out", opacity: 1, stagger: 0.075, y: 0 }, 2.44);
-        }
-        timeline.to(overlay, {
-          duration: 0.26,
-          ease: "power1.out",
-          opacity: 0,
-          onComplete: complete,
-          pointerEvents: "none",
-        }, 3.05);
+
+        timeline.to(
+          overlay,
+          {
+            duration: 0.16,
+            ease: "power1.out",
+            opacity: 0,
+            pointerEvents: "none",
+          },
+          1.5,
+        );
       } catch {
         complete();
       }
@@ -270,10 +284,11 @@ export function SiteOpeningAnimation() {
     };
 
     window.addEventListener("resize", handleResize, { passive: true });
-    void run();
+    startFrame = window.requestAnimationFrame(run);
 
     return () => {
       cancelled = true;
+      window.cancelAnimationFrame(startFrame);
       window.clearTimeout(watchdogTimer);
       window.removeEventListener("resize", handleResize);
       timelineRef.current?.kill();
@@ -323,7 +338,7 @@ export function SiteOpeningAnimation() {
         <OpeningDroplet />
       </div>
 
-      <span className="sr-only" role="status">Loading Urechem Chemicals</span>
+      <span className="sr-only" role="status">Opening Urechem Chemicals</span>
     </div>
   );
 }
