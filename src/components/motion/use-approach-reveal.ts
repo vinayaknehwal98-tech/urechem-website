@@ -35,8 +35,8 @@ function getSharedObserver() {
     },
     {
       root: null,
-      rootMargin: "0px",
-      threshold: 0,
+      rootMargin: "0px 0px 10% 0px",
+      threshold: 0.01,
     },
   );
 
@@ -62,6 +62,12 @@ function unregisterReveal(node: Element) {
   releaseObserverWhenIdle();
 }
 
+function isNearViewport(node: Element) {
+  const bounds = node.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  return bounds.top <= viewportHeight * 1.1 && bounds.bottom >= -viewportHeight * 0.1;
+}
+
 export function useApproachReveal<T extends HTMLElement>() {
   const ref = useRef<T>(null);
   const shouldReduceMotion = useReducedMotion();
@@ -79,20 +85,35 @@ export function useApproachReveal<T extends HTMLElement>() {
       return;
     }
 
-    const bounds = node.getBoundingClientRect();
-    if (bounds.top <= window.innerHeight && bounds.bottom >= 0) {
+    if (isNearViewport(node)) {
       setIsVisible(true);
       return;
     }
 
     let cancelled = false;
+    let revealed = false;
 
-    registerReveal(node, () => {
-      if (!cancelled) setIsVisible(true);
+    const reveal = () => {
+      if (cancelled || revealed) return;
+      revealed = true;
+      unregisterReveal(node);
+      setIsVisible(true);
+    };
+
+    registerReveal(node, reveal);
+
+    const frameId = window.requestAnimationFrame(() => {
+      if (isNearViewport(node)) reveal();
     });
+
+    const fallbackId = window.setTimeout(() => {
+      if (isNearViewport(node)) reveal();
+    }, 450);
 
     return () => {
       cancelled = true;
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(fallbackId);
       unregisterReveal(node);
     };
   }, [shouldReduceMotion]);
