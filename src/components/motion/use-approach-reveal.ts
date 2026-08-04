@@ -1,82 +1,65 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-
-const APPROACH_MARGIN = 0;
-const PERIODIC_CHECK_MS = 500;
 
 type RevealCallback = () => void;
 
 const pendingReveals = new Map<Element, RevealCallback>();
-let animationFrame = 0;
-let periodicCheck = 0;
-let monitoring = false;
+let sharedObserver: IntersectionObserver | null = null;
 
-function stopMonitoring() {
-  if (typeof window === "undefined" || !monitoring) return;
-
-  monitoring = false;
-  window.removeEventListener("scroll", scheduleRevealCheck);
-  window.removeEventListener("resize", scheduleRevealCheck);
-  window.clearInterval(periodicCheck);
-  periodicCheck = 0;
-
-  if (animationFrame) {
-    window.cancelAnimationFrame(animationFrame);
-    animationFrame = 0;
-  }
+function releaseObserverWhenIdle() {
+  if (pendingReveals.size > 0 || !sharedObserver) return;
+  sharedObserver.disconnect();
+  sharedObserver = null;
 }
 
-function runRevealCheck() {
-  animationFrame = 0;
+function getSharedObserver() {
+  if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") return null;
+  if (sharedObserver) return sharedObserver;
 
-  if (typeof window === "undefined") return;
+  sharedObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
 
-  const viewportHeight = window.innerHeight;
+        const reveal = pendingReveals.get(entry.target);
+        if (!reveal) continue;
 
-  for (const [node, reveal] of pendingReveals) {
-    if (!node.isConnected) {
-      pendingReveals.delete(node);
-      continue;
-    }
+        pendingReveals.delete(entry.target);
+        sharedObserver?.unobserve(entry.target);
+        reveal();
+      }
 
-    const bounds = node.getBoundingClientRect();
-    const isEnteringViewport =
-      bounds.top <= viewportHeight + APPROACH_MARGIN && bounds.bottom >= -APPROACH_MARGIN;
+      releaseObserverWhenIdle();
+    },
+    {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0,
+    },
+  );
 
-    if (!isEnteringViewport) continue;
-
-    pendingReveals.delete(node);
-    reveal();
-  }
-
-  if (pendingReveals.size === 0) stopMonitoring();
-}
-
-function scheduleRevealCheck() {
-  if (typeof window === "undefined" || animationFrame) return;
-  animationFrame = window.requestAnimationFrame(runRevealCheck);
-}
-
-function startMonitoring() {
-  if (typeof window === "undefined" || monitoring) return;
-
-  monitoring = true;
-  window.addEventListener("scroll", scheduleRevealCheck, { passive: true });
-  window.addEventListener("resize", scheduleRevealCheck, { passive: true });
-  periodicCheck = window.setInterval(scheduleRevealCheck, PERIODIC_CHECK_MS);
+  return sharedObserver;
 }
 
 function registerReveal(node: Element, reveal: RevealCallback) {
   pendingReveals.set(node, reveal);
-  startMonitoring();
-  scheduleRevealCheck();
+
+  const observer = getSharedObserver();
+  if (!observer) {
+    pendingReveals.delete(node);
+    reveal();
+    return;
+  }
+
+  observer.observe(node);
 }
 
 function unregisterReveal(node: Element) {
   pendingReveals.delete(node);
-  if (pendingReveals.size === 0) stopMonitoring();
+  sharedObserver?.unobserve(node);
+  releaseObserverWhenIdle();
 }
 
 export function useApproachReveal<T extends HTMLElement>() {
@@ -84,7 +67,7 @@ export function useApproachReveal<T extends HTMLElement>() {
   const shouldReduceMotion = useReducedMotion();
   const [isVisible, setIsVisible] = useState(Boolean(shouldReduceMotion));
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (shouldReduceMotion) {
       setIsVisible(true);
       return;
@@ -96,14 +79,17 @@ export function useApproachReveal<T extends HTMLElement>() {
       return;
     }
 
+    const bounds = node.getBoundingClientRect();
+    if (bounds.top <= window.innerHeight && bounds.bottom >= 0) {
+      setIsVisible(true);
+      return;
+    }
+
     let cancelled = false;
 
-    const reveal = () => {
-      if (cancelled) return;
-      setIsVisible(true);
-    };
-
-    registerReveal(node, reveal);
+    registerReveal(node, () => {
+      if (!cancelled) setIsVisible(true);
+    });
 
     return () => {
       cancelled = true;
