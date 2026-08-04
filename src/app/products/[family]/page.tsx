@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AppLinks, DocumentStatus, ValidationNote } from "@/components/catalog/cards";
+import { AppLinks, DocumentStatus } from "@/components/catalog/cards";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -42,10 +42,6 @@ export default async function Page({ params }: { params: Promise<{ family: strin
               {productFamily.name}
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-700">{productFamily.description}</p>
-
-            <div className="mt-6 max-w-3xl rounded-2xl border border-white/70 bg-transparent p-4 shadow-[0_14px_40px_rgba(2,18,36,0.16)]">
-              <ValidationNote />
-            </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <ButtonLink href={`/consultant?product=${encodeURIComponent(productFamily.name)}`}>
