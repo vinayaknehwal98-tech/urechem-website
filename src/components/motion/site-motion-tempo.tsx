@@ -75,7 +75,7 @@ export function SiteMotionTempo() {
     const scanAnimations = () => {
       scanFrame = 0;
 
-      document.getAnimations({ subtree: true }).forEach((animation) => {
+      document.documentElement.getAnimations({ subtree: true }).forEach((animation) => {
         if (processed.has(animation) || !isContentReveal(animation)) return;
 
         const target = animationTarget(animation);
