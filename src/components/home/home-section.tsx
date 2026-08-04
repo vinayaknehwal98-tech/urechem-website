@@ -16,8 +16,8 @@ type HomeSectionProps = {
 
 const revealEase = [0.16, 1, 0.3, 1] as const;
 const sectionViewport = {
-  amount: 0.16,
-  margin: "0px 0px -10% 0px",
+  amount: 0.08,
+  margin: "0px 0px -18% 0px",
   once: true,
 } as const;
 
@@ -35,33 +35,35 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-0 h-px w-full origin-left bg-gradient-to-r from-blue-700 via-cyan-400 to-transparent"
-        initial={false}
-        transition={{ duration: 1.55, ease: revealEase }}
+        initial={shouldReduceMotion ? false : { opacity: 0, scaleX: 0 }}
+        transition={{ duration: 1.72, ease: revealEase }}
         viewport={sectionViewport}
-        whileInView={
-          shouldReduceMotion
-            ? undefined
-            : {
-                opacity: [0.2, 0.8],
-                scaleX: [0.08, 1],
-              }
-        }
+        whileInView={shouldReduceMotion ? undefined : { opacity: 0.8, scaleX: 1 }}
       />
 
       <Container className="relative z-10">
         <motion.div
           className="mb-8 max-w-3xl"
-          initial={false}
-          transition={{ duration: 1.38, ease: revealEase }}
+          initial={
+            shouldReduceMotion
+              ? false
+              : {
+                  opacity: 0,
+                  y: 76,
+                  scale: 0.975,
+                  filter: "blur(10px)",
+                }
+          }
+          transition={{ duration: 1.72, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
               ? undefined
               : {
-                  opacity: [0.22, 1],
-                  y: [64, 0],
-                  scale: [0.982, 1],
-                  filter: ["blur(8px)", "blur(0px)", "none"],
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  filter: "blur(0px)",
                 }
           }
         >
@@ -76,17 +78,26 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
         </motion.div>
 
         <motion.div
-          initial={false}
-          transition={{ delay: 0.24, duration: 1.42, ease: revealEase }}
+          initial={
+            shouldReduceMotion
+              ? false
+              : {
+                  opacity: 0,
+                  y: 92,
+                  scale: 0.976,
+                  filter: "blur(11px)",
+                }
+          }
+          transition={{ delay: 0.32, duration: 1.92, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
               ? undefined
               : {
-                  opacity: [0.34, 1],
-                  y: [76, 0],
-                  scale: [0.985, 1],
-                  filter: ["blur(9px)", "blur(0px)", "none"],
+                  opacity: 1,
+                  y: 0,
+                  scale: 1,
+                  filter: "blur(0px)",
                 }
           }
         >
