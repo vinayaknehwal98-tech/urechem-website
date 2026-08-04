@@ -168,6 +168,7 @@ export function HeroSection() {
 
     const html = document.documentElement;
     let cancelled = false;
+    let playFrame = 0;
     let introObserver: MutationObserver | null = null;
 
     const playVideo = () => {
@@ -178,11 +179,16 @@ export function HeroSection() {
       });
     };
 
+    const schedulePlay = () => {
+      window.cancelAnimationFrame(playFrame);
+      playFrame = window.requestAnimationFrame(playVideo);
+    };
+
     if (html.hasAttribute("data-urechem-intro-active")) {
       introObserver = new MutationObserver(() => {
         if (!html.hasAttribute("data-urechem-intro-active")) {
           introObserver?.disconnect();
-          window.requestAnimationFrame(playVideo);
+          schedulePlay();
         }
       });
 
@@ -191,14 +197,15 @@ export function HeroSection() {
         attributeFilter: ["data-urechem-intro-active"],
       });
     } else {
-      window.requestAnimationFrame(playVideo);
+      schedulePlay();
     }
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
+        window.cancelAnimationFrame(playFrame);
         video.pause();
       } else {
-        playVideo();
+        schedulePlay();
       }
     };
 
@@ -206,6 +213,7 @@ export function HeroSection() {
 
     return () => {
       cancelled = true;
+      window.cancelAnimationFrame(playFrame);
       introObserver?.disconnect();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       video.pause();
@@ -235,7 +243,7 @@ export function HeroSection() {
           onPlaying={() => setVideoIsPlaying(true)}
           playsInline
           poster={HERO_POSTER}
-          preload="none"
+          preload="metadata"
           ref={videoRef}
           tabIndex={-1}
         >
