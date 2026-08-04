@@ -16,8 +16,8 @@ type HomeSectionProps = {
 
 const revealEase = [0.16, 1, 0.3, 1] as const;
 const sectionViewport = {
-  amount: 0.01,
-  margin: "0px 0px 32% 0px",
+  amount: 0.16,
+  margin: "0px 0px -10% 0px",
   once: true,
 } as const;
 
@@ -36,7 +36,7 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-0 h-px w-full origin-left bg-gradient-to-r from-blue-700 via-cyan-400 to-transparent"
         initial={false}
-        transition={{ duration: 1.15, ease: revealEase }}
+        transition={{ duration: 1.55, ease: revealEase }}
         viewport={sectionViewport}
         whileInView={
           shouldReduceMotion
@@ -52,14 +52,14 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
         <motion.div
           className="mb-8 max-w-3xl"
           initial={false}
-          transition={{ duration: 1.02, ease: revealEase }}
+          transition={{ duration: 1.38, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
               ? undefined
               : {
-                  opacity: [0.28, 1],
-                  y: [62, 0],
+                  opacity: [0.22, 1],
+                  y: [64, 0],
                   scale: [0.982, 1],
                   filter: ["blur(8px)", "blur(0px)", "none"],
                 }
@@ -77,14 +77,14 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
 
         <motion.div
           initial={false}
-          transition={{ delay: 0.12, duration: 1.02, ease: revealEase }}
+          transition={{ delay: 0.24, duration: 1.42, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
               ? undefined
               : {
-                  opacity: [0.42, 1],
-                  y: [72, 0],
+                  opacity: [0.34, 1],
+                  y: [76, 0],
                   scale: [0.985, 1],
                   filter: ["blur(9px)", "blur(0px)", "none"],
                 }
