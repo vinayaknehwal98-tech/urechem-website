@@ -49,16 +49,22 @@ export function HomeSection({
         backgroundLayout === "right-panel" ? (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute right-0 top-0 z-0 hidden h-[28rem] w-[47%] overflow-hidden lg:block"
+            className="pointer-events-none absolute -right-10 -top-8 z-0 hidden h-[32rem] w-[56%] overflow-hidden lg:block"
+            style={{
+              WebkitMaskImage:
+                "radial-gradient(ellipse 92% 86% at 68% 46%, #000 0%, #000 56%, rgba(0,0,0,0.94) 67%, rgba(0,0,0,0.62) 80%, rgba(0,0,0,0.24) 91%, transparent 100%)",
+              maskImage:
+                "radial-gradient(ellipse 92% 86% at 68% 46%, #000 0%, #000 56%, rgba(0,0,0,0.94) 67%, rgba(0,0,0,0.62) 80%, rgba(0,0,0,0.24) 91%, transparent 100%)",
+            }}
           >
             <div
-              className="absolute -inset-2 scale-[1.025] bg-cover bg-no-repeat blur-[2px] saturate-[1.08]"
+              className="absolute -inset-5 scale-[1.045] bg-cover bg-no-repeat opacity-95 blur-[2px] saturate-[1.06]"
               style={{
                 backgroundImage: `url(${backgroundImage})`,
                 backgroundPosition,
               }}
             />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.72)_0%,rgba(255,255,255,0.18)_26%,rgba(255,255,255,0.08)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.34)_0%,rgba(255,255,255,0.12)_24%,rgba(255,255,255,0.02)_56%,transparent_100%)]" />
           </div>
         ) : (
           <>
