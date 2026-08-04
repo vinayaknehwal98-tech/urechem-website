@@ -24,23 +24,32 @@ export function Reveal({ children, className, delay = 0, distance = 54 }: Reveal
   const safeDistance = Math.min(Math.max(distance, 24), 68);
   const safeDelay = Math.min(Math.max(delay, 0), 0.3);
 
+  const hiddenState = {
+    opacity: 0.24,
+    y: safeDistance,
+    scale: 0.984,
+    filter: "blur(6px)",
+  };
+
   return (
     <motion.div
       animate={
-        shouldReduceMotion || !isVisible
+        shouldReduceMotion
           ? restingState
-          : {
-              opacity: [0.24, 1],
-              y: [safeDistance, 0],
-              scale: [0.984, 1],
-              filter: ["blur(6px)", "blur(0px)", "none"],
-            }
+          : isVisible
+            ? {
+                opacity: [0.24, 1],
+                y: [safeDistance, 0],
+                scale: [0.984, 1],
+                filter: ["blur(6px)", "blur(0px)", "none"],
+              }
+            : hiddenState
       }
       className={cn(className)}
       initial={false}
       ref={ref}
       transition={{
-        delay: safeDelay,
+        delay: isVisible ? safeDelay : 0,
         opacity: { duration: 0.68, ease: revealEase, times: [0, 1] },
         y: { duration: 0.94, ease: revealEase, times: [0, 1] },
         scale: { duration: 0.94, ease: revealEase, times: [0, 1] },
