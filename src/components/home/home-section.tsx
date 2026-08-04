@@ -12,6 +12,8 @@ type HomeSectionProps = {
   children: React.ReactNode;
   className?: string;
   id?: string;
+  backgroundImage?: string;
+  backgroundPosition?: string;
 };
 
 const revealEase = [0.16, 1, 0.3, 1] as const;
@@ -21,7 +23,16 @@ const sectionViewport = {
   once: true,
 } as const;
 
-export function HomeSection({ eyebrow, title, intro, children, className, id }: HomeSectionProps) {
+export function HomeSection({
+  eyebrow,
+  title,
+  intro,
+  children,
+  className,
+  id,
+  backgroundImage,
+  backgroundPosition = "center",
+}: HomeSectionProps) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
@@ -32,9 +43,23 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
       )}
       id={id}
     >
+      {backgroundImage ? (
+        <>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-3 z-0 scale-[1.035] bg-cover opacity-45 blur-[3px]"
+            style={{
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundPosition,
+            }}
+          />
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[1] bg-white/60" />
+        </>
+      ) : null}
+
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 h-px w-full origin-left bg-gradient-to-r from-blue-700 via-cyan-400 to-transparent"
+        className="pointer-events-none absolute left-0 top-0 z-20 h-px w-full origin-left bg-gradient-to-r from-blue-700 via-cyan-400 to-transparent"
         initial={shouldReduceMotion ? false : { opacity: 0, scaleX: 0 }}
         transition={{ duration: 1.42, ease: revealEase }}
         viewport={sectionViewport}
