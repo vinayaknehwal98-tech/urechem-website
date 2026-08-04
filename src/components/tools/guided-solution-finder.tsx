@@ -27,6 +27,7 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
   const hasTechnicalMatch = Boolean(
     analysis && (analysis.ureshieldMatch || analysis.pathways.length > 0),
   );
+  const hasValue = value.trim().length > 0;
 
   useEffect(() => {
     if (!submission) return;
@@ -46,36 +47,44 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextValue = value.trim();
-    if (nextValue) {
-      setSubmission((current) => ({
-        value: nextValue,
-        version: (current?.version ?? 0) + 1,
-      }));
+
+    if (!nextValue) {
+      challengeRef.current?.focus();
+      return;
     }
+
+    setSubmission((current) => ({
+      value: nextValue,
+      version: (current?.version ?? 0) + 1,
+    }));
   };
 
   const chooseSuggestion = (suggestion: string) => {
     setValue(suggestion);
     setSubmission(null);
-    window.requestAnimationFrame(() => challengeRef.current?.focus());
+
+    window.requestAnimationFrame(() => {
+      challengeRef.current?.focus();
+      challengeRef.current?.setSelectionRange(suggestion.length, suggestion.length);
+    });
   };
 
   return (
     <div className="rounded-[var(--radius-lg)] border border-cyan-200/20 bg-navy-900/82 p-4 shadow-[var(--shadow-deep)] sm:p-6">
-      <form className="grid gap-4" onSubmit={handleSubmit}>
+      <form className="grid gap-4" noValidate onSubmit={handleSubmit}>
         <label className="grid gap-2 font-semibold text-cyan-50" htmlFor={challengeId}>
           Describe the result, material or project condition
           <textarea
             aria-describedby={`${challengeId}-hint`}
             className={`${compact ? "min-h-28" : "min-h-36"} w-full resize-y rounded-[var(--radius-md)] border border-white/12 bg-navy-950/72 p-4 font-normal leading-7 text-white outline-none placeholder:text-slate-400 focus:border-cyan-200 focus:ring-4 focus:ring-cyan-300/12`}
             id={challengeId}
+            name="technical-challenge"
             onChange={(event) => {
               setValue(event.target.value);
               if (submission) setSubmission(null);
             }}
             placeholder="Example: We need closed-cell insulation for a concrete roof exposed to heat and moisture."
             ref={challengeRef}
-            required
             value={value}
           />
         </label>
@@ -84,20 +93,32 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
           Include the application, substrate or material, environment and performance goal for a more useful match.
         </p>
 
-        <div className="flex flex-wrap gap-2">
-          {suggestions.map((suggestion) => (
-            <button
-              className="rounded-full border border-white/12 bg-white/[0.05] px-3 py-2 text-left text-xs font-semibold text-slate-200 transition hover:border-cyan-200/60 hover:bg-cyan-300/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200"
-              key={suggestion}
-              onClick={() => chooseSuggestion(suggestion)}
-              type="button"
-            >
-              {suggestion}
-            </button>
-          ))}
+        <div aria-label="Example technical challenges" className="flex flex-wrap gap-2">
+          {suggestions.map((suggestion) => {
+            const isSelected = value === suggestion;
+
+            return (
+              <button
+                aria-pressed={isSelected}
+                className={`rounded-full border px-3 py-2 text-left text-xs font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-200 ${
+                  isSelected
+                    ? "border-cyan-200 bg-cyan-300/18 text-white shadow-[0_0_0_3px_rgba(103,232,249,0.08)]"
+                    : "border-white/12 bg-white/[0.05] text-slate-200 hover:border-cyan-200/60 hover:bg-cyan-300/10"
+                }`}
+                key={suggestion}
+                onClick={(event) => {
+                  event.preventDefault();
+                  chooseSuggestion(suggestion);
+                }}
+                type="button"
+              >
+                {suggestion}
+              </button>
+            );
+          })}
         </div>
 
-        <Button className="w-full sm:w-fit" disabled={!value.trim()} type="submit">
+        <Button className="w-full sm:w-fit" disabled={!hasValue} type="submit">
           <SearchCheck aria-hidden="true" className="size-4" />
           Find relevant pathways
         </Button>
