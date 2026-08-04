@@ -36,7 +36,7 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
         aria-hidden="true"
         className="pointer-events-none absolute left-0 top-0 h-px w-full origin-left bg-gradient-to-r from-blue-700 via-cyan-400 to-transparent"
         initial={shouldReduceMotion ? false : { opacity: 0, scaleX: 0 }}
-        transition={{ duration: 1.56, ease: revealEase }}
+        transition={{ duration: 1.42, ease: revealEase }}
         viewport={sectionViewport}
         whileInView={shouldReduceMotion ? undefined : { opacity: 0.8, scaleX: 1 }}
       />
@@ -54,7 +54,7 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
                   filter: "blur(10px)",
                 }
           }
-          transition={{ duration: 1.56, ease: revealEase }}
+          transition={{ duration: 1.42, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
@@ -88,7 +88,7 @@ export function HomeSection({ eyebrow, title, intro, children, className, id }: 
                   filter: "blur(11px)",
                 }
           }
-          transition={{ delay: 0.28, duration: 1.74, ease: revealEase }}
+          transition={{ delay: 0.25, duration: 1.58, ease: revealEase }}
           viewport={sectionViewport}
           whileInView={
             shouldReduceMotion
