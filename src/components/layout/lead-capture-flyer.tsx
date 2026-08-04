@@ -5,12 +5,29 @@ import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { lockBodyScroll } from "@/lib/body-scroll-lock";
 
 const sessionStorageKey = "urechem-consultation-flyer-dismissed-session-v3";
 const flyerDelay = 4500;
 const minimumPostHeroDelay = 650;
 const heroCompleteAttribute = "data-urechem-hero-intro-complete";
 const heroCompleteEvent = "urechem:hero-intro-complete";
+
+function hasDismissedFlyer() {
+  try {
+    return window.sessionStorage.getItem(sessionStorageKey) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function storeFlyerDismissal() {
+  try {
+    window.sessionStorage.setItem(sessionStorageKey, "true");
+  } catch {
+    // Dismissal still works when browser storage is unavailable.
+  }
+}
 
 export function LeadCaptureFlyer() {
   const pathname = usePathname();
@@ -27,9 +44,7 @@ export function LeadCaptureFlyer() {
     pathname.startsWith("/legal");
 
   const rememberDismissal = useCallback(() => {
-    if (!forcePreviewRef.current) {
-      window.sessionStorage.setItem(sessionStorageKey, "true");
-    }
+    if (!forcePreviewRef.current) storeFlyerDismissal();
   }, []);
 
   const dismiss = useCallback(() => {
@@ -43,13 +58,11 @@ export function LeadCaptureFlyer() {
     const forceFlyer = new URLSearchParams(window.location.search).get("flyer") === "force";
     forcePreviewRef.current = forceFlyer;
 
-    if (!forceFlyer && window.sessionStorage.getItem(sessionStorageKey) === "true") {
-      return;
-    }
+    if (!forceFlyer && hasDismissedFlyer()) return;
 
     let cancelled = false;
     let timer = 0;
-    const mountedAt = Date.now();
+    const mountedAt = performance.now();
     const isHomePage = pathname === "/";
 
     const showFlyer = () => {
@@ -64,7 +77,7 @@ export function LeadCaptureFlyer() {
     const scheduleAfterHero = () => {
       if (cancelled) return;
 
-      const elapsed = Date.now() - mountedAt;
+      const elapsed = performance.now() - mountedAt;
       const remainingBaseDelay = forceFlyer ? 180 : Math.max(0, flyerDelay - elapsed);
       scheduleFlyer(Math.max(forceFlyer ? 180 : minimumPostHeroDelay, remainingBaseDelay));
     };
@@ -92,11 +105,12 @@ export function LeadCaptureFlyer() {
     const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     closeButtonRef.current?.focus();
 
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") dismiss();
-    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        dismiss();
+        return;
+      }
 
-    const handleTab = (event: KeyboardEvent) => {
       if (event.key !== "Tab" || !dialogRef.current) return;
 
       const focusable = Array.from(
@@ -119,14 +133,12 @@ export function LeadCaptureFlyer() {
       }
     };
 
-    document.addEventListener("keydown", handleEscape);
-    document.addEventListener("keydown", handleTab);
-    document.body.classList.add("overflow-hidden");
+    const releaseScrollLock = lockBodyScroll();
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.removeEventListener("keydown", handleTab);
-      document.body.classList.remove("overflow-hidden");
+      document.removeEventListener("keydown", handleKeyDown);
+      releaseScrollLock();
       previouslyFocused?.focus();
     };
   }, [dismiss, isExcludedPath, isOpen]);
