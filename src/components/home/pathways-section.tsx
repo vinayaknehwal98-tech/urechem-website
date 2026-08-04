@@ -24,8 +24,8 @@ const pathwayImages = [
 
 const revealEase = [0.16, 1, 0.3, 1] as const;
 const cardViewport = {
-  amount: 0.12,
-  margin: "0px 0px -4% 0px",
+  amount: 0.18,
+  margin: "0px 0px -8% 0px",
   once: true,
 } as const;
 
@@ -51,10 +51,10 @@ export function PathwaysSection() {
               transformPerspective: 1100,
             }}
             transition={{
-              delay: index * 0.15,
-              duration: 1.02,
+              delay: index * 0.2,
+              duration: 1.28,
               ease: revealEase,
-              filter: { duration: 0.34, ease: "easeOut" },
+              filter: { duration: 0.5, ease: "easeOut" },
             }}
             viewport={cardViewport}
             whileHover={
@@ -104,7 +104,7 @@ export function PathwaysSection() {
               aria-hidden="true"
               className="absolute bottom-0 left-0 h-px w-full origin-left bg-gradient-to-r from-transparent via-cyan-200/75 to-transparent"
               initial={false}
-              transition={{ delay: 0.35 + index * 0.15, duration: 0.9, ease: revealEase }}
+              transition={{ delay: 0.5 + index * 0.2, duration: 1.15, ease: revealEase }}
               viewport={cardViewport}
               whileInView={shouldReduceMotion ? undefined : { scaleX: [0, 1] }}
             />
