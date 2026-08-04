@@ -23,6 +23,13 @@ const restingState = {
   scale: 1,
   filter: "none",
 };
+const hiddenState = {
+  opacity: 0.28,
+  x: -44,
+  y: 24,
+  scale: 0.968,
+  filter: "blur(6px) saturate(0.86)",
+};
 
 export function AnimatedImage({
   alt,
@@ -39,15 +46,17 @@ export function AnimatedImage({
   return (
     <motion.figure
       animate={
-        shouldAnimate
-          ? {
-              opacity: [0.28, 1],
-              x: [-44, 0],
-              y: [24, 0],
-              scale: [0.968, 1],
-              filter: ["blur(6px) saturate(0.86)", "blur(0px) saturate(1)", "none"],
-            }
-          : restingState
+        shouldReduceMotion
+          ? restingState
+          : shouldAnimate
+            ? {
+                opacity: [0.28, 1],
+                x: [-44, 0],
+                y: [24, 0],
+                scale: [0.968, 1],
+                filter: ["blur(6px) saturate(0.86)", "blur(0px) saturate(1)", "none"],
+              }
+            : hiddenState
       }
       className={cn(
         "group relative isolate overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white shadow-[var(--shadow-deep)]",
@@ -66,7 +75,7 @@ export function AnimatedImage({
       whileHover={shouldReduceMotion ? undefined : { scale: 1.01, y: -3 }}
     >
       <motion.div
-        animate={shouldAnimate ? { scale: [1.1, 1] } : { scale: 1 }}
+        animate={shouldReduceMotion ? { scale: 1 } : shouldAnimate ? { scale: [1.1, 1] } : { scale: 1.1 }}
         className="absolute -inset-y-8 inset-x-0"
         initial={false}
         transition={{ duration: 1.14, ease: revealEase }}
