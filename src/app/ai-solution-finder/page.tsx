@@ -1,4 +1,3 @@
-import { ValidationNote } from "@/components/catalog/cards";
 import { GuidedSolutionFinder } from "@/components/tools/guided-solution-finder";
 import { Container } from "@/components/ui/container";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -7,7 +6,7 @@ export const metadata = { title: "Describe Your Challenge" };
 
 export default function Page() {
   return (
-    <section className="relative min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-[linear-gradient(135deg,#04111f,#0b2840_60%,#0b4a6f)] py-16 sm:py-20">
+    <section className="relative min-h-[calc(100dvh-4.5rem)] overflow-hidden bg-[linear-gradient(135deg,#04111f,#0b2840_60%,#0b4a6f)] pb-16 pt-28 sm:pb-20 sm:pt-32 lg:pt-36">
       <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.3)_1px,transparent_0)] [background-size:24px_24px]" />
       <Container className="relative z-10">
         <SectionLabel>Technical challenge intake</SectionLabel>
@@ -20,10 +19,6 @@ export default function Page() {
 
         <div className="mt-10 max-w-5xl">
           <GuidedSolutionFinder />
-        </div>
-
-        <div className="mt-6 max-w-5xl">
-          <ValidationNote />
         </div>
       </Container>
     </section>
