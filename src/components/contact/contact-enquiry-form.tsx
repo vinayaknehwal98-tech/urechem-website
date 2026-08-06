@@ -2,9 +2,10 @@
 
 import { Check, CheckCircle2, Clipboard, Download, Mail } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { products } from "@/data/catalog";
 import { tpuPathways } from "@/data/tpu-materials";
+import { takeConsultationPrefill } from "@/lib/client/consultation-prefill";
 
 const enquiryTypes = [
   "General enquiry",
@@ -52,18 +53,35 @@ const enquiryProductOptions = [
 export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) {
   const searchParams = useSearchParams();
   const isConsultation = fixedType === "Consultation request";
+  const startedAtRef = useRef(Date.now());
   const [isPrepared, setIsPrepared] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
+  const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
   const [form, setForm] = useState(() => ({
     type: fixedType ?? normaliseEnquiryType(searchParams.get("type")),
-    name: searchParams.get("name") ?? "",
-    email: searchParams.get("email") ?? "",
-    mobile: searchParams.get("mobile") ?? "",
-    product: searchParams.get("product") ?? "",
-    context: searchParams.get("context") ?? "",
+    name: (searchParams.get("name") ?? "").slice(0, 100),
+    email: (searchParams.get("email") ?? "").slice(0, 254),
+    mobile: (searchParams.get("mobile") ?? "").slice(0, 24),
+    product: (searchParams.get("product") ?? "").slice(0, 160),
+    context: (searchParams.get("context") ?? "").slice(0, 4000),
   }));
   const enquiryEmail = process.env.NEXT_PUBLIC_URECHEM_ENQUIRY_EMAIL?.trim();
   const productRequired = documentRequestTypes.includes(form.type);
+
+  useEffect(() => {
+    if (!isConsultation) return;
+    const prefill = takeConsultationPrefill();
+    if (!prefill) return;
+
+    setForm((current) => ({
+      ...current,
+      name: current.name || prefill.name || "",
+      email: current.email || prefill.email || "",
+      mobile: current.mobile || prefill.mobile || "",
+      context: current.context || prefill.context || "",
+    }));
+  }, [isConsultation]);
 
   const enquiryBrief = useMemo(
     () =>
@@ -81,10 +99,43 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
     [form],
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (submitState === "sending") return;
+
     setIsPrepared(true);
     setCopyState("idle");
+    setSubmitState("sending");
+    setSubmitMessage("");
+
+    try {
+      const formData = new FormData(event.currentTarget);
+      const website = String(formData.get("website") ?? "");
+      const response = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          website,
+          startedAt: startedAtRef.current,
+        }),
+        cache: "no-store",
+      });
+      const payload = (await response.json().catch(() => ({}))) as { message?: string };
+
+      if (!response.ok) {
+        setSubmitState("failed");
+        setSubmitMessage(payload.message || "Something went wrong. Please try again.");
+        return;
+      }
+
+      setSubmitState("sent");
+      setSubmitMessage(payload.message || "Your enquiry was sent successfully.");
+      startedAtRef.current = Date.now();
+    } catch {
+      setSubmitState("failed");
+      setSubmitMessage("Something went wrong. Please try again.");
+    }
   };
 
   const copyBrief = async () => {
@@ -123,6 +174,7 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
 
   return (
     <form className="mt-8 grid gap-5 rounded-[var(--radius-lg)] border border-blue-200 bg-white p-6 shadow-[0_18px_55px_rgba(30,64,175,0.09)] sm:p-8" onSubmit={handleSubmit}>
+      <input aria-hidden="true" autoComplete="off" className="hidden" name="website" tabIndex={-1} type="text" />
       <div className="grid gap-5 md:grid-cols-2">
         {fixedType ? (
           <div className="grid content-center gap-1 rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-4 py-3 text-blue-950">
@@ -149,6 +201,8 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
           <input
             autoComplete="name"
             className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+            maxLength={100}
+            minLength={2}
             name="name"
             required
             value={form.name}
@@ -161,6 +215,7 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
           <input
             autoComplete="email"
             className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+            maxLength={254}
             name="email"
             required
             type="email"
@@ -175,7 +230,10 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
             autoComplete="tel"
             className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
             inputMode="tel"
+            maxLength={24}
+            minLength={7}
             name="mobile"
+            pattern="[+0-9 ()-]{7,24}"
             required
             type="tel"
             value={form.mobile}
@@ -190,6 +248,7 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
           aria-describedby="product-help"
           className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 px-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
           list="urechem-product-options"
+          maxLength={160}
           name="product"
           placeholder="Enter or select the product or technical pathway"
           required={productRequired}
@@ -209,6 +268,8 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
         <textarea
           aria-describedby="technical-context-help"
           className="min-h-36 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 p-3 text-slate-800 outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+          maxLength={4000}
+          minLength={10}
           name="context"
           placeholder={
             isConsultation
@@ -224,8 +285,16 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
         </span>
       </label>
 
-      <button className="inline-flex h-12 items-center justify-center rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-6 font-bold text-[color:#fff] transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600" type="submit">
-        {isConsultation ? "Prepare consultation request" : "Prepare enquiry"}
+      <button
+        className="inline-flex h-12 items-center justify-center rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-6 font-bold text-[color:#fff] transition hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-70"
+        disabled={submitState === "sending"}
+        type="submit"
+      >
+        {submitState === "sending"
+          ? "Sending…"
+          : isConsultation
+            ? "Prepare consultation request"
+            : "Prepare enquiry"}
       </button>
 
       {isPrepared ? (
@@ -233,10 +302,15 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
           <div className="flex items-start gap-3">
             <CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" />
             <div>
-              <h2 className="font-bold">Your enquiry brief is ready</h2>
+              <h2 className="font-bold">{submitState === "sent" ? "Your enquiry was sent" : "Your enquiry brief is ready"}</h2>
               <p className="mt-1 text-sm leading-6">
-                Check the details, then email, copy or download the brief for the approved Urechem contact channel.
+                {submitState === "sent"
+                  ? submitMessage
+                  : "Check the details, then email, copy or download the brief for the approved Urechem contact channel."}
               </p>
+              {submitState === "failed" && submitMessage ? (
+                <p className="mt-2 text-sm font-semibold leading-6 text-red-700">{submitMessage}</p>
+              ) : null}
             </div>
           </div>
           <pre className="mt-4 max-h-72 overflow-auto whitespace-pre-wrap rounded-[var(--radius-sm)] border border-blue-200 bg-white p-4 font-sans text-sm leading-6 text-slate-700">

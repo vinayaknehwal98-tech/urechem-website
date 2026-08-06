@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { saveConsultationPrefill } from "@/lib/client/consultation-prefill";
 import { lockBodyScroll } from "@/lib/body-scroll-lock";
 
 const sessionStorageKey = "urechem-consultation-flyer-dismissed-session-v3";
@@ -147,14 +148,14 @@ export function LeadCaptureFlyer() {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const params = new URLSearchParams({
+    saveConsultationPrefill({
       name: String(formData.get("name") ?? ""),
       email: String(formData.get("email") ?? ""),
       mobile: String(formData.get("mobile") ?? ""),
     });
 
     rememberDismissal();
-    window.location.assign(`/consultant?${params.toString()}`);
+    window.location.assign("/consultant");
   };
 
   if (!isOpen || isExcludedPath) return null;
@@ -238,6 +239,8 @@ export function LeadCaptureFlyer() {
                 <input
                   autoComplete="name"
                   className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                  maxLength={100}
+                  minLength={2}
                   name="name"
                   placeholder="Your name"
                   required
@@ -256,6 +259,7 @@ export function LeadCaptureFlyer() {
                   <input
                     autoComplete="email"
                     className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+                    maxLength={254}
                     name="email"
                     placeholder="name@company.com"
                     required
@@ -275,7 +279,10 @@ export function LeadCaptureFlyer() {
                     autoComplete="tel"
                     className="h-12 w-full rounded-[var(--radius-md)] border border-blue-200 bg-blue-50/60 pl-12 pr-4 font-medium text-blue-950 outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
                     inputMode="tel"
+                    maxLength={24}
+                    minLength={7}
                     name="mobile"
+                    pattern="[+0-9 ()-]{7,24}"
                     placeholder="Mobile number"
                     required
                     type="tel"

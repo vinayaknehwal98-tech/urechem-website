@@ -6,13 +6,19 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   verify:
-    name: Lint, contrast, image audit, build and route smoke
+    name: Security, lint, type, audits, build and smoke tests
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout
+      - name: Checkout full history
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,8 +29,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit dependencies
+        run: npm run audit:dependencies
+
       - name: Lint
         run: npm run lint
+
+      - name: Type check
+        run: npm run typecheck
 
       - name: Audit light-theme contrast coverage
         run: npm run audit:theme
@@ -32,8 +44,11 @@ jobs:
       - name: Audit unique image usage
         run: npm run audit:images
 
-      - name: Build
+      - name: Build production application
         run: npm run build
+
+      - name: Scan source, history and browser bundles for secrets
+        run: npm run audit:security
 
       - name: Start production server
         run: |
@@ -53,3 +68,10 @@ jobs:
 
       - name: Smoke test every sitemap route
         run: npm run smoke:routes
+
+      - name: Smoke test security controls
+        run: npm run smoke:security
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat /tmp/urechem-next.log || true

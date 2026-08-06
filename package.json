@@ -10,10 +10,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "audit:dependencies": "npm audit --audit-level=high",
+    "audit:security": "node scripts/audit-security.mjs",
     "audit:images": "node scripts/audit-image-usage.mjs",
     "audit:theme": "node scripts/audit-light-theme-contrast.mjs",
     "smoke:routes": "node scripts/smoke-sitemap-routes.mjs",
-    "verify": "npm run lint && npm run audit:images && npm run audit:theme && npm run build"
+    "smoke:security": "node scripts/security-smoke.mjs",
+    "verify": "npm run lint && npm run typecheck && npm run audit:images && npm run audit:theme && npm run build && npm run audit:security"
   },
   "dependencies": {
     "clsx": "^2.1.1",
