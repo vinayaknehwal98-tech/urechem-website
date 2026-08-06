@@ -1,0 +1,191 @@
+name: Performance and Visual Regression
+
+on:
+  pull_request:
+    paths:
+      - "src/app/**"
+      - "src/components/**"
+      - "src/data/**"
+      - "scripts/measure-runtime-performance.mjs"
+      - "scripts/compare-runtime-performance.mjs"
+      - "scripts/visual-regression.mjs"
+      - ".github/workflows/performance-regression.yml"
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    name: Compare main and pull request performance
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout pull request branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install candidate dependencies
+        run: npm ci
+
+      - name: Install audit-only browser tooling
+        run: |
+          npm install --no-save --no-package-lock \
+            @playwright/test@1.61.1 \
+            lighthouse@12.8.2 \
+            pixelmatch@7.1.0 \
+            pngjs@7.0.0
+          npx playwright install --with-deps chromium
+
+      - name: Create clean baseline worktree
+        run: |
+          git worktree add --detach /tmp/urechem-baseline "${{ github.event.pull_request.base.sha }}"
+
+      - name: Build baseline
+        working-directory: /tmp/urechem-baseline
+        run: |
+          npm ci
+          npm run build
+          find .next/static/chunks -type f -print0 \
+            | xargs -0 stat -c '%s' \
+            | awk '{ total += $1 } END { print total + 0 }' \
+            > /tmp/baseline-browser-bundle-bytes.txt
+
+      - name: Build candidate
+        run: |
+          npm run build
+          find .next/static/chunks -type f -print0 \
+            | xargs -0 stat -c '%s' \
+            | awk '{ total += $1 } END { print total + 0 }' \
+            > /tmp/candidate-browser-bundle-bytes.txt
+
+      - name: Start baseline and candidate production servers
+        run: |
+          (
+            cd /tmp/urechem-baseline
+            npm run start -- --hostname 127.0.0.1 --port 3101 \
+              > /tmp/urechem-baseline.log 2>&1 &
+            echo "$!" > /tmp/urechem-baseline.pid
+          )
+          npm run start -- --hostname 127.0.0.1 --port 3100 \
+            > /tmp/urechem-candidate.log 2>&1 &
+          echo "$!" > /tmp/urechem-candidate.pid
+
+      - name: Wait for both production servers
+        run: |
+          for port in 3100 3101; do
+            ready=0
+            for attempt in {1..90}; do
+              if curl -fsS "http://127.0.0.1:${port}/sitemap.xml" >/dev/null; then
+                ready=1
+                break
+              fi
+              sleep 1
+            done
+            if [ "$ready" -ne 1 ]; then
+              echo "Server on port ${port} did not become ready."
+              cat /tmp/urechem-baseline.log || true
+              cat /tmp/urechem-candidate.log || true
+              exit 1
+            fi
+          done
+
+      - name: Measure runtime performance
+        run: |
+          mkdir -p performance-results/lighthouse
+          node scripts/measure-runtime-performance.mjs \
+            --url http://127.0.0.1:3101 \
+            --label baseline \
+            --repeats 2 \
+            --output performance-results/baseline.json
+          node scripts/measure-runtime-performance.mjs \
+            --url http://127.0.0.1:3100 \
+            --label candidate \
+            --repeats 2 \
+            --output performance-results/candidate.json
+          cp /tmp/baseline-browser-bundle-bytes.txt performance-results/
+          cp /tmp/candidate-browser-bundle-bytes.txt performance-results/
+
+      - name: Run Lighthouse on baseline and candidate
+        run: |
+          CHROME_PATH="$(node -e "const { chromium } = require('@playwright/test'); process.stdout.write(chromium.executablePath())")"
+          for target in baseline candidate; do
+            if [ "$target" = "baseline" ]; then
+              port=3101
+            else
+              port=3100
+            fi
+
+            npx lighthouse "http://127.0.0.1:${port}/?intro=skip" \
+              --chrome-path="$CHROME_PATH" \
+              --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+              --only-categories=performance \
+              --preset=desktop \
+              --output=json \
+              --output-path="performance-results/lighthouse/${target}-home-desktop.json" \
+              --quiet
+
+            npx lighthouse "http://127.0.0.1:${port}/?intro=skip" \
+              --chrome-path="$CHROME_PATH" \
+              --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+              --only-categories=performance \
+              --output=json \
+              --output-path="performance-results/lighthouse/${target}-home-mobile.json" \
+              --quiet
+          done
+
+      - name: Compare runtime measurements
+        id: performance_gate
+        continue-on-error: true
+        run: |
+          node scripts/compare-runtime-performance.mjs \
+            --baseline performance-results/baseline.json \
+            --candidate performance-results/candidate.json \
+            --bundle-baseline performance-results/baseline-browser-bundle-bytes.txt \
+            --bundle-candidate performance-results/candidate-browser-bundle-bytes.txt \
+            --lighthouse-dir performance-results/lighthouse \
+            --output performance-results/comparison.md
+
+      - name: Compare desktop and mobile screenshots
+        id: visual_gate
+        continue-on-error: true
+        run: |
+          node scripts/visual-regression.mjs \
+            --baseline-url http://127.0.0.1:3101 \
+            --candidate-url http://127.0.0.1:3100 \
+            --output performance-results/visual-regression
+
+      - name: Upload audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-and-visual-regression
+          path: performance-results
+          if-no-files-found: error
+
+      - name: Show server logs on failure
+        if: failure()
+        run: |
+          cat /tmp/urechem-baseline.log || true
+          cat /tmp/urechem-candidate.log || true
+
+      - name: Enforce regression gates
+        if: always()
+        run: |
+          if [ "${{ steps.performance_gate.outcome }}" != "success" ]; then
+            echo "Performance regression gate failed."
+            exit 1
+          fi
+          if [ "${{ steps.visual_gate.outcome }}" != "success" ]; then
+            echo "Visual regression gate failed."
+            exit 1
+          fi

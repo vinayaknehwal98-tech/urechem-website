@@ -98,6 +98,7 @@ const processStepVariants: Variants = {
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoIsPlaying, setVideoIsPlaying] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
@@ -164,15 +165,24 @@ export function HeroSection() {
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || shouldReduceMotion || videoFailed) return;
+    const section = sectionRef.current;
+    if (!video || !section || shouldReduceMotion || videoFailed) return;
 
     const html = document.documentElement;
     let cancelled = false;
+    let isInViewport = true;
     let playFrame = 0;
     let introObserver: MutationObserver | null = null;
 
     const playVideo = () => {
-      if (cancelled || document.hidden || html.hasAttribute("data-urechem-intro-active")) return;
+      if (
+        cancelled ||
+        document.hidden ||
+        !isInViewport ||
+        html.hasAttribute("data-urechem-intro-active")
+      ) {
+        return;
+      }
 
       void video.play().catch(() => {
         if (!cancelled) setVideoFailed(true);
@@ -183,6 +193,21 @@ export function HeroSection() {
       window.cancelAnimationFrame(playFrame);
       playFrame = window.requestAnimationFrame(playVideo);
     };
+
+    const viewportObserver = new IntersectionObserver(
+      ([entry]) => {
+        isInViewport = Boolean(entry?.isIntersecting);
+
+        if (isInViewport) {
+          schedulePlay();
+        } else {
+          window.cancelAnimationFrame(playFrame);
+          video.pause();
+        }
+      },
+      { threshold: 0 },
+    );
+    viewportObserver.observe(section);
 
     if (html.hasAttribute("data-urechem-intro-active")) {
       introObserver = new MutationObserver(() => {
@@ -204,7 +229,7 @@ export function HeroSection() {
       if (document.hidden) {
         window.cancelAnimationFrame(playFrame);
         video.pause();
-      } else {
+      } else if (isInViewport) {
         schedulePlay();
       }
     };
@@ -215,6 +240,7 @@ export function HeroSection() {
       cancelled = true;
       window.cancelAnimationFrame(playFrame);
       introObserver?.disconnect();
+      viewportObserver.disconnect();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       video.pause();
     };
@@ -226,6 +252,7 @@ export function HeroSection() {
     <section
       className="minimal-hero relative isolate overflow-hidden border-b border-blue-100 bg-slate-100 md:min-h-[calc(100dvh-4.5rem)]"
       data-urechem-hero-section
+      ref={sectionRef}
     >
       <div
         aria-hidden="true"

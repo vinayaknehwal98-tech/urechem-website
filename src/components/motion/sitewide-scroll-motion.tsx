@@ -22,6 +22,7 @@ const EASING = "cubic-bezier(0.16, 1, 0.3, 1)";
 const TARGET_ATTRIBUTE = "data-site-motion-target";
 const DONE_ATTRIBUTE = "data-site-motion-done";
 const SWEEP_ATTRIBUTE = "data-site-motion-sweep";
+const MOTION_SCAN_EVENT = "urechem:motion-scan-request";
 
 function isCardCandidate(element: HTMLElement) {
   if (element.tagName === "ARTICLE") return true;
@@ -231,6 +232,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
     let disposed = false;
     let begun = false;
     let scanFrame = 0;
+    let scanAllRequested = false;
     let observer: IntersectionObserver | null = null;
     let introObserver: MutationObserver | null = null;
     let contentObserver: MutationObserver | null = null;
@@ -239,6 +241,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
     const animations = new Set<Animation>();
     const sweepCleanups = new Set<() => void>();
     const savedStyles = new Map<HTMLElement, SavedStyle>();
+    const pendingSections = new Set<HTMLElement>();
 
     const play = (element: HTMLElement) => {
       if (disposed || element.hasAttribute(DONE_ATTRIBUTE)) return;
@@ -260,6 +263,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
 
       animations.add(animation);
       if (kind === "image") addImageSweep(element, delay, animations, sweepCleanups);
+      window.dispatchEvent(new Event(MOTION_SCAN_EVENT));
 
       animation.onfinish = () => {
         animations.delete(animation);
@@ -319,6 +323,54 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       }
     };
 
+    const scanSection = (section: HTMLElement, sectionIndex: number) => {
+      if (section.closest("[data-no-site-motion]")) return;
+
+      let cardIndex = 0;
+      let imageIndex = 0;
+      let headingIndex = 0;
+      let copyIndex = 0;
+      let controlIndex = 0;
+
+      section
+        .querySelectorAll<HTMLElement>(
+          "article, a[class*='rounded'][class*='border'], div[class*='rounded'][class*='border']",
+        )
+        .forEach((element) => {
+          if (!isCardCandidate(element)) return;
+          registerTarget(element, "card", cardIndex * 125);
+          cardIndex += 1;
+        });
+
+      section.querySelectorAll<HTMLElement>("figure, picture").forEach((element) => {
+        registerImage(element, sectionIndex, imageIndex);
+        imageIndex += 1;
+      });
+
+      section.querySelectorAll<HTMLElement>("img, video").forEach((element) => {
+        if (element.closest("figure, picture, [data-no-site-motion]")) return;
+        registerImage(element, sectionIndex, imageIndex);
+        imageIndex += 1;
+      });
+
+      section.querySelectorAll<HTMLElement>("h1, h2, h3").forEach((element) => {
+        registerTarget(element, "heading", headingIndex * 100);
+        headingIndex += 1;
+      });
+
+      section.querySelectorAll<HTMLElement>("p, ul, ol, blockquote").forEach((element) => {
+        registerTarget(element, "copy", 130 + copyIndex * 72);
+        copyIndex += 1;
+      });
+
+      section
+        .querySelectorAll<HTMLElement>("button, form, a[class*='inline-flex']")
+        .forEach((element) => {
+          registerTarget(element, "control", 180 + controlIndex * 88);
+          controlIndex += 1;
+        });
+    };
+
     const scan = () => {
       scanFrame = 0;
       if (disposed) return;
@@ -326,57 +378,26 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       releaseDetachedTargets();
       const sections = Array.from(root.querySelectorAll<HTMLElement>("section"));
 
-      sections.forEach((section, sectionIndex) => {
-        if (section.closest("[data-no-site-motion]")) return;
+      if (scanAllRequested) {
+        scanAllRequested = false;
+        pendingSections.clear();
+        sections.forEach(scanSection);
+        return;
+      }
 
-        let cardIndex = 0;
-        let imageIndex = 0;
-        let headingIndex = 0;
-        let copyIndex = 0;
-        let controlIndex = 0;
-
-        section
-          .querySelectorAll<HTMLElement>(
-            "article, a[class*='rounded'][class*='border'], div[class*='rounded'][class*='border']",
-          )
-          .forEach((element) => {
-            if (!isCardCandidate(element)) return;
-            registerTarget(element, "card", cardIndex * 125);
-            cardIndex += 1;
-          });
-
-        section.querySelectorAll<HTMLElement>("figure, picture").forEach((element) => {
-          registerImage(element, sectionIndex, imageIndex);
-          imageIndex += 1;
-        });
-
-        section.querySelectorAll<HTMLElement>("img, video").forEach((element) => {
-          if (element.closest("figure, picture, [data-no-site-motion]")) return;
-          registerImage(element, sectionIndex, imageIndex);
-          imageIndex += 1;
-        });
-
-        section.querySelectorAll<HTMLElement>("h1, h2, h3").forEach((element) => {
-          registerTarget(element, "heading", headingIndex * 100);
-          headingIndex += 1;
-        });
-
-        section.querySelectorAll<HTMLElement>("p, ul, ol, blockquote").forEach((element) => {
-          registerTarget(element, "copy", 130 + copyIndex * 72);
-          copyIndex += 1;
-        });
-
-        section
-          .querySelectorAll<HTMLElement>("button, form, a[class*='inline-flex']")
-          .forEach((element) => {
-            registerTarget(element, "control", 180 + controlIndex * 88);
-            controlIndex += 1;
-          });
-      });
+      for (const section of pendingSections) {
+        if (!section.isConnected || !root.contains(section)) continue;
+        const sectionIndex = sections.indexOf(section);
+        if (sectionIndex >= 0) scanSection(section, sectionIndex);
+      }
+      pendingSections.clear();
     };
 
-    const scheduleScan = () => {
-      if (disposed || scanFrame) return;
+    const scheduleScan = (section?: HTMLElement) => {
+      if (disposed) return;
+      if (section) pendingSections.add(section);
+      else scanAllRequested = true;
+      if (scanFrame) return;
       scanFrame = window.requestAnimationFrame(scan);
     };
 
@@ -396,20 +417,33 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
         },
       );
 
-      scan();
+      scheduleScan();
 
       contentObserver = new MutationObserver((records) => {
-        const hasRealContentChange = records.some((record) => {
-          const nodes = [...Array.from(record.addedNodes), ...Array.from(record.removedNodes)];
-          return nodes.some((node) => {
-            if (!(node instanceof HTMLElement)) return false;
-            if (node.hasAttribute(SWEEP_ATTRIBUTE) || node.closest(`[${SWEEP_ATTRIBUTE}]`)) return false;
-            if (node.closest("[aria-hidden='true']")) return false;
-            return true;
-          });
-        });
+        let removedContent = false;
 
-        if (hasRealContentChange) scheduleScan();
+        for (const record of records) {
+          if (record.removedNodes.length > 0) removedContent = true;
+
+          for (const node of record.addedNodes) {
+            if (!(node instanceof HTMLElement)) continue;
+            if (node.hasAttribute(SWEEP_ATTRIBUTE) || node.closest(`[${SWEEP_ATTRIBUTE}]`)) continue;
+            if (node.closest("[aria-hidden='true']")) continue;
+
+            if (node.matches("section")) pendingSections.add(node);
+            node.querySelectorAll<HTMLElement>("section").forEach((section) => pendingSections.add(section));
+
+            const containingSection =
+              node.closest<HTMLElement>("section") ??
+              (record.target instanceof HTMLElement
+                ? record.target.closest<HTMLElement>("section")
+                : null);
+            if (containingSection) pendingSections.add(containingSection);
+          }
+        }
+
+        if (removedContent) releaseDetachedTargets();
+        if (pendingSections.size > 0) scheduleScan();
       });
       contentObserver.observe(root, { childList: true, subtree: true });
     };
@@ -451,6 +485,7 @@ export function SitewideScrollMotion({ children }: SitewideScrollMotionProps) {
       });
       registered.clear();
       savedStyles.clear();
+      pendingSections.clear();
     };
   }, [pathname]);
 

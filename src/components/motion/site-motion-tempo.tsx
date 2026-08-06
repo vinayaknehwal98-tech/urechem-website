@@ -5,8 +5,10 @@ import { useEffect } from "react";
 const CONTENT_PLAYBACK_RATE = 1.2;
 const MIN_REVEAL_DURATION_MS = 380;
 const MAX_REVEAL_DURATION_MS = 2200;
-const SCROLL_SCAN_INTERVAL_MS = 120;
-const SCROLL_SETTLE_MS = 180;
+const INITIAL_SETTLE_MS = 180;
+const PROXIMITY_FOLLOW_UP_MS = 80;
+const PROXIMITY_SELECTOR = "section, article, figure, [data-no-site-motion]";
+const MOTION_SCAN_EVENT = "urechem:motion-scan-request";
 
 function animationTarget(animation: Animation) {
   const effect = animation.effect;
@@ -47,10 +49,10 @@ export function SiteMotionTempo() {
 
     const processed = new WeakSet<Animation>();
     const waitingByTarget = new Map<Element, Set<Animation>>();
+    let disposed = false;
     let scanFrame = 0;
-    let scanTimer = 0;
-    let settleTimer = 0;
-    let lastScanAt = 0;
+    const scanTimers = new Set<number>();
+    const observedProximityTargets = new WeakSet<Element>();
 
     const releaseTarget = (target: Element) => {
       const animations = waitingByTarget.get(target);
@@ -78,77 +80,125 @@ export function SiteMotionTempo() {
       },
     );
 
+    const processAnimation = (animation: Animation) => {
+      if (disposed || processed.has(animation) || !isContentReveal(animation)) return;
+
+      const target = animationTarget(animation);
+      if (!target || !main.contains(target) || target.closest("[data-motion-tempo-ignore]")) return;
+
+      processed.add(animation);
+      applyContentPace(animation);
+
+      const revealTarget = target.closest("section, article, figure, [data-site-motion-target]") ?? target;
+      const bounds = revealTarget.getBoundingClientRect();
+      const isBelowRevealLine = bounds.top > window.innerHeight * 0.9;
+
+      if (isBelowRevealLine && animation.playState === "running") {
+        animation.pause();
+        const waiting = waitingByTarget.get(revealTarget) ?? new Set<Animation>();
+        waiting.add(animation);
+        waitingByTarget.set(revealTarget, waiting);
+        revealObserver.observe(revealTarget);
+      }
+    };
+
     const scanAnimations = () => {
       scanFrame = 0;
-      lastScanAt = performance.now();
-
-      main.getAnimations({ subtree: true }).forEach((animation) => {
-        if (processed.has(animation) || !isContentReveal(animation)) return;
-
-        const target = animationTarget(animation);
-        if (!target || target.closest("[data-motion-tempo-ignore]")) return;
-
-        processed.add(animation);
-        applyContentPace(animation);
-
-        const revealTarget = target.closest("section, article, figure, [data-site-motion-target]") ?? target;
-        const bounds = revealTarget.getBoundingClientRect();
-        const isBelowRevealLine = bounds.top > window.innerHeight * 0.9;
-
-        if (isBelowRevealLine && animation.playState === "running") {
-          animation.pause();
-          const waiting = waitingByTarget.get(revealTarget) ?? new Set<Animation>();
-          waiting.add(animation);
-          waitingByTarget.set(revealTarget, waiting);
-          revealObserver.observe(revealTarget);
-        }
-      });
+      if (disposed) return;
+      main.getAnimations({ subtree: true }).forEach(processAnimation);
     };
 
     const requestScan = () => {
-      if (scanFrame) return;
+      if (disposed || scanFrame) return;
       scanFrame = window.requestAnimationFrame(scanAnimations);
     };
 
-    const scheduleScan = () => {
-      if (scanTimer) return;
-
-      const elapsed = performance.now() - lastScanAt;
-      const delay = Math.max(0, SCROLL_SCAN_INTERVAL_MS - elapsed);
-      scanTimer = window.setTimeout(() => {
-        scanTimer = 0;
+    const requestFollowUpScan = (delay: number) => {
+      const timer = window.setTimeout(() => {
+        scanTimers.delete(timer);
         requestScan();
       }, delay);
+      scanTimers.add(timer);
     };
 
-    const handleViewportActivity = () => {
-      scheduleScan();
-      window.clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(requestScan, SCROLL_SETTLE_MS);
+    const proximityObserver = new IntersectionObserver(
+      (entries) => {
+        let shouldScan = false;
+
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          proximityObserver.unobserve(entry.target);
+          shouldScan = true;
+        }
+
+        if (shouldScan) {
+          requestScan();
+          requestFollowUpScan(PROXIMITY_FOLLOW_UP_MS);
+        }
+      },
+      {
+        rootMargin: "15% 0px 15% 0px",
+        threshold: 0.01,
+      },
+    );
+
+    const registerProximityTargets = (root: Element) => {
+      const targets = [
+        ...(root.matches(PROXIMITY_SELECTOR) ? [root] : []),
+        ...Array.from(root.querySelectorAll(PROXIMITY_SELECTOR)),
+      ];
+
+      for (const target of targets) {
+        if (observedProximityTargets.has(target)) continue;
+        observedProximityTargets.add(target);
+        proximityObserver.observe(target);
+      }
     };
 
-    const handleAnimationStart = (event: AnimationEvent) => {
-      if (event.target instanceof Element && main.contains(event.target)) scheduleScan();
+    const handleAnimationActivity = (event: AnimationEvent | TransitionEvent) => {
+      if (event.target instanceof Element && main.contains(event.target)) requestScan();
     };
 
-    const mutationObserver = new MutationObserver(scheduleScan);
+    const mutationObserver = new MutationObserver((records) => {
+      let addedContent = false;
+
+      for (const record of records) {
+        for (const node of record.addedNodes) {
+          if (
+            !(node instanceof Element) ||
+            node.closest("[aria-hidden='true']") ||
+            node.hasAttribute("data-site-motion-sweep")
+          ) {
+            continue;
+          }
+
+          addedContent = true;
+          registerProximityTargets(node);
+        }
+      }
+
+      if (addedContent) requestScan();
+    });
     mutationObserver.observe(main, { childList: true, subtree: true });
 
-    window.addEventListener("scroll", handleViewportActivity, { passive: true });
-    window.addEventListener("resize", handleViewportActivity, { passive: true });
-    document.addEventListener("animationstart", handleAnimationStart, true);
+    document.addEventListener("animationstart", handleAnimationActivity, true);
+    document.addEventListener("transitionrun", handleAnimationActivity, true);
+    window.addEventListener(MOTION_SCAN_EVENT, requestScan);
 
+    registerProximityTargets(main);
     requestScan();
-    settleTimer = window.setTimeout(requestScan, SCROLL_SETTLE_MS);
+    requestFollowUpScan(INITIAL_SETTLE_MS);
 
     return () => {
+      disposed = true;
       window.cancelAnimationFrame(scanFrame);
-      window.clearTimeout(scanTimer);
-      window.clearTimeout(settleTimer);
-      window.removeEventListener("scroll", handleViewportActivity);
-      window.removeEventListener("resize", handleViewportActivity);
-      document.removeEventListener("animationstart", handleAnimationStart, true);
+      scanTimers.forEach((timer) => window.clearTimeout(timer));
+      scanTimers.clear();
+      document.removeEventListener("animationstart", handleAnimationActivity, true);
+      document.removeEventListener("transitionrun", handleAnimationActivity, true);
+      window.removeEventListener(MOTION_SCAN_EVENT, requestScan);
       mutationObserver.disconnect();
+      proximityObserver.disconnect();
       revealObserver.disconnect();
 
       waitingByTarget.forEach((animations) => {
