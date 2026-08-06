@@ -4,7 +4,9 @@ import Link from "next/link";
 import { ArrowRight, Bot, FileSearch, RotateCcw, Send, ShieldCheck, Sparkles } from "lucide-react";
 import { FormEvent, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { analyzeTechnicalChallenge } from "@/lib/solution-engine";
+import { requestSolution } from "@/lib/client/secure-api";
+import { saveConsultationPrefill } from "@/lib/client/consultation-prefill";
+import type { GuidedAnalysis } from "@/lib/solution-engine";
 
 const starterQuestions = [
   "Which pathway fits closed-cell roof insulation?",
@@ -37,13 +39,12 @@ export function UrechemAiAssistant() {
   const questionId = useId();
   const questionRef = useRef<HTMLTextAreaElement>(null);
   const answerRef = useRef<HTMLElement>(null);
+  const requestControllerRef = useRef<AbortController | null>(null);
   const [draft, setDraft] = useState("");
-  const [request, setRequest] = useState<{ value: string; version: number } | null>(null);
-  const question = request?.value ?? "";
-  const analysis = useMemo(
-    () => (question ? analyzeTechnicalChallenge(question) : null),
-    [question],
-  );
+  const [question, setQuestion] = useState("");
+  const [analysis, setAnalysis] = useState<GuidedAnalysis | null>(null);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const documentIntent = useMemo(() => getDocumentIntent(question), [question]);
   const greeting = Boolean(question && isGreeting(question));
   const needsClarification = Boolean(
@@ -55,8 +56,10 @@ export function UrechemAiAssistant() {
       analysis.pathways.length === 0,
   );
 
+  useEffect(() => () => requestControllerRef.current?.abort(), []);
+
   useEffect(() => {
-    if (!request) return;
+    if (!analysis || !question) return;
 
     const frame = window.requestAnimationFrame(() => {
       const shouldScroll = window.matchMedia("(max-width: 1023px)").matches;
@@ -68,28 +71,53 @@ export function UrechemAiAssistant() {
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [request]);
+  }, [analysis, question]);
+
+  const clearResult = () => {
+    requestControllerRef.current?.abort();
+    requestControllerRef.current = null;
+    setQuestion("");
+    setAnalysis(null);
+    setStatus("idle");
+    setErrorMessage("");
+  };
 
   const chooseQuestion = (value: string) => {
     setDraft(value);
-    setRequest(null);
+    clearResult();
     window.requestAnimationFrame(() => questionRef.current?.focus());
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextQuestion = draft.trim();
-    if (!nextQuestion) return;
+    if (!nextQuestion || status === "loading") return;
 
-    setRequest((current) => ({
-      value: nextQuestion,
-      version: (current?.version ?? 0) + 1,
-    }));
+    requestControllerRef.current?.abort();
+    const controller = new AbortController();
+    requestControllerRef.current = controller;
+    setQuestion(nextQuestion);
+    setAnalysis(null);
+    setStatus("loading");
+    setErrorMessage("");
+
+    try {
+      const nextAnalysis = await requestSolution(nextQuestion, controller.signal);
+      if (controller.signal.aborted) return;
+      setAnalysis(nextAnalysis);
+      setStatus("success");
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      setStatus("error");
+      setErrorMessage(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    } finally {
+      if (requestControllerRef.current === controller) requestControllerRef.current = null;
+    }
   };
 
   const resetAssistant = () => {
     setDraft("");
-    setRequest(null);
+    clearResult();
     window.requestAnimationFrame(() => questionRef.current?.focus());
   };
 
@@ -107,7 +135,7 @@ export function UrechemAiAssistant() {
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-300/8 px-3 py-1.5 text-xs font-semibold text-emerald-100">
           <span aria-hidden="true" className="size-1.5 rounded-full bg-emerald-300" />
-          Ready for a question
+          {status === "loading" ? "Checking pathways" : "Ready for a question"}
         </span>
       </div>
 
@@ -119,9 +147,10 @@ export function UrechemAiAssistant() {
               aria-describedby={`${questionId}-hint`}
               className="min-h-36 w-full resize-y rounded-[var(--radius-md)] border border-white/12 bg-navy-950/72 p-4 font-normal leading-7 text-white outline-none placeholder:text-slate-400 focus:border-cyan-200 focus:ring-4 focus:ring-cyan-300/12"
               id={questionId}
+              maxLength={1200}
               onChange={(event) => {
                 setDraft(event.target.value);
-                if (request) setRequest(null);
+                if (question || analysis || errorMessage) clearResult();
               }}
               placeholder="Example: Which product family should I explore for roof insulation exposed to heat and moisture?"
               ref={questionRef}
@@ -150,14 +179,19 @@ export function UrechemAiAssistant() {
             </div>
           </div>
 
-          <Button className="w-full sm:w-fit" disabled={!draft.trim()} type="submit">
+          <Button className="w-full sm:w-fit" disabled={!draft.trim() || status === "loading"} type="submit">
             <Send aria-hidden="true" className="size-4" />
             Ask Urechem AI
           </Button>
+          {errorMessage ? (
+            <p aria-live="polite" className="text-sm leading-6 text-red-200">
+              {errorMessage}
+            </p>
+          ) : null}
         </form>
 
         <div className="min-h-80 rounded-[var(--radius-md)] border border-white/10 bg-navy-950/55 p-4 sm:p-5">
-          {analysis && request ? (
+          {analysis && question ? (
             <section
               aria-live="polite"
               className="scroll-mt-28 outline-none"
@@ -268,7 +302,8 @@ export function UrechemAiAssistant() {
                       <div className="mt-4 flex flex-wrap gap-3">
                         <Link
                           className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-4 text-sm font-semibold text-navy-950 transition hover:bg-white"
-                          href={`/consultant?context=${encodeURIComponent(question)}`}
+                          href="/consultant"
+                          onClick={() => saveConsultationPrefill({ context: question })}
                         >
                           Ask an expert
                           <ArrowRight aria-hidden="true" className="size-4" />
@@ -293,9 +328,13 @@ export function UrechemAiAssistant() {
                 <span className="mx-auto grid size-14 place-items-center rounded-full border border-cyan-200/20 bg-cyan-300/8 text-cyan-100">
                   <Sparkles aria-hidden="true" className="size-6" />
                 </span>
-                <h2 className="mt-4 text-lg font-semibold text-white">Ask a technical discovery question</h2>
+                <h2 className="mt-4 text-lg font-semibold text-white">
+                  {status === "loading" ? "Checking published pathways" : "Ask a technical discovery question"}
+                </h2>
                 <p className="mt-2 text-sm leading-6 text-slate-400">
-                  You will receive catalog-linked application routes, product-family directions and the correct expert-review next step.
+                  {status === "loading"
+                    ? "Your request is being validated and matched securely."
+                    : "You will receive catalog-linked application routes, product-family directions and the correct expert-review next step."}
                 </p>
               </div>
             </div>

@@ -10,10 +10,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "audit:dependencies": "npm audit --audit-level=high",
+    "audit:security": "node scripts/audit-security.mjs",
     "audit:images": "node scripts/audit-image-usage.mjs",
     "audit:theme": "node scripts/audit-light-theme-contrast.mjs",
     "smoke:routes": "node scripts/smoke-sitemap-routes.mjs",
-    "verify": "npm run lint && npm run audit:images && npm run audit:theme && npm run build"
+    "smoke:security": "node scripts/security-smoke.mjs",
+    "verify": "npm run lint && npm run typecheck && npm run audit:images && npm run audit:theme && npm run build && npm run audit:security"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -36,7 +40,9 @@
     "typescript": "^5"
   },
   "overrides": {
-    "postcss": "^8.5.10",
+    "brace-expansion@^1.0.0": "1.1.18",
+    "brace-expansion@^5.0.0": "5.0.9",
+    "postcss": "8.5.25",
     "sharp": "^0.35.0"
   },
   "engines": {

@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { ArrowRight, Beaker, SearchCheck, ShieldCheck } from "lucide-react";
-import { FormEvent, useEffect, useId, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { analyzeTechnicalChallenge } from "@/lib/solution-engine";
+import { requestSolution } from "@/lib/client/secure-api";
+import { saveConsultationPrefill } from "@/lib/client/consultation-prefill";
+import type { GuidedAnalysis } from "@/lib/solution-engine";
 
 const suggestions = [
   "Closed-cell roof insulation for a commercial building",
@@ -17,20 +19,21 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
   const challengeId = useId();
   const challengeRef = useRef<HTMLTextAreaElement>(null);
   const resultRef = useRef<HTMLElement>(null);
+  const requestControllerRef = useRef<AbortController | null>(null);
   const [value, setValue] = useState("");
-  const [submission, setSubmission] = useState<{ value: string; version: number } | null>(null);
-  const submittedValue = submission?.value ?? "";
-  const analysis = useMemo(
-    () => (submittedValue ? analyzeTechnicalChallenge(submittedValue) : null),
-    [submittedValue],
-  );
+  const [submittedValue, setSubmittedValue] = useState("");
+  const [analysis, setAnalysis] = useState<GuidedAnalysis | null>(null);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
   const hasTechnicalMatch = Boolean(
     analysis && (analysis.ureshieldMatch || analysis.pathways.length > 0),
   );
   const hasValue = value.trim().length > 0;
 
+  useEffect(() => () => requestControllerRef.current?.abort(), []);
+
   useEffect(() => {
-    if (!submission) return;
+    if (!analysis) return;
 
     const frame = window.requestAnimationFrame(() => {
       const shouldScroll = window.matchMedia("(max-width: 1023px)").matches;
@@ -42,9 +45,18 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [submission]);
+  }, [analysis]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const clearResult = () => {
+    requestControllerRef.current?.abort();
+    requestControllerRef.current = null;
+    setSubmittedValue("");
+    setAnalysis(null);
+    setStatus("idle");
+    setErrorMessage("");
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextValue = value.trim();
 
@@ -52,16 +64,33 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
       challengeRef.current?.focus();
       return;
     }
+    if (status === "loading") return;
 
-    setSubmission((current) => ({
-      value: nextValue,
-      version: (current?.version ?? 0) + 1,
-    }));
+    requestControllerRef.current?.abort();
+    const controller = new AbortController();
+    requestControllerRef.current = controller;
+    setSubmittedValue(nextValue);
+    setAnalysis(null);
+    setStatus("loading");
+    setErrorMessage("");
+
+    try {
+      const nextAnalysis = await requestSolution(nextValue, controller.signal);
+      if (controller.signal.aborted) return;
+      setAnalysis(nextAnalysis);
+      setStatus("success");
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      setStatus("error");
+      setErrorMessage(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    } finally {
+      if (requestControllerRef.current === controller) requestControllerRef.current = null;
+    }
   };
 
   const chooseSuggestion = (suggestion: string) => {
     setValue(suggestion);
-    setSubmission(null);
+    clearResult();
 
     window.requestAnimationFrame(() => {
       challengeRef.current?.focus();
@@ -78,10 +107,11 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
             aria-describedby={`${challengeId}-hint`}
             className={`${compact ? "min-h-28" : "min-h-36"} w-full resize-y rounded-[var(--radius-md)] border border-white/12 bg-navy-950/72 p-4 font-normal leading-7 text-white outline-none placeholder:text-slate-400 focus:border-cyan-200 focus:ring-4 focus:ring-cyan-300/12`}
             id={challengeId}
+            maxLength={1200}
             name="technical-challenge"
             onChange={(event) => {
               setValue(event.target.value);
-              if (submission) setSubmission(null);
+              if (submittedValue || analysis || errorMessage) clearResult();
             }}
             placeholder="Example: We need closed-cell insulation for a concrete roof exposed to heat and moisture."
             ref={challengeRef}
@@ -118,10 +148,16 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
           })}
         </div>
 
-        <Button className="w-full sm:w-fit" disabled={!hasValue} type="submit">
+        <Button className="w-full sm:w-fit" disabled={!hasValue || status === "loading"} type="submit">
           <SearchCheck aria-hidden="true" className="size-4" />
           Find relevant pathways
         </Button>
+        {status === "loading" ? (
+          <p aria-live="polite" className="text-sm leading-6 text-slate-300">Checking published pathways securely…</p>
+        ) : null}
+        {errorMessage ? (
+          <p aria-live="polite" className="text-sm leading-6 text-red-200">{errorMessage}</p>
+        ) : null}
       </form>
 
       {analysis ? (
@@ -196,7 +232,8 @@ export function GuidedSolutionFinder({ compact = false }: { compact?: boolean })
 
               <Link
                 className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-cyan-300/80 bg-cyan-300 px-5 font-semibold text-navy-950 transition hover:bg-white"
-                href={`/consultant?context=${encodeURIComponent(submittedValue)}`}
+                href="/consultant"
+                onClick={() => saveConsultationPrefill({ context: submittedValue })}
               >
                 Send this challenge for expert review
                 <ArrowRight aria-hidden="true" className="size-4" />

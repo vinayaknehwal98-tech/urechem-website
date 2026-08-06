@@ -15,6 +15,7 @@ jobs:
   capture:
     name: Capture production-review screenshots
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,8 +32,10 @@ jobs:
       - name: Build production app
         run: npm run build
 
-      - name: Install Chromium for Playwright CLI
-        run: npx --yes playwright@1.55.0 install --with-deps chromium
+      - name: Install Chromium and Playwright test runner
+        run: |
+          npm install --no-save --no-package-lock @playwright/test@1.61.1
+          npx playwright install --with-deps chromium
 
       - name: Start production server
         run: |
@@ -49,6 +52,86 @@ jobs:
           done
           cat /tmp/urechem-next.log
           exit 1
+
+      - name: Check browser console, page errors and same-origin requests
+        run: |
+          cat > browser-console-smoke.spec.cjs <<'EOF'
+          const { test, expect } = require('@playwright/test');
+
+          const baseUrl = 'http://127.0.0.1:3000';
+          const routes = [
+            '/',
+            '/products',
+            '/contact',
+            '/consultant',
+            '/ai-solution-finder',
+            '/ask-urechem-ai',
+          ];
+          const viewports = [
+            ['desktop', { width: 1440, height: 900 }],
+            ['mobile', { width: 390, height: 844 }],
+          ];
+
+          function attachFailureCollection(page, findings) {
+            page.on('console', (message) => {
+              if (message.type() === 'error') findings.push(`console: ${message.text()}`);
+            });
+            page.on('pageerror', (error) => findings.push(`pageerror: ${error.message}`));
+            page.on('requestfailed', (request) => {
+              if (!request.url().startsWith(baseUrl)) return;
+              const reason = request.failure()?.errorText ?? 'unknown request failure';
+              if (reason.includes('ERR_ABORTED')) return;
+              findings.push(`requestfailed: ${request.method()} ${request.url()} (${reason})`);
+            });
+            page.on('response', (response) => {
+              if (response.url().startsWith(baseUrl) && response.status() >= 400) {
+                findings.push(`http ${response.status()}: ${response.url()}`);
+              }
+            });
+          }
+
+          for (const [label, viewport] of viewports) {
+            for (const route of routes) {
+              test(`${label} ${route} has no browser errors`, async ({ page }) => {
+                const findings = [];
+                attachFailureCollection(page, findings);
+                await page.setViewportSize(viewport);
+                const response = await page.goto(`${baseUrl}${route}`, {
+                  waitUntil: 'domcontentloaded',
+                  timeout: 30_000,
+                });
+                expect(response?.status()).toBe(200);
+                await page.waitForTimeout(route === '/' ? 4_000 : 1_500);
+                expect(findings).toEqual([]);
+              });
+            }
+          }
+
+          test('both AI interfaces use the protected endpoint successfully', async ({ page }) => {
+            const findings = [];
+            attachFailureCollection(page, findings);
+
+            await page.goto(`${baseUrl}/ai-solution-finder`, { waitUntil: 'domcontentloaded' });
+            await page.locator('textarea').first().fill('Closed-cell roof insulation for a commercial building');
+            const finderResponsePromise = page.waitForResponse(
+              (response) => response.url().endsWith('/api/ai/solution') && response.request().method() === 'POST',
+            );
+            await page.getByRole('button', { name: /find relevant pathways/i }).click();
+            expect((await finderResponsePromise).status()).toBe(200);
+
+            await page.goto(`${baseUrl}/ask-urechem-ai`, { waitUntil: 'domcontentloaded' });
+            await page.locator('textarea').first().fill('Water ingress through a concrete construction joint');
+            const assistantResponsePromise = page.waitForResponse(
+              (response) => response.url().endsWith('/api/ai/solution') && response.request().method() === 'POST',
+            );
+            await page.getByRole('button', { name: /ask urechem ai/i }).click();
+            expect((await assistantResponsePromise).status()).toBe(200);
+            expect(findings).toEqual([]);
+          });
+          EOF
+
+          npx playwright test browser-console-smoke.spec.cjs --workers=1 --reporter=line
+          rm browser-console-smoke.spec.cjs
 
       - name: Capture full-page desktop and mobile screenshots
         run: |
@@ -74,8 +157,8 @@ jobs:
           for route in "${routes[@]}"; do
             name="${route%%:*}"
             path="${route#*:}"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --full-page --viewport-size=1440,900 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --full-page --viewport-size=390,844 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
+            npx playwright screenshot --browser=chromium --full-page --viewport-size=1440,900 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
+            npx playwright screenshot --browser=chromium --full-page --viewport-size=390,844 --wait-for-timeout=1200 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
           done
 
       - name: Capture homepage image sections after anchor navigation
@@ -92,20 +175,20 @@ jobs:
           for section in "${sections[@]}"; do
             name="${section%%:*}"
             path="${section#*:}"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
+            npx playwright screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-desktop.png"
+            npx playwright screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout=1800 "http://127.0.0.1:3000${path}" "review-screenshots/latest/${name}-mobile.png"
           done
 
       - name: Capture opening animation checkpoints
         run: |
           desktop_checkpoints=(450 1000 1500 2200 2800 3400)
           for checkpoint in "${desktop_checkpoints[@]}"; do
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout="${checkpoint}" "http://127.0.0.1:3000/?intro=force&checkpoint=${checkpoint}" "review-screenshots/latest/opening-${checkpoint}ms-desktop.png"
+            npx playwright screenshot --browser=chromium --viewport-size=1440,900 --wait-for-timeout="${checkpoint}" "http://127.0.0.1:3000/?intro=force&checkpoint=${checkpoint}" "review-screenshots/latest/opening-${checkpoint}ms-desktop.png"
           done
 
           mobile_checkpoints=(650 1450 2400 3400)
           for checkpoint in "${mobile_checkpoints[@]}"; do
-            npx --yes playwright@1.55.0 screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout="${checkpoint}" "http://127.0.0.1:3000/?intro=force&checkpoint=${checkpoint}" "review-screenshots/latest/opening-${checkpoint}ms-mobile.png"
+            npx playwright screenshot --browser=chromium --viewport-size=390,844 --wait-for-timeout="${checkpoint}" "http://127.0.0.1:3000/?intro=force&checkpoint=${checkpoint}" "review-screenshots/latest/opening-${checkpoint}ms-mobile.png"
           done
 
       - name: Upload review screenshots
@@ -114,3 +197,7 @@ jobs:
           name: production-review-screenshots
           path: review-screenshots/latest/*.png
           if-no-files-found: error
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat /tmp/urechem-next.log || true

@@ -74,21 +74,15 @@ export function useApproachReveal<T extends HTMLElement>() {
   const [isVisible, setIsVisible] = useState(Boolean(shouldReduceMotion));
 
   useLayoutEffect(() => {
-    if (shouldReduceMotion) {
-      setIsVisible(true);
-      return;
-    }
+    const revealOnNextFrame = () => {
+      const frameId = window.requestAnimationFrame(() => setIsVisible(true));
+      return () => window.cancelAnimationFrame(frameId);
+    };
+
+    if (shouldReduceMotion) return revealOnNextFrame();
 
     const node = ref.current;
-    if (!node) {
-      setIsVisible(true);
-      return;
-    }
-
-    if (isNearViewport(node)) {
-      setIsVisible(true);
-      return;
-    }
+    if (!node || isNearViewport(node)) return revealOnNextFrame();
 
     let cancelled = false;
     let revealed = false;
