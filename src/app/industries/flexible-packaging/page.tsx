@@ -2,8 +2,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   CheckCircle2,
-  ClipboardCheck,
-  FileText,
   FlaskConical,
   Layers3,
   Package,
