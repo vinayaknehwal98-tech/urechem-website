@@ -1,0 +1,132 @@
+name: Apply React lint fixes
+
+on:
+  push:
+    branches:
+      - agent/security-hardening
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fixes:
+    if: ${{ !contains(github.event.head_commit.message, '[lint bot]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout security branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/security-hardening
+          fetch-depth: 0
+
+      - name: Apply targeted purity fixes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace(path: str, old: str, new: str) -> None:
+              file = Path(path)
+              text = file.read_text()
+              if old not in text:
+                  raise SystemExit(f"Expected source block was not found in {path}")
+              file.write_text(text.replace(old, new, 1))
+
+          replace(
+              "src/components/contact/contact-enquiry-form.tsx",
+              "  const startedAtRef = useRef(Date.now());",
+              "  const startedAtRef = useRef(0);",
+          )
+
+          replace(
+              "src/components/contact/contact-enquiry-form.tsx",
+              '''  useEffect(() => {
+            if (!isConsultation) return;
+            const prefill = takeConsultationPrefill();
+            if (!prefill) return;
+
+            setForm((current) => ({
+              ...current,
+              name: current.name || prefill.name || "",
+              email: current.email || prefill.email || "",
+              mobile: current.mobile || prefill.mobile || "",
+              context: current.context || prefill.context || "",
+            }));
+          }, [isConsultation]);''',
+              '''  useEffect(() => {
+            startedAtRef.current = Date.now();
+            if (!isConsultation) return;
+
+            const prefill = takeConsultationPrefill();
+            if (!prefill) return;
+
+            const frame = window.requestAnimationFrame(() => {
+              setForm((current) => ({
+                ...current,
+                name: current.name || prefill.name || "",
+                email: current.email || prefill.email || "",
+                mobile: current.mobile || prefill.mobile || "",
+                context: current.context || prefill.context || "",
+              }));
+            });
+
+            return () => window.cancelAnimationFrame(frame);
+          }, [isConsultation]);''',
+          )
+
+          replace(
+              "src/components/home/hero-section.tsx",
+              '''  useEffect(() => {
+            if (shouldReduceMotion) {
+              setHeroCanAnimate(true);
+              return;
+            }''',
+              '''  useEffect(() => {
+            if (shouldReduceMotion) {
+              const frame = window.requestAnimationFrame(() => setHeroCanAnimate(true));
+              return () => window.cancelAnimationFrame(frame);
+            }''',
+          )
+
+          replace(
+              "src/components/motion/use-approach-reveal.ts",
+              '''  useLayoutEffect(() => {
+            if (shouldReduceMotion) {
+              setIsVisible(true);
+              return;
+            }
+
+            const node = ref.current;
+            if (!node) {
+              setIsVisible(true);
+              return;
+            }
+
+            if (isNearViewport(node)) {
+              setIsVisible(true);
+              return;
+            }''',
+              '''  useLayoutEffect(() => {
+            const revealOnNextFrame = () => {
+              const frameId = window.requestAnimationFrame(() => setIsVisible(true));
+              return () => window.cancelAnimationFrame(frameId);
+            };
+
+            if (shouldReduceMotion) return revealOnNextFrame();
+
+            const node = ref.current;
+            if (!node || isNearViewport(node)) return revealOnNextFrame();''',
+          )
+          PY
+
+          git diff --check
+
+      - name: Commit targeted fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/contact/contact-enquiry-form.tsx src/components/home/hero-section.tsx src/components/motion/use-approach-reveal.ts
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Fix React purity lint errors [lint bot]"
+          git push origin HEAD:agent/security-hardening
