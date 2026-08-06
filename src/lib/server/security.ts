@@ -95,6 +95,24 @@ function memoryRateLimit(key: string, limit: number, windowMs: number): RateLimi
   };
 }
 
+function getRequestHostOrigin(request: NextRequest) {
+  const host = request.headers.get("host")?.trim();
+  if (!host) return null;
+
+  const forwardedProtocol = process.env.VERCEL === "1"
+    ? request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim()
+    : null;
+  const protocol = forwardedProtocol === "http" || forwardedProtocol === "https"
+    ? forwardedProtocol
+    : request.nextUrl.protocol.replace(":", "");
+
+  try {
+    return new URL(`${protocol}://${host}`).origin;
+  } catch {
+    return null;
+  }
+}
+
 export function createRequestId() {
   return randomUUID();
 }
@@ -126,8 +144,10 @@ export function getClientIdentifier(request: NextRequest) {
 export function isAllowedOrigin(request: NextRequest) {
   const origin = request.headers.get("origin");
   const fetchSite = request.headers.get("sec-fetch-site");
+  const hostOrigin = getRequestHostOrigin(request);
   const allowedOrigins = new Set<string>([
     request.nextUrl.origin,
+    ...(hostOrigin ? [hostOrigin] : []),
     "https://urechem-website.vercel.app",
     ...(process.env.URECHEM_ALLOWED_ORIGINS ?? "")
       .split(",")
@@ -135,11 +155,15 @@ export function isAllowedOrigin(request: NextRequest) {
       .filter(Boolean),
   ]);
 
+  // Browsers calculate Sec-Fetch-Site and page JavaScript cannot override it.
+  // Accept an explicit same-origin signal even if framework URL normalization
+  // represents localhost or a trusted proxy host differently.
+  if (fetchSite === "same-origin") return true;
   if (origin) return allowedOrigins.has(origin);
 
   // Non-browser clients may omit Origin. Browser cross-site requests normally
   // include both Origin and Sec-Fetch-Site, so reject an explicit cross-site signal.
-  return !fetchSite || fetchSite === "same-origin" || fetchSite === "same-site" || fetchSite === "none";
+  return !fetchSite || fetchSite === "same-site" || fetchSite === "none";
 }
 
 export async function readJsonBody(request: NextRequest, maxBytes: number): Promise<JsonReadResult> {
