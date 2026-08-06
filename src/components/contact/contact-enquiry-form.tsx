@@ -53,7 +53,7 @@ const enquiryProductOptions = [
 export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) {
   const searchParams = useSearchParams();
   const isConsultation = fixedType === "Consultation request";
-  const startedAtRef = useRef(Date.now());
+  const startedAtRef = useRef(0);
   const [isPrepared, setIsPrepared] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
   const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
@@ -70,17 +70,23 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
   const productRequired = documentRequestTypes.includes(form.type);
 
   useEffect(() => {
+    startedAtRef.current = Date.now();
     if (!isConsultation) return;
+
     const prefill = takeConsultationPrefill();
     if (!prefill) return;
 
-    setForm((current) => ({
-      ...current,
-      name: current.name || prefill.name || "",
-      email: current.email || prefill.email || "",
-      mobile: current.mobile || prefill.mobile || "",
-      context: current.context || prefill.context || "",
-    }));
+    const frame = window.requestAnimationFrame(() => {
+      setForm((current) => ({
+        ...current,
+        name: current.name || prefill.name || "",
+        email: current.email || prefill.email || "",
+        mobile: current.mobile || prefill.mobile || "",
+        context: current.context || prefill.context || "",
+      }));
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [isConsultation]);
 
   const enquiryBrief = useMemo(

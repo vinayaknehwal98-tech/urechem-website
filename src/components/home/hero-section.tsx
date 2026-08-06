@@ -105,8 +105,8 @@ export function HeroSection() {
 
   useEffect(() => {
     if (shouldReduceMotion) {
-      setHeroCanAnimate(true);
-      return;
+      const frame = window.requestAnimationFrame(() => setHeroCanAnimate(true));
+      return () => window.cancelAnimationFrame(frame);
     }
 
     const html = document.documentElement;
