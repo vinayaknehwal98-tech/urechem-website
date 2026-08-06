@@ -1,29 +1,22 @@
 import { getApplicationFamilyLabels } from "@/data/application-family-mappings";
 import {
-  Beaker,
-  Binary,
   BookOpen,
   Boxes,
   BrainCircuit,
   Building2,
   Car,
   ClipboardCheck,
-  Factory,
   FileBadge,
   FileText,
   FlaskConical,
   Layers3,
-  Microscope,
   PackageSearch,
   Paintbrush,
   PanelTop,
-  Search,
   ShieldCheck,
   Sofa,
-  Sparkles,
   SprayCan,
   ThermometerSun,
-  Wrench,
   type LucideIcon,
 } from "lucide-react";
 
@@ -357,23 +350,3 @@ export const technicalResources: TechnicalResource[] = [
 export const technicalFilters = ["TDS", "SDS", "COA", "Compliance", "Processing guide"];
 
 export const ctaBriefFields = ["Application", "Material", "Environment", "Performance goal"];
-
-export const sectionIndicators = [
-  "Path",
-  "Products",
-  "Applications",
-  "Proof",
-  "Workflow",
-  "Technical",
-  "Brief",
-];
-
-export const intelligenceSignals = [
-  Search,
-  Binary,
-  Microscope,
-  Factory,
-  Wrench,
-  Beaker,
-  Sparkles,
-];

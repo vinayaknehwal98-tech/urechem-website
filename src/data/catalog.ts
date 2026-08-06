@@ -456,9 +456,3 @@ export function relatedFamilies(slug: string) {
     .filter((item) => item.slug !== slug && item.applications.some((application) => family?.applications.includes(application)))
     .slice(0, 3);
 }
-
-export function comparisonEligible(familySlug: string, productSlug: string) {
-  return products.some(
-    (item) => item.familySlug === familySlug && item.slug === productSlug && Object.keys(item.compareAttributes).length > 0,
-  );
-}
