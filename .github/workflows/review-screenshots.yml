@@ -15,6 +15,7 @@ jobs:
   capture:
     name: Capture production-review screenshots
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,6 +50,86 @@ jobs:
           done
           cat /tmp/urechem-next.log
           exit 1
+
+      - name: Check browser console, page errors and same-origin requests
+        run: |
+          cat > browser-console-smoke.spec.cjs <<'EOF'
+          const { test, expect } = require('@playwright/test');
+
+          const baseUrl = 'http://127.0.0.1:3000';
+          const routes = [
+            '/',
+            '/products',
+            '/contact',
+            '/consultant',
+            '/ai-solution-finder',
+            '/ask-urechem-ai',
+          ];
+          const viewports = [
+            ['desktop', { width: 1440, height: 900 }],
+            ['mobile', { width: 390, height: 844 }],
+          ];
+
+          function attachFailureCollection(page, findings) {
+            page.on('console', (message) => {
+              if (message.type() === 'error') findings.push(`console: ${message.text()}`);
+            });
+            page.on('pageerror', (error) => findings.push(`pageerror: ${error.message}`));
+            page.on('requestfailed', (request) => {
+              if (!request.url().startsWith(baseUrl)) return;
+              const reason = request.failure()?.errorText ?? 'unknown request failure';
+              if (reason.includes('ERR_ABORTED')) return;
+              findings.push(`requestfailed: ${request.method()} ${request.url()} (${reason})`);
+            });
+            page.on('response', (response) => {
+              if (response.url().startsWith(baseUrl) && response.status() >= 400) {
+                findings.push(`http ${response.status()}: ${response.url()}`);
+              }
+            });
+          }
+
+          for (const [label, viewport] of viewports) {
+            for (const route of routes) {
+              test(`${label} ${route} has no browser errors`, async ({ page }) => {
+                const findings = [];
+                attachFailureCollection(page, findings);
+                await page.setViewportSize(viewport);
+                const response = await page.goto(`${baseUrl}${route}`, {
+                  waitUntil: 'domcontentloaded',
+                  timeout: 30_000,
+                });
+                expect(response?.status()).toBe(200);
+                await page.waitForTimeout(route === '/' ? 4_000 : 1_500);
+                expect(findings).toEqual([]);
+              });
+            }
+          }
+
+          test('both AI interfaces use the protected endpoint successfully', async ({ page }) => {
+            const findings = [];
+            attachFailureCollection(page, findings);
+
+            await page.goto(`${baseUrl}/ai-solution-finder`, { waitUntil: 'domcontentloaded' });
+            await page.locator('textarea').first().fill('Closed-cell roof insulation for a commercial building');
+            const finderResponsePromise = page.waitForResponse(
+              (response) => response.url().endsWith('/api/ai/solution') && response.request().method() === 'POST',
+            );
+            await page.getByRole('button', { name: /find relevant pathways/i }).click();
+            expect((await finderResponsePromise).status()).toBe(200);
+
+            await page.goto(`${baseUrl}/ask-urechem-ai`, { waitUntil: 'domcontentloaded' });
+            await page.locator('textarea').first().fill('Water ingress through a concrete construction joint');
+            const assistantResponsePromise = page.waitForResponse(
+              (response) => response.url().endsWith('/api/ai/solution') && response.request().method() === 'POST',
+            );
+            await page.getByRole('button', { name: /ask urechem ai/i }).click();
+            expect((await assistantResponsePromise).status()).toBe(200);
+            expect(findings).toEqual([]);
+          });
+          EOF
+
+          npx --yes @playwright/test@1.55.0 test browser-console-smoke.spec.cjs --workers=1 --reporter=line
+          rm browser-console-smoke.spec.cjs
 
       - name: Capture full-page desktop and mobile screenshots
         run: |
@@ -114,3 +195,7 @@ jobs:
           name: production-review-screenshots
           path: review-screenshots/latest/*.png
           if-no-files-found: error
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat /tmp/urechem-next.log || true
