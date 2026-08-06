@@ -24,98 +24,96 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          def replace(path: str, old: str, new: str) -> None:
+          def replace_once(path: str, old: str, new: str) -> None:
               file = Path(path)
               text = file.read_text()
               if old not in text:
                   raise SystemExit(f"Expected source block was not found in {path}")
               file.write_text(text.replace(old, new, 1))
 
-          replace(
+          replace_once(
               "src/components/contact/contact-enquiry-form.tsx",
               "  const startedAtRef = useRef(Date.now());",
               "  const startedAtRef = useRef(0);",
           )
 
-          replace(
-              "src/components/contact/contact-enquiry-form.tsx",
-              '''  useEffect(() => {
-            if (!isConsultation) return;
-            const prefill = takeConsultationPrefill();
-            if (!prefill) return;
-
-            setForm((current) => ({
-              ...current,
-              name: current.name || prefill.name || "",
-              email: current.email || prefill.email || "",
-              mobile: current.mobile || prefill.mobile || "",
-              context: current.context || prefill.context || "",
-            }));
-          }, [isConsultation]);''',
-              '''  useEffect(() => {
-            startedAtRef.current = Date.now();
-            if (!isConsultation) return;
-
-            const prefill = takeConsultationPrefill();
-            if (!prefill) return;
-
-            const frame = window.requestAnimationFrame(() => {
-              setForm((current) => ({
-                ...current,
-                name: current.name || prefill.name || "",
-                email: current.email || prefill.email || "",
-                mobile: current.mobile || prefill.mobile || "",
-                context: current.context || prefill.context || "",
-              }));
-            });
-
-            return () => window.cancelAnimationFrame(frame);
-          }, [isConsultation]);''',
+          contact_old = (
+              "  useEffect(() => {\n"
+              "    if (!isConsultation) return;\n"
+              "    const prefill = takeConsultationPrefill();\n"
+              "    if (!prefill) return;\n\n"
+              "    setForm((current) => ({\n"
+              "      ...current,\n"
+              "      name: current.name || prefill.name || \"\",\n"
+              "      email: current.email || prefill.email || \"\",\n"
+              "      mobile: current.mobile || prefill.mobile || \"\",\n"
+              "      context: current.context || prefill.context || \"\",\n"
+              "    }));\n"
+              "  }, [isConsultation]);"
           )
-
-          replace(
-              "src/components/home/hero-section.tsx",
-              '''  useEffect(() => {
-            if (shouldReduceMotion) {
-              setHeroCanAnimate(true);
-              return;
-            }''',
-              '''  useEffect(() => {
-            if (shouldReduceMotion) {
-              const frame = window.requestAnimationFrame(() => setHeroCanAnimate(true));
-              return () => window.cancelAnimationFrame(frame);
-            }''',
+          contact_new = (
+              "  useEffect(() => {\n"
+              "    startedAtRef.current = Date.now();\n"
+              "    if (!isConsultation) return;\n\n"
+              "    const prefill = takeConsultationPrefill();\n"
+              "    if (!prefill) return;\n\n"
+              "    const frame = window.requestAnimationFrame(() => {\n"
+              "      setForm((current) => ({\n"
+              "        ...current,\n"
+              "        name: current.name || prefill.name || \"\",\n"
+              "        email: current.email || prefill.email || \"\",\n"
+              "        mobile: current.mobile || prefill.mobile || \"\",\n"
+              "        context: current.context || prefill.context || \"\",\n"
+              "      }));\n"
+              "    });\n\n"
+              "    return () => window.cancelAnimationFrame(frame);\n"
+              "  }, [isConsultation]);"
           )
+          replace_once("src/components/contact/contact-enquiry-form.tsx", contact_old, contact_new)
 
-          replace(
-              "src/components/motion/use-approach-reveal.ts",
-              '''  useLayoutEffect(() => {
-            if (shouldReduceMotion) {
-              setIsVisible(true);
-              return;
-            }
-
-            const node = ref.current;
-            if (!node) {
-              setIsVisible(true);
-              return;
-            }
-
-            if (isNearViewport(node)) {
-              setIsVisible(true);
-              return;
-            }''',
-              '''  useLayoutEffect(() => {
-            const revealOnNextFrame = () => {
-              const frameId = window.requestAnimationFrame(() => setIsVisible(true));
-              return () => window.cancelAnimationFrame(frameId);
-            };
-
-            if (shouldReduceMotion) return revealOnNextFrame();
-
-            const node = ref.current;
-            if (!node || isNearViewport(node)) return revealOnNextFrame();''',
+          hero_old = (
+              "  useEffect(() => {\n"
+              "    if (shouldReduceMotion) {\n"
+              "      setHeroCanAnimate(true);\n"
+              "      return;\n"
+              "    }"
           )
+          hero_new = (
+              "  useEffect(() => {\n"
+              "    if (shouldReduceMotion) {\n"
+              "      const frame = window.requestAnimationFrame(() => setHeroCanAnimate(true));\n"
+              "      return () => window.cancelAnimationFrame(frame);\n"
+              "    }"
+          )
+          replace_once("src/components/home/hero-section.tsx", hero_old, hero_new)
+
+          reveal_old = (
+              "  useLayoutEffect(() => {\n"
+              "    if (shouldReduceMotion) {\n"
+              "      setIsVisible(true);\n"
+              "      return;\n"
+              "    }\n\n"
+              "    const node = ref.current;\n"
+              "    if (!node) {\n"
+              "      setIsVisible(true);\n"
+              "      return;\n"
+              "    }\n\n"
+              "    if (isNearViewport(node)) {\n"
+              "      setIsVisible(true);\n"
+              "      return;\n"
+              "    }"
+          )
+          reveal_new = (
+              "  useLayoutEffect(() => {\n"
+              "    const revealOnNextFrame = () => {\n"
+              "      const frameId = window.requestAnimationFrame(() => setIsVisible(true));\n"
+              "      return () => window.cancelAnimationFrame(frameId);\n"
+              "    };\n\n"
+              "    if (shouldReduceMotion) return revealOnNextFrame();\n\n"
+              "    const node = ref.current;\n"
+              "    if (!node || isNearViewport(node)) return revealOnNextFrame();"
+          )
+          replace_once("src/components/motion/use-approach-reveal.ts", reveal_old, reveal_new)
           PY
 
           git diff --check
