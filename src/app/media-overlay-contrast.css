@@ -1,40 +1,35 @@
-/*
- * Image / gradient overlay contrast
- *
- * The site uses a light-theme compatibility layer for legacy Tailwind
- * utilities. That layer intentionally remaps text-white and text-white/*
- * to dark text on normal light surfaces. It must not do that for copy that
- * sits directly on photographic/gradient overlays, where white text is the
- * intended high-contrast treatment.
- */
-body main [class*="bg-gradient-to-t"][class*="absolute"],
-body main [class*="bg-gradient-to-b"][class*="absolute"],
-body main [class*="bg-gradient-to-r"][class*="absolute"],
-body main [class*="bg-gradient-to-l"][class*="absolute"] {
+/* Image / gradient overlay contrast: keep copy light on photographic surfaces. */
+body [class*="bg-gradient-to-t"][class*="absolute"],
+body [class*="bg-gradient-to-b"][class*="absolute"],
+body [class*="bg-gradient-to-r"][class*="absolute"],
+body [class*="bg-gradient-to-l"][class*="absolute"] {
   color: #f8fafc !important;
 }
 
-body main [class*="bg-gradient-to-t"][class*="absolute"] :is(h1, h2, h3, h4, h5, h6, p, span, li, strong, em),
-body main [class*="bg-gradient-to-b"][class*="absolute"] :is(h1, h2, h3, h4, h5, h6, p, span, li, strong, em),
-body main [class*="bg-gradient-to-r"][class*="absolute"] :is(h1, h2, h3, h4, h5, h6, p, span, li, strong, em),
-body main [class*="bg-gradient-to-l"][class*="absolute"] :is(h1, h2, h3, h4, h5, h6, p, span, li, strong, em) {
+body [class*="bg-gradient-to-t"][class*="absolute"] :is(h1,h2,h3,h4,h5,h6,p,span,li,strong,em),
+body [class*="bg-gradient-to-b"][class*="absolute"] :is(h1,h2,h3,h4,h5,h6,p,span,li,strong,em),
+body [class*="bg-gradient-to-r"][class*="absolute"] :is(h1,h2,h3,h4,h5,h6,p,span,li,strong,em),
+body [class*="bg-gradient-to-l"][class*="absolute"] :is(h1,h2,h3,h4,h5,h6,p,span,li,strong,em) {
   color: #f8fafc !important;
   -webkit-text-fill-color: #f8fafc !important;
-  text-shadow: 0 2px 5px rgba(2, 18, 36, 0.78);
+  text-shadow: 0 2px 5px rgba(2,18,36,.78);
 }
 
-/* Preserve cyan/blue accent labels while keeping the supporting copy white. */
-body main [class*="bg-gradient-to-t"][class*="absolute"] :is([class*="text-cyan"], [class*="text-sky"]),
-body main [class*="bg-gradient-to-b"][class*="absolute"] :is([class*="text-cyan"], [class*="text-sky"]),
-body main [class*="bg-gradient-to-r"][class*="absolute"] :is([class*="text-cyan"], [class*="text-sky"]),
-body main [class*="bg-gradient-to-l"][class*="absolute"] :is([class*="text-cyan"], [class*="text-sky"]) {
+body [class*="bg-gradient-to-t"][class*="absolute"] :is([class*="text-cyan"],[class*="text-sky"]),
+body [class*="bg-gradient-to-b"][class*="absolute"] :is([class*="text-cyan"],[class*="text-sky"]),
+body [class*="bg-gradient-to-r"][class*="absolute"] :is([class*="text-cyan"],[class*="text-sky"]),
+body [class*="bg-gradient-to-l"][class*="absolute"] :is([class*="text-cyan"],[class*="text-sky"]) {
   color: #67e8f9 !important;
   -webkit-text-fill-color: #67e8f9 !important;
 }
 
-/* Explicit reusable hook for future image captions. */
-body main .media-overlay-copy :is(h1, h2, h3, h4, h5, h6, p, span, li, strong, em) {
+/* Reusable explicit hook for captions over images. */
+body .media-overlay-copy :is(h1,h2,h3,h4,h5,h6,p,span,li,strong,em) {
   color: #f8fafc !important;
   -webkit-text-fill-color: #f8fafc !important;
-  text-shadow: 0 2px 5px rgba(2, 18, 36, 0.78);
+  text-shadow: 0 2px 5px rgba(2,18,36,.78);
+}
+body .media-overlay-copy :is([class*="text-cyan"],[class*="text-sky"]) {
+  color: #67e8f9 !important;
+  -webkit-text-fill-color: #67e8f9 !important;
 }
