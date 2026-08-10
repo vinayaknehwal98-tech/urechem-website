@@ -41,11 +41,7 @@ export default async function Page({ params }: { params: Promise<{ application: 
     <div className="bg-white">
       <section className="relative isolate overflow-hidden">
         {background ? (
-          <div
-            aria-hidden="true"
-            className="application-hero-bg absolute inset-0 -z-30 bg-cover"
-            style={{ backgroundImage: `url(${background.src})`, backgroundPosition: background.position }}
-          />
+          <div aria-hidden="true" className="application-hero-bg absolute inset-0 -z-30 bg-cover" style={{ backgroundImage: `url(${background.src})`, backgroundPosition: background.position }} />
         ) : null}
         <div aria-hidden="true" className="absolute inset-0 -z-20 bg-gradient-to-r from-slate-950/82 via-slate-950/52 to-slate-950/20" />
 
@@ -114,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ application: 
                 </div>
                 <div className="group relative overflow-hidden rounded-2xl border border-slate-200 shadow-[0_24px_70px_rgba(15,23,42,0.16)]">
                   <img alt={detail.imageAlt} className="h-[28rem] w-full object-cover transition duration-700 ease-out group-hover:scale-105" loading="lazy" src={detail.image} />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 to-transparent p-6 pt-20 text-white">
+                  <div className="media-overlay-copy absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/90 to-transparent p-6 pt-20 text-white">
                     <p className="text-sm font-bold uppercase tracking-[0.18em] text-cyan-300">Project context matters</p>
                     <p className="mt-2 max-w-md text-sm leading-6 text-white/85">{detail.imageCaption}</p>
                   </div>
