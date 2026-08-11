@@ -13,6 +13,9 @@ export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<Deliver
   const recipient = process.env.URECHEM_ENQUIRY_EMAIL?.trim();
   const from = process.env.URECHEM_FROM_EMAIL?.trim();
 
+  // All delivery configuration remains server-side. Never fall back to a
+  // source-code API key, sender, or recipient because that would make a
+  // configuration mistake look like a successful delivery path.
   if (!apiKey || !recipient || !from) return { ok: false, reason: "not_configured" };
 
   const text = [
@@ -45,7 +48,13 @@ export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<Deliver
       signal: AbortSignal.timeout(8_000),
     });
 
-    return response.ok ? { ok: true } : { ok: false, reason: "provider_error" };
+    if (!response.ok) {
+      // Do not expose provider response bodies to the browser; the API route
+      // records only the safe provider_error category in production logs.
+      return { ok: false, reason: "provider_error" };
+    }
+
+    return { ok: true };
   } catch {
     return { ok: false, reason: "provider_error" };
   }
