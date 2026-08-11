@@ -34,6 +34,8 @@ const documentRequestTypes: EnquiryType[] = [
   "Processing guide request",
 ];
 
+const URECHEM_ENQUIRY_EMAIL = "sales@urechem.co.in";
+
 function normaliseEnquiryType(value: string | null): EnquiryType {
   return enquiryTypes.includes(value as EnquiryType) ? (value as EnquiryType) : "General enquiry";
 }
@@ -66,7 +68,6 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
     product: (searchParams.get("product") ?? "").slice(0, 160),
     context: (searchParams.get("context") ?? "").slice(0, 4000),
   }));
-  const enquiryEmail = process.env.NEXT_PUBLIC_URECHEM_ENQUIRY_EMAIL?.trim();
   const productRequired = documentRequestTypes.includes(form.type);
 
   useEffect(() => {
@@ -109,7 +110,7 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
     event.preventDefault();
     if (submitState === "sending") return;
 
-    setIsPrepared(true);
+    setIsPrepared(false);
     setCopyState("idle");
     setSubmitState("sending");
     setSubmitMessage("");
@@ -131,16 +132,23 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
 
       if (!response.ok) {
         setSubmitState("failed");
-        setSubmitMessage(payload.message || "Something went wrong. Please try again.");
+        setSubmitMessage(payload.message || "We could not send your request. Please use the email fallback below or try again later.");
+        setIsPrepared(true);
         return;
       }
 
       setSubmitState("sent");
-      setSubmitMessage(payload.message || "Your enquiry was sent successfully.");
+      setSubmitMessage(
+        isConsultation
+          ? "Your consultation request has been sent successfully. The Urechem team will contact you shortly."
+          : payload.message || "Your enquiry was sent successfully.",
+      );
+      setIsPrepared(true);
       startedAtRef.current = Date.now();
     } catch {
       setSubmitState("failed");
-      setSubmitMessage("Something went wrong. Please try again.");
+      setSubmitMessage("We could not send your request. Please use the email fallback below or try again later.");
+      setIsPrepared(true);
     }
   };
 
@@ -299,8 +307,8 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
         {submitState === "sending"
           ? "Sending…"
           : isConsultation
-            ? "Prepare consultation request"
-            : "Prepare enquiry"}
+            ? "Send consultation request"
+            : "Send enquiry"}
       </button>
 
       {isPrepared ? (
@@ -308,57 +316,58 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
           <div className="flex items-start gap-3">
             <CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" />
             <div>
-              <h2 className="font-bold">{submitState === "sent" ? "Your enquiry was sent" : "Your enquiry brief is ready"}</h2>
-              <p className="mt-1 text-sm leading-6">
+              <h2 className="font-bold">
                 {submitState === "sent"
-                  ? submitMessage
-                  : "Check the details, then email, copy or download the brief for the approved Urechem contact channel."}
-              </p>
-              {submitState === "failed" && submitMessage ? (
-                <p className="mt-2 text-sm font-semibold leading-6 text-red-700">{submitMessage}</p>
-              ) : null}
+                  ? isConsultation
+                    ? "Consultation request sent"
+                    : "Your enquiry was sent"
+                  : "We could not send your request"}
+              </h2>
+              <p className="mt-1 text-sm leading-6">{submitMessage}</p>
             </div>
           </div>
-          <pre className="mt-4 max-h-72 overflow-auto whitespace-pre-wrap rounded-[var(--radius-sm)] border border-blue-200 bg-white p-4 font-sans text-sm leading-6 text-slate-700">
-            {enquiryBrief}
-          </pre>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {enquiryEmail ? (
+
+          {submitState === "failed" ? (
+            <div className="mt-4">
               <a
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-4 text-sm font-bold text-[color:#fff] transition hover:bg-blue-800"
-                href={`mailto:${enquiryEmail}?subject=${encodeURIComponent(`Urechem ${form.type}: ${form.product || form.name}`)}&body=${encodeURIComponent(enquiryBrief)}`}
+                href={`mailto:${URECHEM_ENQUIRY_EMAIL}?subject=${encodeURIComponent(`Urechem ${form.type}: ${form.product || form.name}`)}&body=${encodeURIComponent(enquiryBrief)}`}
               >
                 <Mail aria-hidden="true" className="size-4" />
                 Email Urechem
               </a>
+            </div>
+          ) : null}
+
+          <details className="mt-4 rounded-[var(--radius-sm)] border border-blue-200 bg-white p-4">
+            <summary className="cursor-pointer text-sm font-bold text-blue-950">View enquiry brief</summary>
+            <pre className="mt-3 max-h-72 overflow-auto whitespace-pre-wrap font-sans text-sm leading-6 text-slate-700">
+              {enquiryBrief}
+            </pre>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <button
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
+                onClick={copyBrief}
+                type="button"
+              >
+                {copyState === "copied" ? <Check aria-hidden="true" className="size-4" /> : <Clipboard aria-hidden="true" className="size-4" />}
+                {copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy brief"}
+              </button>
+              <button
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
+                onClick={downloadBrief}
+                type="button"
+              >
+                <Download aria-hidden="true" className="size-4" />
+                Download brief
+              </button>
+            </div>
+            {copyState === "failed" ? (
+              <p className="mt-3 text-xs leading-5 text-red-700">
+                Clipboard access was blocked by the browser. Use “Download brief” or manually select the prepared text.
+              </p>
             ) : null}
-            <button
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
-              onClick={copyBrief}
-              type="button"
-            >
-              {copyState === "copied" ? <Check aria-hidden="true" className="size-4" /> : <Clipboard aria-hidden="true" className="size-4" />}
-              {copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy brief"}
-            </button>
-            <button
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
-              onClick={downloadBrief}
-              type="button"
-            >
-              <Download aria-hidden="true" className="size-4" />
-              Download brief
-            </button>
-          </div>
-          {copyState === "failed" ? (
-            <p className="mt-3 text-xs leading-5 text-red-700">
-              Clipboard access was blocked by the browser. Use “Download brief” or manually select the prepared text.
-            </p>
-          ) : null}
-          {!enquiryEmail ? (
-            <p className="mt-4 text-xs leading-5 text-slate-600">
-              Direct email delivery will be enabled after Urechem confirms the official enquiry inbox.
-            </p>
-          ) : null}
+          </details>
         </section>
       ) : null}
     </form>
