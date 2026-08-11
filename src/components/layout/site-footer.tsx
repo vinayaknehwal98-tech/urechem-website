@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, FlaskConical, Mail, Sparkles } from "lucide-react";
+import { ArrowRight, FlaskConical, Mail, Phone, Sparkles } from "lucide-react";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { Container } from "@/components/ui/container";
 import { footerGroups, legalLinks } from "@/data/navigation";
 
 const trustPoints = ["Application-led", "Expert reviewed", "Quality focused"] as const;
+const URECHEM_PHONE = "+91-8882132954";
+const URECHEM_EMAIL = "sales@urechem.co.in";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -99,6 +101,17 @@ export function SiteFooter() {
                   {point}
                 </span>
               ))}
+            </div>
+
+            <div className="mt-6 grid gap-2 text-sm">
+              <a className="inline-flex items-center gap-2 font-bold text-[#16324a] hover:text-blue-700" href={`tel:${URECHEM_PHONE.replace(/[^+0-9]/g, "")}`}>
+                <Phone aria-hidden="true" className="h-4 w-4" />
+                {URECHEM_PHONE}
+              </a>
+              <a className="inline-flex items-center gap-2 font-bold text-[#16324a] hover:text-blue-700" href={`mailto:${URECHEM_EMAIL}`}>
+                <Mail aria-hidden="true" className="h-4 w-4" />
+                {URECHEM_EMAIL}
+              </a>
             </div>
 
             <p className="mt-7 text-sm font-black uppercase tracking-[0.13em]" style={{ color: "#b7791f" }}>
