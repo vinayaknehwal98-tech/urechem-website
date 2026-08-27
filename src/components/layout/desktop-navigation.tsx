@@ -67,7 +67,7 @@ export function DesktopNavigation() {
   return (
     <nav
       aria-label="Primary navigation"
-      className="hidden items-center justify-between gap-0.5 px-1 lg:flex xl:gap-1 xl:px-3"
+      className="hidden items-center justify-between gap-0.5 rounded-full border border-blue-100/80 bg-white/75 px-1.5 py-1 shadow-[0_8px_24px_rgba(37,99,235,0.07)] backdrop-blur-sm lg:flex xl:gap-1 xl:px-2"
       onKeyDown={(event) => {
         if (event.key === "Escape") closeDropdown();
       }}
@@ -93,8 +93,8 @@ export function DesktopNavigation() {
               aria-expanded={menu ? isOpen : undefined}
               aria-haspopup={menu ? "menu" : undefined}
               className={cn(
-                "group relative inline-flex items-center gap-1 rounded-[var(--radius-sm)] px-2 py-2.5 text-[0.78rem] font-semibold text-slate-700 transition duration-300 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 xl:px-2.5 xl:text-[0.83rem]",
-                isActive && "text-blue-800",
+                "group relative inline-flex items-center gap-1 rounded-full px-3 py-2 text-[0.78rem] font-semibold text-slate-700 transition duration-300 hover:bg-blue-50/80 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 xl:px-3.5 xl:text-[0.83rem]",
+                isActive && "bg-blue-50 text-blue-800",
               )}
               href={item.href}
               onFocus={() => menu && openDropdown(item.label)}
@@ -110,7 +110,7 @@ export function DesktopNavigation() {
               <span
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-x-2 bottom-1 h-px origin-left scale-x-0 bg-blue-700 transition-transform duration-300 group-hover:scale-x-100",
+                  "absolute inset-x-3 bottom-1 h-px origin-left scale-x-0 bg-blue-700 transition-transform duration-300 group-hover:scale-x-100",
                   (isActive || isOpen) && "scale-x-100",
                 )}
               />
