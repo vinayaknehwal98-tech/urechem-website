@@ -57,17 +57,21 @@ export function DesktopNavigation() {
   return (
     <nav
       aria-label="Primary navigation"
-      className="hidden items-center justify-center gap-1 rounded-full border border-white/75 bg-white/55 px-2 py-1 shadow-[0_5px_20px_rgba(15,23,42,0.06)] backdrop-blur-lg lg:flex xl:gap-1.5"
+      className="relative z-20 hidden items-center justify-center gap-1 rounded-full border border-white/75 bg-white/55 px-2 py-1 shadow-[0_5px_20px_rgba(15,23,42,0.06)] backdrop-blur-lg lg:flex xl:gap-1.5"
       onKeyDown={(event) => event.key === "Escape" && closeDropdown()}
     >
       {primaryNavigation.map((item) => {
         const menu = dropdownItems[item.label];
         const isOpen = openMenu === item.label;
         const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+        const commonClassName = cn(
+          "group relative inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[0.83rem] font-semibold text-slate-700 transition-colors hover:bg-white/80 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 xl:px-4",
+          (isActive || isOpen) && "bg-white/75 text-blue-800",
+        );
 
         return (
           <div
-            className="relative flex items-center"
+            className="relative z-20 flex items-center"
             key={item.href}
             onMouseEnter={() => menu && openDropdown(item.label)}
             onMouseLeave={() => menu && scheduleDropdownClose()}
@@ -79,10 +83,7 @@ export function DesktopNavigation() {
               aria-current={isActive ? "page" : undefined}
               aria-expanded={menu ? isOpen : undefined}
               aria-haspopup={menu ? "menu" : undefined}
-              className={cn(
-                "group relative inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[0.83rem] font-semibold text-slate-700 transition-colors hover:bg-white/80 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 xl:px-4",
-                (isActive || isOpen) && "bg-white/75 text-blue-800",
-              )}
+              className={commonClassName}
               href={item.href}
               onFocus={() => menu && openDropdown(item.label)}
               onClick={() => menu && setOpenMenu(isOpen ? null : item.label)}
