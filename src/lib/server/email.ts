@@ -1,11 +1,27 @@
 import type { ValidatedEnquiry } from "@/lib/server/validation";
 
 type DeliveryResult =
-  | { ok: true }
+  | { ok: true; providerMessageId?: string }
   | { ok: false; reason: "not_configured" | "provider_error" };
 
 function safeSubjectPart(value: string) {
   return value.replace(/[\r\n]+/g, " ").slice(0, 120);
+}
+
+function buildEnquiryBrief(enquiry: ValidatedEnquiry) {
+  return [
+    "URECHEM ENQUIRY",
+    `Type: ${enquiry.type}`,
+    `Name: ${enquiry.name}`,
+    `Email: ${enquiry.email}`,
+    `Mobile: ${enquiry.mobile}`,
+    `Product: ${enquiry.product || "Not specified"}`,
+    "",
+    "Customer enquiry / technical context:",
+    enquiry.context,
+    "",
+    "Please review this enquiry and confirm the appropriate next step.",
+  ].join("\n");
 }
 
 export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<DeliveryResult> {
@@ -15,16 +31,16 @@ export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<Deliver
 
   if (!apiKey || !recipient || !from) return { ok: false, reason: "not_configured" };
 
+  const brief = buildEnquiryBrief(enquiry);
+  const subjectPart = safeSubjectPart(enquiry.product || enquiry.type || enquiry.name);
+  const subject = `New Website Enquiry — ${subjectPart}`;
+
   const text = [
-    "URECHEM WEBSITE ENQUIRY",
-    `Type: ${enquiry.type}`,
-    `Name: ${enquiry.name}`,
-    `Email: ${enquiry.email}`,
-    `Mobile: ${enquiry.mobile}`,
-    `Product: ${enquiry.product || "Not specified"}`,
+    "New website enquiry received by Urechem Chemicals.",
     "",
-    "Technical context:",
-    enquiry.context,
+    brief,
+    "",
+    `Reply directly to this email to contact ${enquiry.name} at ${enquiry.email}.`,
   ].join("\n");
 
   try {
@@ -38,14 +54,20 @@ export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<Deliver
         from,
         to: [recipient],
         reply_to: enquiry.email,
-        subject: `Urechem ${safeSubjectPart(enquiry.type)}: ${safeSubjectPart(enquiry.product || enquiry.name)}`,
+        subject,
         text,
       }),
       cache: "no-store",
       signal: AbortSignal.timeout(8_000),
     });
 
-    return response.ok ? { ok: true } : { ok: false, reason: "provider_error" };
+    if (!response.ok) return { ok: false, reason: "provider_error" };
+
+    const payload = (await response.json().catch(() => null)) as { id?: unknown } | null;
+    return {
+      ok: true,
+      providerMessageId: typeof payload?.id === "string" ? payload.id : undefined,
+    };
   } catch {
     return { ok: false, reason: "provider_error" };
   }
