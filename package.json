@@ -46,7 +46,7 @@
     "sharp": "^0.35.0"
   },
   "engines": {
-    "node": ">=20 <21",
+    "node": "24.x",
     "npm": ">=10"
   },
   "packageManager": "npm@11.4.2"
