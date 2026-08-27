@@ -131,7 +131,7 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
 
       if (!response.ok) {
         setSubmitState("failed");
-        setSubmitMessage(payload.message || "Something went wrong. Please try again.");
+        setSubmitMessage(payload.message || "We could not send the enquiry. Please try again or use the prepared brief below.");
         return;
       }
 
@@ -140,7 +140,7 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
       startedAtRef.current = Date.now();
     } catch {
       setSubmitState("failed");
-      setSubmitMessage("Something went wrong. Please try again.");
+      setSubmitMessage("We could not send the enquiry. Please try again or use the prepared brief below.");
     }
   };
 
@@ -299,8 +299,8 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
         {submitState === "sending"
           ? "Sending…"
           : isConsultation
-            ? "Prepare consultation request"
-            : "Prepare enquiry"}
+            ? "Send consultation request"
+            : "Send enquiry"}
       </button>
 
       {isPrepared ? (
@@ -308,55 +308,62 @@ export function ContactEnquiryForm({ fixedType }: ContactEnquiryFormProps = {}) 
           <div className="flex items-start gap-3">
             <CheckCircle2 aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-blue-700" />
             <div>
-              <h2 className="font-bold">{submitState === "sent" ? "Your enquiry was sent" : "Your enquiry brief is ready"}</h2>
+              <h2 className="font-bold">
+                {submitState === "sent"
+                  ? "Enquiry sent successfully ✓"
+                  : submitState === "failed"
+                    ? "Enquiry could not be sent"
+                    : "Sending your enquiry…"}
+              </h2>
               <p className="mt-1 text-sm leading-6">
                 {submitState === "sent"
-                  ? submitMessage
-                  : "Check the details, then email, copy or download the brief for the approved Urechem contact channel."}
+                  ? "The Urechem team has received your enquiry and can follow up using the contact details you provided."
+                  : submitState === "failed"
+                    ? submitMessage
+                    : "Your enquiry is being securely sent to the Urechem enquiry inbox. Please keep this page open until the send completes."}
               </p>
-              {submitState === "failed" && submitMessage ? (
-                <p className="mt-2 text-sm font-semibold leading-6 text-red-700">{submitMessage}</p>
-              ) : null}
             </div>
           </div>
-          <pre className="mt-4 max-h-72 overflow-auto whitespace-pre-wrap rounded-[var(--radius-sm)] border border-blue-200 bg-white p-4 font-sans text-sm leading-6 text-slate-700">
-            {enquiryBrief}
-          </pre>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {enquiryEmail ? (
-              <a
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-4 text-sm font-bold text-[color:#fff] transition hover:bg-blue-800"
-                href={`mailto:${enquiryEmail}?subject=${encodeURIComponent(`Urechem ${form.type}: ${form.product || form.name}`)}&body=${encodeURIComponent(enquiryBrief)}`}
+
+          {submitState !== "sent" ? (
+            <pre className="mt-4 max-h-72 overflow-auto whitespace-pre-wrap rounded-[var(--radius-sm)] border border-blue-200 bg-white p-4 font-sans text-sm leading-6 text-slate-700">
+              {enquiryBrief}
+            </pre>
+          ) : null}
+
+          {submitState === "failed" ? (
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {enquiryEmail ? (
+                <a
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-700 bg-blue-700 px-4 text-sm font-bold text-[color:#fff] transition hover:bg-blue-800"
+                  href={`mailto:${enquiryEmail}?subject=${encodeURIComponent(`New Website Enquiry — ${form.product || form.type}`)}&body=${encodeURIComponent(enquiryBrief)}`}
+                >
+                  <Mail aria-hidden="true" className="size-4" />
+                  Email Urechem
+                </a>
+              ) : null}
+              <button
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
+                onClick={copyBrief}
+                type="button"
               >
-                <Mail aria-hidden="true" className="size-4" />
-                Email Urechem
-              </a>
-            ) : null}
-            <button
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
-              onClick={copyBrief}
-              type="button"
-            >
-              {copyState === "copied" ? <Check aria-hidden="true" className="size-4" /> : <Clipboard aria-hidden="true" className="size-4" />}
-              {copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy brief"}
-            </button>
-            <button
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
-              onClick={downloadBrief}
-              type="button"
-            >
-              <Download aria-hidden="true" className="size-4" />
-              Download brief
-            </button>
-          </div>
+                {copyState === "copied" ? <Check aria-hidden="true" className="size-4" /> : <Clipboard aria-hidden="true" className="size-4" />}
+                {copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy brief"}
+              </button>
+              <button
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-button)] border border-blue-300 bg-white px-4 text-sm font-bold text-blue-950 transition hover:bg-blue-100"
+                onClick={downloadBrief}
+                type="button"
+              >
+                <Download aria-hidden="true" className="size-4" />
+                Download brief
+              </button>
+            </div>
+          ) : null}
+
           {copyState === "failed" ? (
             <p className="mt-3 text-xs leading-5 text-red-700">
               Clipboard access was blocked by the browser. Use “Download brief” or manually select the prepared text.
-            </p>
-          ) : null}
-          {!enquiryEmail ? (
-            <p className="mt-4 text-xs leading-5 text-slate-600">
-              Direct email delivery will be enabled after Urechem confirms the official enquiry inbox.
             </p>
           ) : null}
         </section>
