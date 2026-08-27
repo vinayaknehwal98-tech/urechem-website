@@ -29,7 +29,14 @@ export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<Deliver
   const recipient = process.env.URECHEM_ENQUIRY_EMAIL?.trim();
   const from = process.env.URECHEM_FROM_EMAIL?.trim();
 
-  if (!apiKey || !recipient || !from) return { ok: false, reason: "not_configured" };
+  if (!apiKey || !recipient || !from) {
+    console.warn("[urechem] enquiry_delivery_not_configured", {
+      hasApiKey: Boolean(apiKey),
+      hasRecipient: Boolean(recipient),
+      hasFrom: Boolean(from),
+    });
+    return { ok: false, reason: "not_configured" };
+  }
 
   const brief = buildEnquiryBrief(enquiry);
   const subjectPart = safeSubjectPart(enquiry.product || enquiry.type || enquiry.name);
@@ -61,14 +68,25 @@ export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<Deliver
       signal: AbortSignal.timeout(8_000),
     });
 
-    if (!response.ok) return { ok: false, reason: "provider_error" };
+    if (!response.ok) {
+      console.warn("[urechem] enquiry_provider_error", {
+        provider: "resend",
+        status: response.status,
+        statusText: response.statusText.slice(0, 120),
+      });
+      return { ok: false, reason: "provider_error" };
+    }
 
     const payload = (await response.json().catch(() => null)) as { id?: unknown } | null;
     return {
       ok: true,
       providerMessageId: typeof payload?.id === "string" ? payload.id : undefined,
     };
-  } catch {
+  } catch (error) {
+    console.warn("[urechem] enquiry_provider_request_failed", {
+      provider: "resend",
+      error: error instanceof Error ? error.name : "UnknownError",
+    });
     return { ok: false, reason: "provider_error" };
   }
 }
