@@ -68,14 +68,14 @@ export async function POST(request: NextRequest) {
       await releaseDuplicate("enquiry", fingerprint);
       safeServerLog("warn", "enquiry_delivery_failed", requestId, { reason: delivery.reason });
       return jsonResponse(
-        { ok: false, message: "We could not send the enquiry. Please use the prepared email or try again later.", requestId },
+        { ok: false, message: "Automatic delivery failed. Your enquiry brief has been preserved below so you can still send it to Urechem.", requestId },
         503,
         limitHeaders,
       );
     }
 
     return jsonResponse(
-      { ok: true, message: "Your enquiry was sent successfully.", requestId },
+      { ok: true, message: "Enquiry sent successfully ✓", requestId },
       200,
       limitHeaders,
     );
