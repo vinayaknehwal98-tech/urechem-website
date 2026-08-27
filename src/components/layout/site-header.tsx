@@ -20,8 +20,13 @@ export function SiteHeader() {
 
         <DesktopNavigation />
 
-        <div className="relative flex items-center gap-2 sm:gap-3">
-          <ButtonLink className="hidden xl:inline-flex" href="/consultant" size="sm">
+        <div className="relative z-30 flex items-center gap-2 sm:gap-3">
+          <ButtonLink
+            aria-label="Talk to a Urechem consultant"
+            className="hidden xl:inline-flex"
+            href="/consultant"
+            size="sm"
+          >
             <MessageSquareText aria-hidden="true" className="h-4 w-4" />
             Consultant
           </ButtonLink>
