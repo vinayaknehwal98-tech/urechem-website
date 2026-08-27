@@ -8,22 +8,42 @@ import { Container } from "@/components/ui/container";
 
 export function SiteHeader() {
   return (
-    <header className="relative sticky top-0 z-40 overflow-hidden border-b border-white/50 bg-[radial-gradient(circle_at_8%_50%,rgba(56,189,248,0.34)_0_2%,transparent_15%),radial-gradient(circle_at_30%_110%,rgba(14,165,233,0.20)_0_3%,transparent_18%),radial-gradient(circle_at_72%_-30%,rgba(96,165,250,0.28)_0_4%,transparent_22%),radial-gradient(circle_at_96%_55%,rgba(37,99,235,0.30)_0_3%,transparent_18%),linear-gradient(115deg,rgba(224,247,255,0.62),rgba(255,255,255,0.30)_42%,rgba(219,242,255,0.56))] shadow-[0_10px_36px_rgba(14,116,144,0.14)] backdrop-blur-md before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[linear-gradient(90deg,rgba(7,89,133,0.9),rgba(56,189,248,0.95),rgba(255,255,255,0.95),rgba(37,99,235,0.95),rgba(56,189,248,0.95),rgba(7,89,133,0.9))] before:content-[''] after:pointer-events-none after:absolute after:-right-16 after:-top-20 after:h-48 after:w-72 after:rounded-full after:border after:border-white/35 after:bg-white/10 after:blur-sm after:content-['']">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <span className="absolute -left-10 top-1/2 h-24 w-48 -translate-y-1/2 rounded-full border border-white/65 bg-white/18 shadow-[inset_0_0_28px_rgba(255,255,255,0.35)]" />
-        <span className="absolute left-[7%] top-3 h-2 w-2 rounded-full bg-white/80 shadow-[0_0_16px_rgba(56,189,248,0.95)]" />
-        <span className="absolute left-[18%] bottom-3 h-1.5 w-1.5 rounded-full bg-sky-300/75" />
-        <span className="absolute left-[31%] top-2 h-1.5 w-1.5 rounded-full bg-blue-300/70" />
-        <span className="absolute right-[28%] bottom-2 h-2 w-2 rounded-full bg-white/75 shadow-[0_0_14px_rgba(56,189,248,0.8)]" />
-        <span className="absolute right-[12%] top-3 h-1.5 w-1.5 rounded-full bg-sky-300/75" />
-        <span className="absolute -right-12 top-1/2 h-24 w-52 -translate-y-1/2 rounded-full border border-sky-100/65 bg-sky-100/15 shadow-[inset_0_0_30px_rgba(125,211,252,0.25)]" />
-        <span className="absolute left-[43%] top-1/2 h-px w-28 bg-gradient-to-r from-transparent via-white/55 to-transparent" />
+    <header className="relative sticky top-0 z-40 overflow-hidden border-b border-sky-200/60 bg-white/95 shadow-[0_8px_30px_rgba(14,116,144,0.12)] backdrop-blur-md">
+      {/* Static water-glass artwork: deliberately subtle so the navigation stays crisp. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(239,249,255,0.82)_52%,rgba(219,242,255,0.72))]" />
+
+        {/* Flowing water shapes along the top and bottom edges */}
+        <svg className="absolute -left-[2%] -top-8 h-28 w-[104%] text-sky-300/35" viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none">
+          <path d="M0 48C90 8 150 78 245 43C340 8 402 76 495 42C590 8 650 70 745 43C850 12 900 75 1000 43C1095 12 1160 72 1260 40C1340 15 1395 38 1440 20V120H0Z" fill="currentColor" />
+          <path d="M0 56C95 22 155 86 250 52C345 18 405 83 500 51C595 20 655 78 750 51C855 20 905 82 1005 50C1100 20 1165 80 1265 49C1345 24 1400 46 1440 29" stroke="rgba(255,255,255,0.9)" strokeWidth="2" />
+        </svg>
+
+        <svg className="absolute -bottom-9 -left-[2%] h-28 w-[104%] text-blue-300/30" viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none">
+          <path d="M0 70C90 104 155 36 250 70C350 106 410 38 505 73C600 108 660 45 755 72C855 105 915 38 1010 72C1105 105 1170 45 1270 74C1350 97 1400 77 1440 91V120H0Z" fill="currentColor" />
+          <path d="M0 67C95 99 160 31 255 66C350 101 415 34 510 69C605 103 665 41 760 68C855 101 920 34 1015 68C1110 101 1175 41 1275 70C1350 92 1405 73 1440 86" stroke="rgba(255,255,255,0.85)" strokeWidth="2" />
+        </svg>
+
+        {/* Soft glass pools */}
+        <span className="absolute -left-20 top-1/2 h-36 w-72 -translate-y-1/2 rounded-[55%] bg-sky-200/35 blur-2xl" />
+        <span className="absolute left-[25%] -top-16 h-36 w-72 rounded-full bg-cyan-200/25 blur-3xl" />
+        <span className="absolute right-[20%] -bottom-20 h-44 w-80 rounded-full bg-blue-200/30 blur-3xl" />
+        <span className="absolute -right-20 top-1/2 h-40 w-80 -translate-y-1/2 rounded-[55%] bg-blue-300/35 blur-2xl" />
+
+        {/* Tiny bubbles / molecular accents */}
+        <span className="absolute left-[7%] top-2 h-2 w-2 rounded-full border border-white bg-sky-300/65 shadow-[0_0_12px_rgba(56,189,248,0.55)]" />
+        <span className="absolute left-[18%] bottom-2 h-1.5 w-1.5 rounded-full bg-sky-400/55" />
+        <span className="absolute left-[31%] top-3 h-1.5 w-1.5 rounded-full bg-blue-300/60" />
+        <span className="absolute right-[29%] bottom-2 h-2 w-2 rounded-full border border-white bg-sky-300/60" />
+        <span className="absolute right-[12%] top-3 h-1.5 w-1.5 rounded-full bg-sky-400/55" />
+        <span className="absolute right-[4%] top-1/2 h-10 w-10 -translate-y-1/2 rounded-full border border-white/70 bg-white/15 shadow-[inset_0_0_16px_rgba(255,255,255,0.8)]" />
+        <span className="absolute right-[6.5%] top-[28%] h-3 w-3 rounded-full border border-sky-200/70 bg-white/30" />
       </div>
 
-      <Container className="relative z-10 grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:h-18 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-4 lg:gap-6">
+      <Container className="relative z-10 grid h-[4.75rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-4 lg:gap-6">
         <Link
           aria-label="Urechem Chemicals home"
-          className="group relative inline-flex min-w-0 items-center rounded-[var(--radius-sm)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600"
+          className="relative inline-flex min-w-0 items-center rounded-full border border-white/75 bg-white/45 px-2 py-1.5 shadow-[0_8px_24px_rgba(14,116,144,0.10)] backdrop-blur-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 sm:px-3"
           href="/"
         >
           <BrandLogo priority />
