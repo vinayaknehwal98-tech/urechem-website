@@ -8,13 +8,16 @@ import { Container } from "@/components/ui/container";
 
 export function SiteHeader() {
   return (
-    <header className="relative sticky top-0 z-40 overflow-hidden border-b border-sky-200/70 bg-[radial-gradient(ellipse_at_0%_50%,rgba(14,165,233,0.34)_0%,rgba(56,189,248,0.18)_18%,transparent_46%),radial-gradient(ellipse_at_100%_35%,rgba(37,99,235,0.30)_0%,rgba(96,165,250,0.16)_20%,transparent_48%),radial-gradient(circle_at_55%_120%,rgba(14,165,233,0.16)_0%,transparent_35%),linear-gradient(110deg,rgba(239,250,255,0.94)_0%,rgba(255,255,255,0.78)_42%,rgba(240,249,255,0.90)_100%)] shadow-[0_10px_40px_rgba(14,116,144,0.12)] backdrop-blur-xl before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[linear-gradient(90deg,#075985_0%,#38bdf8_20%,#ffffff_42%,#2563eb_64%,#38bdf8_82%,#075985_100%)] before:content-[''] after:pointer-events-none after:absolute after:-bottom-10 after:left-[18%] after:h-24 after:w-[64%] after:rounded-[50%] after:bg-[radial-gradient(ellipse,rgba(56,189,248,0.25)_0%,rgba(125,211,252,0.13)_38%,transparent_72%)] after:blur-xl after:content-['']">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-80">
-        <span className="absolute -left-8 top-1/2 h-20 w-40 -translate-y-1/2 rounded-full border border-white/70 bg-white/20 blur-[1px]" />
-        <span className="absolute left-[24%] top-2 h-2 w-2 rounded-full bg-sky-300/70 shadow-[0_0_18px_rgba(56,189,248,0.9)]" />
-        <span className="absolute left-[27%] bottom-2 h-1.5 w-1.5 rounded-full bg-blue-300/60" />
-        <span className="absolute right-[20%] top-2 h-1.5 w-1.5 rounded-full bg-sky-300/70" />
-        <span className="absolute right-[-20px] top-1/2 h-24 w-52 -translate-y-1/2 rounded-full border border-sky-200/60 bg-sky-100/20 blur-[1px]" />
+    <header className="relative sticky top-0 z-40 overflow-hidden border-b border-white/50 bg-[radial-gradient(circle_at_8%_50%,rgba(56,189,248,0.34)_0_2%,transparent_15%),radial-gradient(circle_at_30%_110%,rgba(14,165,233,0.20)_0_3%,transparent_18%),radial-gradient(circle_at_72%_-30%,rgba(96,165,250,0.28)_0_4%,transparent_22%),radial-gradient(circle_at_96%_55%,rgba(37,99,235,0.30)_0_3%,transparent_18%),linear-gradient(115deg,rgba(224,247,255,0.62),rgba(255,255,255,0.30)_42%,rgba(219,242,255,0.56))] shadow-[0_10px_36px_rgba(14,116,144,0.14)] backdrop-blur-md before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[linear-gradient(90deg,rgba(7,89,133,0.9),rgba(56,189,248,0.95),rgba(255,255,255,0.95),rgba(37,99,235,0.95),rgba(56,189,248,0.95),rgba(7,89,133,0.9))] before:content-[''] after:pointer-events-none after:absolute after:-right-16 after:-top-20 after:h-48 after:w-72 after:rounded-full after:border after:border-white/35 after:bg-white/10 after:blur-sm after:content-['']">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <span className="absolute -left-10 top-1/2 h-24 w-48 -translate-y-1/2 rounded-full border border-white/65 bg-white/18 shadow-[inset_0_0_28px_rgba(255,255,255,0.35)]" />
+        <span className="absolute left-[7%] top-3 h-2 w-2 rounded-full bg-white/80 shadow-[0_0_16px_rgba(56,189,248,0.95)]" />
+        <span className="absolute left-[18%] bottom-3 h-1.5 w-1.5 rounded-full bg-sky-300/75" />
+        <span className="absolute left-[31%] top-2 h-1.5 w-1.5 rounded-full bg-blue-300/70" />
+        <span className="absolute right-[28%] bottom-2 h-2 w-2 rounded-full bg-white/75 shadow-[0_0_14px_rgba(56,189,248,0.8)]" />
+        <span className="absolute right-[12%] top-3 h-1.5 w-1.5 rounded-full bg-sky-300/75" />
+        <span className="absolute -right-12 top-1/2 h-24 w-52 -translate-y-1/2 rounded-full border border-sky-100/65 bg-sky-100/15 shadow-[inset_0_0_30px_rgba(125,211,252,0.25)]" />
+        <span className="absolute left-[43%] top-1/2 h-px w-28 bg-gradient-to-r from-transparent via-white/55 to-transparent" />
       </div>
 
       <Container className="relative z-10 grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:h-18 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-4 lg:gap-6">
