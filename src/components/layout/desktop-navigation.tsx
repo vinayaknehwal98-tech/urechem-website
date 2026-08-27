@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -11,43 +10,34 @@ import { primaryNavigation, productFamilyLinks, type NavigationItem } from "@/da
 import { cn } from "@/lib/utils";
 
 const industryNavigationItems: NavigationItem[] = [
-  ...industries.map((industry) => ({
-    label: industry.name,
-    href: `/industries/${industry.slug}`,
-  })),
+  ...industries.map((industry) => ({ label: industry.name, href: `/industries/${industry.slug}` })),
   { label: "Flexible packaging", href: "/industries/flexible-packaging" },
 ];
 
 const dropdownItems: Record<string, NavigationItem[]> = {
   Products: productFamilyLinks,
-  Applications: applicationCategories.map((application) => ({
-    label: application.title,
-    href: application.href,
-  })),
+  Applications: applicationCategories.map((application) => ({ label: application.title, href: application.href })),
   Industries: industryNavigationItems,
 };
 
-const CLOSE_DELAY_MS = 160;
+const CLOSE_DELAY_MS = 220;
 
 export function DesktopNavigation() {
   const pathname = usePathname();
-  const shouldReduceMotion = useReducedMotion();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const closeTimerRef = useRef<number | null>(null);
 
   const cancelScheduledClose = useCallback(() => {
-    if (closeTimerRef.current === null) return;
-    window.clearTimeout(closeTimerRef.current);
-    closeTimerRef.current = null;
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
   }, []);
 
-  const openDropdown = useCallback(
-    (label: string) => {
-      cancelScheduledClose();
-      setOpenMenu(label);
-    },
-    [cancelScheduledClose],
-  );
+  const openDropdown = useCallback((label: string) => {
+    cancelScheduledClose();
+    setOpenMenu(label);
+  }, [cancelScheduledClose]);
 
   const closeDropdown = useCallback(() => {
     cancelScheduledClose();
@@ -57,8 +47,8 @@ export function DesktopNavigation() {
   const scheduleDropdownClose = useCallback(() => {
     cancelScheduledClose();
     closeTimerRef.current = window.setTimeout(() => {
-      closeTimerRef.current = null;
       setOpenMenu(null);
+      closeTimerRef.current = null;
     }, CLOSE_DELAY_MS);
   }, [cancelScheduledClose]);
 
@@ -67,10 +57,8 @@ export function DesktopNavigation() {
   return (
     <nav
       aria-label="Primary navigation"
-      className="hidden items-center justify-between gap-0.5 rounded-full border border-blue-100/80 bg-white/75 px-1.5 py-1 shadow-[0_8px_24px_rgba(37,99,235,0.07)] backdrop-blur-sm lg:flex xl:gap-1 xl:px-2"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") closeDropdown();
-      }}
+      className="hidden items-center justify-center gap-1 rounded-full border border-white/75 bg-white/55 px-2 py-1 shadow-[0_5px_20px_rgba(15,23,42,0.06)] backdrop-blur-lg lg:flex xl:gap-1.5"
+      onKeyDown={(event) => event.key === "Escape" && closeDropdown()}
     >
       {primaryNavigation.map((item) => {
         const menu = dropdownItems[item.label];
@@ -81,88 +69,60 @@ export function DesktopNavigation() {
           <div
             className="relative flex items-center"
             key={item.href}
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                closeDropdown();
-              }
-            }}
+            onMouseEnter={() => menu && openDropdown(item.label)}
             onMouseLeave={() => menu && scheduleDropdownClose()}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget as Node | null)) closeDropdown();
+            }}
           >
             <Link
               aria-current={isActive ? "page" : undefined}
               aria-expanded={menu ? isOpen : undefined}
               aria-haspopup={menu ? "menu" : undefined}
               className={cn(
-                "group relative inline-flex items-center gap-1 rounded-full px-3 py-2 text-[0.78rem] font-semibold text-slate-700 transition duration-300 hover:bg-blue-50/80 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 xl:px-3.5 xl:text-[0.83rem]",
-                isActive && "bg-blue-50 text-blue-800",
+                "group relative inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[0.83rem] font-semibold text-slate-700 transition-colors hover:bg-white/80 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600 xl:px-4",
+                (isActive || isOpen) && "bg-white/75 text-blue-800",
               )}
               href={item.href}
               onFocus={() => menu && openDropdown(item.label)}
-              onMouseEnter={() => menu && openDropdown(item.label)}
+              onClick={() => menu && setOpenMenu(isOpen ? null : item.label)}
             >
               {item.label}
-              {menu ? (
-                <ChevronDown
-                  aria-hidden="true"
-                  className={cn("h-3.5 w-3.5 transition-transform duration-300", isOpen && "rotate-180")}
-                />
-              ) : null}
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "absolute inset-x-3 bottom-1 h-px origin-left scale-x-0 bg-blue-700 transition-transform duration-300 group-hover:scale-x-100",
-                  (isActive || isOpen) && "scale-x-100",
-                )}
-              />
+              {menu && <ChevronDown aria-hidden="true" className={cn("h-3.5 w-3.5", isOpen && "rotate-180")} />}
+              <span aria-hidden="true" className={cn("absolute inset-x-4 bottom-1 h-px bg-blue-700", !(isActive || isOpen) && "opacity-0")} />
             </Link>
 
-            {menu ? (
+            {menu && isOpen && (
               <div
-                className={cn(
-                  "absolute left-1/2 top-full z-50 w-[22rem] -translate-x-1/2 pt-3",
-                  isOpen ? "pointer-events-auto" : "pointer-events-none",
-                )}
+                className="absolute left-1/2 top-full z-[100] w-[22rem] -translate-x-1/2 pt-2"
                 onMouseEnter={cancelScheduledClose}
+                onMouseLeave={scheduleDropdownClose}
+                role="presentation"
               >
-                <AnimatePresence>
-                  {isOpen ? (
-                    <motion.div
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      className="overflow-hidden rounded-[var(--radius-lg)] border border-blue-100 bg-white p-2 shadow-[0_24px_70px_rgba(15,23,42,0.2)]"
-                      exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98, y: -8 }}
-                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98, y: -10 }}
-                      role="menu"
-                      transition={{ duration: shouldReduceMotion ? 0.01 : 0.32, ease: [0.22, 1, 0.36, 1] }}
-                    >
+                <div className="overflow-hidden rounded-2xl border border-blue-100 bg-white/95 p-2 shadow-[0_20px_55px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+                  <Link
+                    className="mb-1 flex items-center justify-between rounded-xl bg-blue-50 px-3 py-2.5 text-sm font-bold text-blue-950 hover:bg-blue-100"
+                    href={item.href}
+                    onClick={closeDropdown}
+                  >
+                    View all {item.label.toLowerCase()}
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                  <div className={cn("grid", menu.length > 6 && "grid-cols-2")}>
+                    {menu.map((menuItem) => (
                       <Link
-                        className="mb-1 flex items-center justify-between rounded-[var(--radius-sm)] bg-blue-50 px-3 py-2.5 text-sm font-black text-blue-950 transition hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
-                        href={item.href}
+                        className="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-800"
+                        href={menuItem.href}
+                        key={menuItem.href}
                         onClick={closeDropdown}
-                        role="menuitem"
                       >
-                        View all {item.label.toLowerCase()}
-                        <span aria-hidden="true" className="text-blue-700">
-                          →
-                        </span>
+                        {menuItem.label}
                       </Link>
-                      <div className={cn("grid", menu.length > 6 && "grid-cols-2")}>
-                        {menu.map((menuItem) => (
-                          <Link
-                            className="rounded-[var(--radius-sm)] px-3 py-2.5 text-sm font-medium leading-5 text-slate-700 transition duration-300 hover:bg-blue-50 hover:pl-4 hover:text-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-600"
-                            href={menuItem.href}
-                            key={menuItem.href}
-                            onClick={closeDropdown}
-                            role="menuitem"
-                          >
-                            {menuItem.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
+                    ))}
+                  </div>
+                </div>
               </div>
-            ) : null}
+            )}
           </div>
         );
       })}
