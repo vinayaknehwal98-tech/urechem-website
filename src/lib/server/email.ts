@@ -8,30 +8,83 @@ function safeSubjectPart(value: string) {
   return value.replace(/[\r\n]+/g, " ").slice(0, 120);
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function buildEnquiryBrief(enquiry: ValidatedEnquiry) {
   return [
-    "URECHEM ENQUIRY",
+    "URECHEM WEBSITE",
+    "",
+    enquiry.type === "Consultation request" ? "NEW CONSULTATION REQUEST" : "NEW WEBSITE ENQUIRY",
+    "",
     `Type: ${enquiry.type}`,
     `Name: ${enquiry.name}`,
     `Email: ${enquiry.email}`,
     `Mobile: ${enquiry.mobile}`,
     `Product: ${enquiry.product || "Not specified"}`,
     "",
-    "Customer enquiry / technical context:",
+    enquiry.type === "Consultation request" ? "Project / technical challenge:" : "Customer enquiry / technical context:",
     enquiry.context,
     "",
-    "Please review this enquiry and confirm the appropriate next step.",
+    `Submitted: ${new Date().toISOString()}`,
+    "",
+    "Please review this request and confirm the appropriate next step.",
   ].join("\n");
+}
+
+function buildHtml(enquiry: ValidatedEnquiry) {
+  const title = enquiry.type === "Consultation request" ? "New Consultation Request" : "New Website Enquiry";
+  const contextLabel = enquiry.type === "Consultation request" ? "Project / technical challenge" : "Customer enquiry / technical context";
+  const rows = [
+    ["Request type", enquiry.type],
+    ["Name", enquiry.name],
+    ["Email", enquiry.email],
+    ["Mobile", enquiry.mobile],
+    ["Product", enquiry.product || "Not specified"],
+  ];
+
+  return `<!doctype html>
+<html lang="en">
+  <body style="margin:0;background:#f3f7fb;font-family:Arial,Helvetica,sans-serif;color:#16324a;">
+    <div style="max-width:680px;margin:32px auto;padding:0 16px;">
+      <div style="background:#0a2944;border-radius:18px 18px 0 0;padding:24px 28px;color:#fff;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7dd3fc;">Urechem Website</div>
+        <h1 style="margin:8px 0 0;font-size:25px;line-height:1.25;color:#fff;">${escapeHtml(title)}</h1>
+      </div>
+      <div style="background:#fff;border:1px solid #dbe8f3;border-top:0;border-radius:0 0 18px 18px;padding:28px;">
+        <table role="presentation" style="width:100%;border-collapse:collapse;">
+          <tbody>
+            ${rows
+              .map(
+                ([label, value]) =>
+                  `<tr><td style="width:35%;padding:11px 12px 11px 0;border-bottom:1px solid #e8eef4;font-size:13px;font-weight:700;color:#5b6b7a;vertical-align:top;">${escapeHtml(label)}</td><td style="padding:11px 0;border-bottom:1px solid #e8eef4;font-size:14px;color:#16324a;vertical-align:top;">${escapeHtml(value)}</td></tr>`,
+              )
+              .join("")}
+          </tbody>
+        </table>
+        <h2 style="margin:26px 0 10px;font-size:16px;color:#0a2944;">${escapeHtml(contextLabel)}</h2>
+        <div style="white-space:pre-wrap;background:#f7fbff;border:1px solid #dbe8f3;border-radius:12px;padding:16px;font-size:14px;line-height:1.7;color:#334155;">${escapeHtml(enquiry.context)}</div>
+        <p style="margin:22px 0 0;font-size:12px;line-height:1.6;color:#718096;">Submitted ${escapeHtml(new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }))}. Reply to this email to contact ${escapeHtml(enquiry.name)} directly.</p>
+      </div>
+    </div>
+  </body>
+</html>`;
 }
 
 export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<DeliveryResult> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const recipient = process.env.URECHEM_ENQUIRY_EMAIL?.trim();
-  const from = process.env.URECHEM_FROM_EMAIL?.trim();
+  const recipient = process.env.URECHEM_ENQUIRY_EMAIL?.trim() || "sales@urechem.co.in";
+  const from = process.env.URECHEM_FROM_EMAIL?.trim() || "Urechem Website <sales@urechem.co.in>";
 
-  if (!apiKey || !recipient || !from) {
+  if (!apiKey) {
     console.warn("[urechem] enquiry_delivery_not_configured", {
-      hasApiKey: Boolean(apiKey),
+      hasApiKey: false,
       hasRecipient: Boolean(recipient),
       hasFrom: Boolean(from),
     });
@@ -39,16 +92,9 @@ export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<Deliver
   }
 
   const brief = buildEnquiryBrief(enquiry);
-  const subjectPart = safeSubjectPart(enquiry.product || enquiry.type || enquiry.name);
-  const subject = `New Website Enquiry — ${subjectPart}`;
-
-  const text = [
-    "New website enquiry received by Urechem Chemicals.",
-    "",
-    brief,
-    "",
-    `Reply directly to this email to contact ${enquiry.name} at ${enquiry.email}.`,
-  ].join("\n");
+  const subjectPart = safeSubjectPart(enquiry.product || enquiry.name || enquiry.type);
+  const subjectPrefix = enquiry.type === "Consultation request" ? "New Consultation Request" : "New Website Enquiry";
+  const subject = `${subjectPrefix} — ${subjectPart}`;
 
   try {
     const response = await fetch("https://api.resend.com/emails", {
@@ -62,7 +108,8 @@ export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<Deliver
         to: [recipient],
         reply_to: enquiry.email,
         subject,
-        text,
+        html: buildHtml(enquiry),
+        text: brief,
       }),
       cache: "no-store",
       signal: AbortSignal.timeout(8_000),
