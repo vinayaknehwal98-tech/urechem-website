@@ -195,25 +195,10 @@ export function LeadCaptureFlyer() {
   if (!isOpen || isExcludedPath) return null;
 
   return (
-    <motion.div
-      animate={{ opacity: 1 }}
-      className="fixed inset-0 z-[80] grid place-items-center p-4 sm:p-6"
-      initial={shouldReduceMotion ? false : { opacity: 0 }}
-      role="presentation"
-      transition={{ duration: 0.28, ease: "easeOut" }}
-    >
+    <motion.div animate={{ opacity: 1 }} className="fixed inset-0 z-[80] grid place-items-center p-4 sm:p-6" initial={shouldReduceMotion ? false : { opacity: 0 }} role="presentation" transition={{ duration: 0.28, ease: "easeOut" }}>
       <button aria-hidden="true" className="absolute inset-0 h-full w-full cursor-default bg-blue-950/72 backdrop-blur-sm" tabIndex={-1} type="button" onClick={dismiss} />
 
-      <motion.section
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        aria-labelledby="consultation-flyer-title"
-        aria-modal="true"
-        className="relative z-10 max-h-[calc(100dvh-2rem)] w-full max-w-2xl overflow-y-auto rounded-[var(--radius-lg)] border border-blue-200 bg-white shadow-[0_30px_110px_rgba(3,19,43,0.38)] sm:max-h-[calc(100dvh-3rem)]"
-        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.965, y: 28 }}
-        ref={dialogRef}
-        role="dialog"
-        transition={{ delay: shouldReduceMotion ? 0 : 0.08, duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
-      >
+      <motion.section animate={{ opacity: 1, scale: 1, y: 0 }} aria-labelledby="consultation-flyer-title" aria-modal="true" className="relative z-10 max-h-[calc(100dvh-2rem)] w-full max-w-2xl overflow-y-auto rounded-[var(--radius-lg)] border border-blue-200 bg-white shadow-[0_30px_110px_rgba(3,19,43,0.38)] sm:max-h-[calc(100dvh-3rem)]" initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.965, y: 28 }} ref={dialogRef} role="dialog" transition={{ delay: shouldReduceMotion ? 0 : 0.08, duration: 0.48, ease: [0.22, 1, 0.36, 1] }}>
         <motion.div animate={{ scaleX: 1 }} className="h-2 origin-left bg-[linear-gradient(90deg,#1d4ed8,#22d3ee)]" initial={shouldReduceMotion ? false : { scaleX: 0 }} transition={{ delay: shouldReduceMotion ? 0 : 0.18, duration: 0.62, ease: [0.22, 1, 0.36, 1] }} />
 
         <button aria-label="Close consultation flyer" className="absolute right-4 top-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-blue-200 bg-blue-50 text-blue-950 transition hover:bg-blue-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" ref={closeButtonRef} type="button" onClick={dismiss}>
@@ -237,7 +222,7 @@ export function LeadCaptureFlyer() {
                 </div>
               </div>
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-end">
-                <Button className="w-full sm:w-auto" variant="outline" type="button" onClick={dismiss}>Close</Button>
+                <Button variant="secondary" className="w-full sm:w-auto" type="button" onClick={dismiss}>Close</Button>
                 <Button className="w-full sm:w-auto" type="button" onClick={() => { window.location.assign("/consultant"); }}>Continue to full consultation <ArrowRight aria-hidden="true" className="h-4 w-4" /></Button>
               </div>
             </section>
@@ -269,9 +254,7 @@ export function LeadCaptureFlyer() {
                 </label>
               </div>
 
-              {submitState === "failed" ? (
-                <p aria-live="polite" className="rounded-[var(--radius-md)] border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"><strong>Unable to send:</strong> {submitMessage}</p>
-              ) : null}
+              {submitState === "failed" ? <p aria-live="polite" className="rounded-[var(--radius-md)] border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"><strong>Unable to send:</strong> {submitMessage}</p> : null}
 
               <div className="mt-1 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <button className="text-sm font-semibold text-slate-500 underline-offset-4 hover:text-blue-800 hover:underline" type="button" onClick={dismiss}>Continue browsing</button>
