@@ -16,9 +16,12 @@ export type EnquiryType = (typeof enquiryTypes)[number];
 export type ValidatedEnquiry = {
   type: EnquiryType;
   name: string;
+  company: string;
   email: string;
   mobile: string;
+  industry: string;
   product: string;
+  quantity: string;
   context: string;
   startedAt: number;
 };
@@ -67,7 +70,19 @@ export function validateAiRequest(value: unknown): ValidationResult<{ question: 
 }
 
 export function validateEnquiry(value: unknown): ValidationResult<ValidatedEnquiry> {
-  const allowedKeys = ["type", "name", "email", "mobile", "product", "context", "website", "startedAt"];
+  const allowedKeys = [
+    "type",
+    "name",
+    "company",
+    "email",
+    "mobile",
+    "industry",
+    "product",
+    "quantity",
+    "context",
+    "website",
+    "startedAt",
+  ];
   if (!isRecord(value) || !hasOnlyKeys(value, allowedKeys)) {
     return { ok: false, message: "Please check the enquiry details and try again." };
   }
@@ -79,9 +94,12 @@ export function validateEnquiry(value: unknown): ValidationResult<ValidatedEnqui
 
   const type = cleanText(value.type, 64);
   const name = cleanText(value.name, 100);
+  const company = cleanText(value.company ?? "", 160);
   const email = cleanText(value.email, 254)?.toLowerCase() ?? null;
   const mobile = cleanText(value.mobile, 24);
+  const industry = cleanText(value.industry ?? "", 160);
   const product = cleanText(value.product ?? "", 160);
+  const quantity = cleanText(value.quantity ?? "", 120);
   const context = cleanText(value.context, 4_000);
   const startedAt = typeof value.startedAt === "number" ? Math.trunc(value.startedAt) : NaN;
 
@@ -91,20 +109,23 @@ export function validateEnquiry(value: unknown): ValidationResult<ValidatedEnqui
   if (!name || name.length < 2) {
     return { ok: false, message: "Please enter your name." };
   }
+  if (company === null) {
+    return { ok: false, message: "The company name is too long." };
+  }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     return { ok: false, message: "Please enter a valid email address." };
   }
   if (!mobile || !/^\+?[0-9 ()-]{7,24}$/.test(mobile)) {
     return { ok: false, message: "Please enter a valid mobile number." };
   }
-  if (product === null) {
-    return { ok: false, message: "The product name is too long." };
+  if (industry === null || product === null || quantity === null) {
+    return { ok: false, message: "One of the enquiry fields is too long." };
   }
   if (documentRequestTypes.has(type as EnquiryType) && !product) {
     return { ok: false, message: "Please enter the product for this document request." };
   }
   if (!context || context.length < 10) {
-    return { ok: false, message: "Please add a little more technical context." };
+    return { ok: false, message: "Please add a little more detail about your requirement." };
   }
   if (!Number.isFinite(startedAt) || startedAt <= 0 || startedAt > Date.now() + 60_000) {
     return { ok: false, message: "Please refresh the page and try again." };
@@ -115,9 +136,12 @@ export function validateEnquiry(value: unknown): ValidationResult<ValidatedEnqui
     data: {
       type: type as EnquiryType,
       name,
+      company,
       email,
       mobile: mobile.replace(/\s+/g, " "),
+      industry,
       product,
+      quantity,
       context,
       startedAt,
     },
