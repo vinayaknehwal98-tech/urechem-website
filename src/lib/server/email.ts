@@ -25,14 +25,17 @@ function buildEnquiryBrief(enquiry: ValidatedEnquiry) {
     "",
     `Type: ${enquiry.type}`,
     `Name: ${enquiry.name}`,
+    `Company / Organization: ${enquiry.company || "Not specified"}`,
     `Email: ${enquiry.email}`,
-    `Mobile: ${enquiry.mobile}`,
-    `Product: ${enquiry.product || "Not specified"}`,
+    `Phone: ${enquiry.mobile}`,
+    `Industry / Application: ${enquiry.industry || "Not specified"}`,
+    `Product / Chemical: ${enquiry.product || "Not specified"}`,
+    `Quantity / Specification: ${enquiry.quantity || "Not specified"}`,
     "",
     enquiry.type === "Consultation request" ? "Project / technical challenge:" : "Customer enquiry / technical context:",
     enquiry.context,
     "",
-    `Submitted: ${new Date().toISOString()}`,
+    `Submitted: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`,
     "",
     "Please review this request and confirm the appropriate next step.",
   ].join("\n");
@@ -44,9 +47,12 @@ function buildHtml(enquiry: ValidatedEnquiry) {
   const rows = [
     ["Request type", enquiry.type],
     ["Name", enquiry.name],
+    ["Company / Organization", enquiry.company || "Not specified"],
     ["Email", enquiry.email],
-    ["Mobile", enquiry.mobile],
-    ["Product", enquiry.product || "Not specified"],
+    ["Phone", enquiry.mobile],
+    ["Industry / Application", enquiry.industry || "Not specified"],
+    ["Product / Chemical", enquiry.product || "Not specified"],
+    ["Quantity / Specification", enquiry.quantity || "Not specified"],
   ];
 
   return `<!doctype html>
@@ -79,12 +85,12 @@ function buildHtml(enquiry: ValidatedEnquiry) {
 
 export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<DeliveryResult> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
-  const recipient = process.env.URECHEM_ENQUIRY_EMAIL?.trim() || "sales@urechem.co.in";
-  const from = process.env.URECHEM_FROM_EMAIL?.trim() || "Urechem Website <sales@urechem.co.in>";
+  const recipient = process.env.URECHEM_ENQUIRY_EMAIL?.trim();
+  const from = process.env.URECHEM_FROM_EMAIL?.trim();
 
-  if (!apiKey) {
+  if (!apiKey || !recipient || !from) {
     console.warn("[urechem] enquiry_delivery_not_configured", {
-      hasApiKey: false,
+      hasApiKey: Boolean(apiKey),
       hasRecipient: Boolean(recipient),
       hasFrom: Boolean(from),
     });
