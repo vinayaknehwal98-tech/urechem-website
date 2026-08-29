@@ -15,22 +15,10 @@ const heroTitleWords = "Intelligent chemistry for better polyurethane solutions.
 const revealEase = [0.22, 1, 0.36, 1] as const;
 
 const titleContainerVariants: Variants = { hidden: {}, visible: { transition: { delayChildren: 0.12, staggerChildren: 0.07 } } };
-const titleWordVariants: Variants = {
-  hidden: { opacity: 0, y: 34, filter: "blur(10px)" },
-  visible: { opacity: 1, y: 0, filter: "none", transition: { duration: 0.72, ease: revealEase } },
-};
-const supportingCopyVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (delay = 0) => ({ opacity: 1, y: 0, transition: { delay, duration: 0.64, ease: revealEase } }),
-};
-const processContainerVariants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { delay: 1.28, duration: 0.68, ease: revealEase } },
-};
-const processStepVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: (index = 0) => ({ opacity: 1, y: 0, transition: { delay: 1.44 + index * 0.12, duration: 0.56, ease: revealEase } }),
-};
+const titleWordVariants: Variants = { hidden: { opacity: 0, y: 34, filter: "blur(10px)" }, visible: { opacity: 1, y: 0, filter: "none", transition: { duration: 0.72, ease: revealEase } } };
+const supportingCopyVariants: Variants = { hidden: { opacity: 0, y: 24 }, visible: (delay = 0) => ({ opacity: 1, y: 0, transition: { delay, duration: 0.64, ease: revealEase } }) };
+const processContainerVariants: Variants = { hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0, transition: { delay: 1.28, duration: 0.68, ease: revealEase } } };
+const processStepVariants: Variants = { hidden: { opacity: 0, y: 18 }, visible: (index = 0) => ({ opacity: 1, y: 0, transition: { delay: 1.44 + index * 0.12, duration: 0.56, ease: revealEase } }) };
 
 export function HeroSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -154,6 +142,9 @@ export function HeroSection() {
         .minimal-hero .hero-tagline, .minimal-hero .hero-step-number { color: #a5f3fc !important; }
         .minimal-hero .hero-description { color: rgba(255, 255, 255, 0.78) !important; }
         .minimal-hero .hero-step-label { color: rgba(255, 255, 255, 0.94) !important; }
+        @media (max-width: 767px) {
+          .minimal-hero .hero-process { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+        }
       `}</style>
     </section>
   );
