@@ -1,5 +1,3 @@
-import { Redis } from '@upstash/redis'
-
 const redisUrl = process.env.UPSTASH_REDIS_REST_URL
 const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN
 
@@ -7,12 +5,28 @@ if (!redisUrl || !redisToken) {
   throw new Error('Persistent rate limiting is not configured. Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN.')
 }
 
-const redis = new Redis({ url: redisUrl, token: redisToken })
-
 type RateLimitResult = {
   allowed: boolean
   remaining: number
   retryAfterSeconds: number
+}
+
+async function redisCommand<T>(path: string): Promise<T> {
+  const response = await fetch(`${redisUrl}/${path}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${redisToken}`,
+      'Content-Type': 'application/json',
+    },
+    cache: 'no-store',
+  })
+
+  if (!response.ok) {
+    throw new Error(`Persistent rate limiter returned HTTP ${response.status}.`)
+  }
+
+  const payload = (await response.json()) as { result: T }
+  return payload.result
 }
 
 export async function enforceRateLimit(
@@ -21,10 +35,11 @@ export async function enforceRateLimit(
   windowSeconds: number,
 ): Promise<RateLimitResult> {
   const bucketKey = `urechem:ratelimit:${key}`
-  const count = await redis.incr(bucketKey)
+  const encodedKey = encodeURIComponent(bucketKey)
+  const count = await redisCommand<number>(`incr/${encodedKey}`)
 
   if (count === 1) {
-    await redis.expire(bucketKey, windowSeconds)
+    await redisCommand<number>(`expire/${encodedKey}/${windowSeconds}`)
   }
 
   const allowed = count <= limit
@@ -34,7 +49,7 @@ export async function enforceRateLimit(
     return { allowed, remaining, retryAfterSeconds: 0 }
   }
 
-  const ttl = await redis.ttl(bucketKey)
+  const ttl = await redisCommand<number>(`ttl/${encodedKey}`)
   return {
     allowed: false,
     remaining: 0,
