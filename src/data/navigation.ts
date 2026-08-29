@@ -22,11 +22,11 @@ export const productFamilyLinks: NavigationItem[] = [
   { label: "Complete product range", href: "/products/complete-range" },
   { label: "TPU material pathways", href: "/products/tpu-materials" },
   { label: "UreShield waterproofing and polyurea", href: "/products/ureshield-waterproofing-polyurea-systems" },
-  { label: "Uretherm spray-foam systems", href: "/products/uretherm-spray-foam-systems" },
-  { label: "ChemNate MDI range", href: "/products/chemnate-mdi-range" },
-  { label: "KlayOl polyol range", href: "/products/klayol-polyol-range" },
+  { label: "Uretherm spray-foam systems", href: "/products/complete-range" },
+  { label: "ChemNate MDI range", href: "/products/complete-range" },
+  { label: "KlayOl polyol range", href: "/products/klayol-ppg-range" },
   { label: "KlayOl PPG range", href: "/products/klayol-ppg-range" },
-  { label: "Flexible systems and additives", href: "/products/flexible-systems" },
+  { label: "Flexible systems and additives", href: "/products/complete-range" },
 ];
 
 export const applicationLinks: NavigationItem[] = [
@@ -49,7 +49,7 @@ export const companyLinks: NavigationItem[] = [
   { label: "Innovation & R&D", href: "/innovation-rd" },
   { label: "Talk to a consultant", href: "/consultant" },
   { label: "Contact", href: "/contact" },
-  { label: "Ask Urechem AI", href: "/ask-urechem-ai" },
+  { label: "Solution Finder", href: "/ai-solution-finder" },
 ];
 
 export const footerGroups: FooterGroup[] = [
