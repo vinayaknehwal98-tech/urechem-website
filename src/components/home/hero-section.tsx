@@ -103,7 +103,7 @@ export function HeroSection() {
     <section className="minimal-hero relative isolate overflow-hidden border-b border-blue-100 bg-slate-100 md:min-h-[calc(100dvh-4.5rem)]" data-urechem-hero-section ref={sectionRef}>
       <div aria-hidden="true" className="absolute inset-0 -z-30 overflow-hidden bg-slate-100 bg-cover bg-[64%_center] md:bg-center" style={{ backgroundImage: `url(${HERO_POSTER})` }}>
         <video
-          className={`hidden h-full w-full object-cover object-center [backface-visibility:hidden] [transform:translateZ(0)] transition-opacity duration-700 ease-out md:block ${videoIsPlaying && !videoFailed && !shouldReduceMotion ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 block h-full w-full object-cover object-center [backface-visibility:hidden] [transform:translateZ(0)] transition-opacity duration-700 ease-out ${videoIsPlaying && !videoFailed && !shouldReduceMotion ? "opacity-100" : "opacity-0"}`}
           disablePictureInPicture
           loop
           muted
@@ -115,8 +115,8 @@ export function HeroSection() {
           ref={videoRef}
           tabIndex={-1}
         >
-          <source media="(min-width: 1024px)" src={HERO_VIDEO_FULL_HD} type="video/mp4" />
           <source media="(min-width: 768px)" src={HERO_VIDEO_HD} type="video/mp4" />
+          <source src={HERO_VIDEO_HD} type="video/mp4" />
         </video>
       </div>
       <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,15,28,0.64)_0%,rgba(2,15,28,0.4)_38%,rgba(2,15,28,0.08)_70%,transparent_100%)]" />
