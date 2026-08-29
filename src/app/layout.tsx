@@ -24,8 +24,8 @@ export const metadata: Metadata = {
     "Technical polyurethane and specialty-chemical solutions for application problem-solving, formulation development and implementation support.",
   applicationName: "Urechem Chemicals",
   icons: {
-    icon: "/brand/urechem-logo.png",
-    apple: "/brand/urechem-logo.png",
+    icon: "/brand/urechem-mark.png?v=2",
+    apple: "/brand/urechem-mark.png?v=2",
   },
   keywords: [
     "polyurethane systems",
