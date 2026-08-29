@@ -86,13 +86,12 @@ function buildHtml(enquiry: ValidatedEnquiry) {
 export async function deliverEnquiry(enquiry: ValidatedEnquiry): Promise<DeliveryResult> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const recipient = process.env.URECHEM_ENQUIRY_EMAIL?.trim();
-  const from = process.env.URECHEM_FROM_EMAIL?.trim();
+  const from = process.env.URECHEM_FROM_EMAIL?.trim() || "Urechem Chemicals <sales@urechem.co.in>";
 
-  if (!apiKey || !recipient || !from) {
+  if (!apiKey || !recipient) {
     console.warn("[urechem] enquiry_delivery_not_configured", {
       hasApiKey: Boolean(apiKey),
       hasRecipient: Boolean(recipient),
-      hasFrom: Boolean(from),
     });
     return { ok: false, reason: "not_configured" };
   }
