@@ -52,7 +52,18 @@ export async function POST(request: NextRequest) {
     return jsonResponse({ ok: false, message: "Please check the form and try again.", requestId }, 400, limitHeaders);
   }
 
-  const fingerprint = [identifier, enquiry.type, enquiry.email, enquiry.mobile, enquiry.product, enquiry.context].join("|");
+  const fingerprint = [
+    identifier,
+    enquiry.type,
+    enquiry.name,
+    enquiry.company,
+    enquiry.email,
+    enquiry.mobile,
+    enquiry.industry,
+    enquiry.product,
+    enquiry.quantity,
+    enquiry.context,
+  ].join("|");
   const reserved = await reserveDuplicate("enquiry", fingerprint, 120);
   if (!reserved) {
     return jsonResponse(
@@ -68,14 +79,14 @@ export async function POST(request: NextRequest) {
       await releaseDuplicate("enquiry", fingerprint);
       safeServerLog("warn", "enquiry_delivery_failed", requestId, { reason: delivery.reason });
       return jsonResponse(
-        { ok: false, message: "Automatic delivery failed. Your enquiry brief has been preserved below so you can still send it to Urechem.", requestId },
+        { ok: false, message: "Automatic delivery failed. Your enquiry details have been preserved so you can try again.", requestId },
         503,
         limitHeaders,
       );
     }
 
     return jsonResponse(
-      { ok: true, message: "Enquiry sent successfully ✓", requestId },
+      { ok: true, message: enquiry.type === "Consultation request" ? "Consultation request sent successfully ✓" : "Enquiry sent successfully ✓", requestId },
       200,
       limitHeaders,
     );
