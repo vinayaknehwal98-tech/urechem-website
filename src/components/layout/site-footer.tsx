@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, FlaskConical, Mail, Phone, Sparkles } from "lucide-react";
+import { ArrowRight, FlaskConical, Mail, MapPin, Phone, Sparkles } from "lucide-react";
 import { BrandLogo } from "@/components/layout/brand-logo";
 import { Container } from "@/components/ui/container";
 import { footerGroups, legalLinks } from "@/data/navigation";
@@ -7,6 +7,7 @@ import { footerGroups, legalLinks } from "@/data/navigation";
 const trustPoints = ["Application-led", "Expert reviewed", "Quality focused"] as const;
 const URECHEM_PHONE = "+91-8882132954";
 const URECHEM_EMAIL = "sales@urechem.co.in";
+const URECHEM_HEADQUARTERS = "212 N. 2nd St. STE 100, Richmond, Kentucky, 40475, USA";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -103,7 +104,7 @@ export function SiteFooter() {
               ))}
             </div>
 
-            <div className="mt-6 grid gap-2 text-sm">
+            <div className="mt-6 grid gap-3 text-sm">
               <a className="inline-flex items-center gap-2 font-bold text-[#16324a] hover:text-blue-700" href={`tel:${URECHEM_PHONE.replace(/[^+0-9]/g, "")}`}>
                 <Phone aria-hidden="true" className="h-4 w-4" />
                 {URECHEM_PHONE}
@@ -112,6 +113,13 @@ export function SiteFooter() {
                 <Mail aria-hidden="true" className="h-4 w-4" />
                 {URECHEM_EMAIL}
               </a>
+              <div className="flex items-start gap-2 text-sm leading-6 text-[#596273]">
+                <MapPin aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-[#b7791f]" />
+                <div>
+                  <p className="font-black uppercase tracking-[0.09em] text-[#16324a]">Headquarters</p>
+                  <p className="mt-0.5">{URECHEM_HEADQUARTERS}</p>
+                </div>
+              </div>
             </div>
 
             <p className="mt-7 text-sm font-black uppercase tracking-[0.13em]" style={{ color: "#b7791f" }}>
