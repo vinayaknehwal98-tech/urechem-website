@@ -46,11 +46,19 @@ export default function Page() {
                   <dd className="min-w-0 break-words text-slate-700">{value}</dd>
                 </div>
               ))}
-              <div className="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6 sm:px-6">
+              <div className="grid gap-1 border-b border-slate-100 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6 sm:px-6">
                 <dt className="font-semibold text-slate-900">Telephone</dt>
                 <dd>
                   <a className="font-medium text-sky-700 underline decoration-sky-200 underline-offset-4 hover:text-sky-800" href="tel:+918882132954">
                     +91 88821 32954
+                  </a>
+                </dd>
+              </div>
+              <div className="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6 sm:px-6">
+                <dt className="font-semibold text-slate-900">Email</dt>
+                <dd>
+                  <a className="font-medium text-sky-700 underline decoration-sky-200 underline-offset-4 hover:text-sky-800" href="mailto:sales@urechem.co.in">
+                    sales@urechem.co.in
                   </a>
                 </dd>
               </div>
