@@ -11,7 +11,8 @@ const effectiveDate = "4 August 2026";
 
 const businessDetails = [
   ["Business name", "Urechem Chemicals"],
-  ["Business address", "002 SF, MU II, Industrial Road, Gautam Buddha Nagar, Uttar Pradesh 201310, India"],
+  ["India business address", "002 SF, MU II, Industrial Road, Gautam Buddha Nagar, Uttar Pradesh 201310, India"],
+  ["U.S. headquarters", "212 N. 2nd St. STE 100, Richmond, Kentucky 40475, USA"],
   ["GSTIN", "09CFUPC8658F1ZT"],
   ["PAN", "CFUPC8658F"],
 ];
@@ -45,24 +46,11 @@ export default function Page() {
                   <dd className="min-w-0 break-words text-slate-700">{value}</dd>
                 </div>
               ))}
-              <div className="grid gap-1 border-b border-slate-100 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6 sm:px-6">
+              <div className="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6 sm:px-6">
                 <dt className="font-semibold text-slate-900">Telephone</dt>
                 <dd>
                   <a className="font-medium text-sky-700 underline decoration-sky-200 underline-offset-4 hover:text-sky-800" href="tel:+918882132954">
                     +91 88821 32954
-                  </a>
-                </dd>
-              </div>
-              <div className="grid gap-1 px-5 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6 sm:px-6">
-                <dt className="font-semibold text-slate-900">Website</dt>
-                <dd>
-                  <a
-                    className="font-medium text-sky-700 underline decoration-sky-200 underline-offset-4 hover:text-sky-800"
-                    href="https://urechem-website.vercel.app"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    urechem-website.vercel.app
                   </a>
                 </dd>
               </div>
